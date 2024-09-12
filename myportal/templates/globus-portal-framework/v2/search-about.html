@@ -1,0 +1,52 @@
+{% extends "globus-portal-framework/v2/search-base.html" %}
+{% load is_active index_template is_active %}
+
+{% block breadcrumb_items %}
+{{block.super}}
+<li class="breadcrumb-item {% is_active request 'search-about' index=globus_portal_framework.index %}">
+  <a class="h5">{{project_info.title}} About</a>
+</li>
+{% endblock %}
+
+{% block body %}
+
+<div class="row">
+  <div class="col">
+    <h2 class="text-center mt-3 mb-5">{{project_title}}</h2>
+  </div>
+</div>
+
+
+<div class="row mb-5">
+  <div class="col"></div>
+  <div class="col-10">
+
+    <div>
+      <h1>About</h1>
+      {% block landing_page_about %}
+      The vision of MADE-PUBLIC is a future intelligent, scalable, and democratized manufacturing paradigmto enable distributed manufacturing of low-cost printable electronic devices using locally identifiable resources such as bio-based materials derived from plants.
+      For more infomation, please contact administrator Dr. Ding: ruiding@uchicago.edu
+      {% endblock %}
+    </div>
+    <div>
+      <h1>Data Access</h1>
+      {% block landing_page_data_access %}
+      <p class="lead font-weight-bolder">Search results are limited to members of the {{project_title}} MADE-PUBLIC group. Please click the button to know more of the group and contact the administrator Dr. Ding.</p>
+        <a class="btn btn-primary" target="_blank" href="https://app.globus.org/groups/bb420e57-7835-11ee-b0db-d9a5237cb2e9/about">
+          Request Access to {{project_title}} Group
+        </a>
+      <h1>Globus Installation</h1>
+      <p class="lead font-weight-bolder">The data portal uses Globus to transfer including downloading and uploading data, please make sure you have registered globus and installed globus client on your device.</p>
+        <a class="btn btn-primary" target="_blank" href="https://www.globus.org/get-started">
+          Get started with Globus
+        </a>
+      <h1>Upload Your Data</h1>
+      <p class="lead font-weight-bolder">In the project, we use Globus system for uploading and downloading data and files, click "Upload Data" on the top navigation bar to view a short tutorial and get your data upload to the group data repository. The data uploaded would be reviewed by administrator</p>
+  
+      {% endblock %}
+    </div>
+  </div>
+  <div class="col"></div>
+</div>
+
+{% endblock %}

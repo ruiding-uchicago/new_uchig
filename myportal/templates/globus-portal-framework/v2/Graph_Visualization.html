@@ -1,0 +1,1631 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Graph Visualization</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/qtip2/3.0.3/jquery.qtip.min.css">
+    <style>
+        #cy {
+            width: 100%;
+            height: 1000px;
+            display: block;
+            border: 1px solid #ccc;
+        }
+
+        #debug-info {
+            margin-top: 10px;
+            border: 1px solid #ccc;
+            padding: 10px;
+            height: 15vh;
+            overflow-y: auto;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        h2 {
+            font-family: Arial, Helvetica, sans-serif;
+            color: #333;
+        }
+
+        .button-container {
+            margin: 10px 0;
+        }
+
+        .btn {
+            padding: 10px 15px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+        }
+
+        .qtip-content {
+            font-size: 12px;
+            line-height: 1.4;
+        }
+
+        #loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.8);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .spinner {
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #3498db;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+
+        #loading-message {
+            font-size: 18px;
+            text-align: center;
+        }
+
+        #loading-percentage {
+            font-size: 24px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        #node-list-panel {
+            position: fixed;
+            top: 60px;
+            right: 20px;
+            width: 700px;
+            max-height: 80vh;
+            background-color: white;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            overflow-y: auto;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            display: none;
+            z-index: 1000;
+        }
+
+        .node-item {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+
+        .node-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+
+        .node-title {
+            flex-grow: 1;
+            margin-right: 10px;
+            font-weight: bold;
+        }
+
+        .node-info {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+
+        .info-box {
+            font-size: 12px;
+            padding: 3px 6px;
+            border-radius: 3px;
+            margin-bottom: 3px;
+        }
+
+        .info-label {
+            font-weight: bold;
+            margin-right: 5px;
+        }
+
+        .creator {
+            background-color: #FFB3BA;
+        }
+
+        .data-tags {
+            background-color: #BAFFC9;
+        }
+
+        .document-format {
+            background-color: #BAE1FF;
+        }
+
+        .data-type {
+            background-color: #FFFFBA;
+        }
+
+        .related-topic {
+            background-color: #FFD8B9;
+        }
+
+        .thrust {
+            background-color: #E0BBE4;
+        }
+
+        #node-list-panel h3 {
+            margin-top: 0;
+            margin-bottom: 10px;
+        }
+
+        .node-checkbox {
+            margin-right: 5px;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+
+        }
+
+        #search-bar {
+            width: calc(100% - 20px);
+            padding: 8px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        #no-results {
+            display: none;
+            color: #888;
+            font-style: italic;
+            margin-top: 10px;
+        }
+
+        .visibility-toggle {
+            cursor: pointer;
+            margin-left: 10px;
+        }
+
+        .hide-all-toggle {
+            cursor: pointer;
+            float: right;
+            margin-right: 10px;
+        }
+
+        .visibility-btn {
+            cursor: pointer;
+            padding: 5px 10px;
+            margin-left: 10px;
+            background-color: #f0f0f0;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            font-size: 12px;
+        }
+
+        .visibility-btn:hover {
+            background-color: #e0e0e0;
+        }
+
+        #pinned-entries-container {
+            margin-top: 15px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            padding: 10px;
+        }
+
+        #pinned-entries-container h4 {
+            margin-top: 0;
+            margin-bottom: 10px;
+            color: #333;
+            font-size: 16px;
+        }
+
+        #pinned-entries {
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        #pinned-entries .node-item {
+            background-color: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 3px;
+            margin-bottom: 5px;
+            padding: 5px;
+        }
+
+        .pin-toggle {
+            cursor: pointer;
+            margin-left: 10px;
+        }
+
+        #unpin-all-btn {
+            float: right;
+            margin-top: -5px;
+        }
+
+        #edge-list-panel {
+            position: fixed;
+            top: 100px;
+            left: 20px;
+            /* Changed from right to left */
+            width: 500px;
+            max-height: 80vh;
+            background-color: white;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            overflow-y: auto;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            display: none;
+            z-index: 1000;
+        }
+
+
+
+        .edge-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .edge-checkbox {
+            margin-right: 10px;
+        }
+
+        .edge-label {
+            flex-grow: 1;
+        }
+
+        #edge-categories {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .edge-category {
+            flex: 1 1 calc(50% - 10px);
+            min-width: 200px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        .edge-category h4 {
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        #same-creator {
+            background-color: #FFE6E6;
+        }
+
+        #same-thrust {
+            background-color: #E6F3FF;
+        }
+
+        #same-data-type {
+            background-color: #E6FFE6;
+        }
+
+        #same-related-topic {
+            background-color: #FFF0E6;
+        }
+
+        #same-year {
+            background-color: #F0E6FF;
+        }
+
+        #same-year-month {
+            background-color: #E6FFF0;
+        }
+
+        #same-pi-affiliated {
+            background-color: #FFE6F0;
+        }
+
+        #same-document-format {
+            background-color: #F0FFE6;
+        }
+
+        #same-data-tags {
+            background-color: #E6F0FF;
+        }
+
+        /* Add this new style for the back button */
+        .back-btn {
+            background-color: #f0ad4e;
+            /* Bootstrap's warning color */
+        }
+
+        .back-btn:hover {
+            background-color: #ec971f;
+        }
+
+        .button-container label.btn {
+            display: inline-block;
+            padding: 10px 15px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+
+        .button-container label.btn:hover {
+            background-color: #0056b3;
+        }
+
+        #json-file-input {
+            display: none;
+        }
+
+        .message {
+    padding: 8px 12px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    max-width: 80%;
+    clear: both;
+}
+
+.human-message {
+    background-color: #e6f2ff;
+    float: right;
+}
+
+.ai-message {
+    background-color: #f0f0f0;
+    float: left;
+}
+
+/* Add this new style for the data sent messages */
+.human-message[style*="background-color"] {
+    color: black; /* Ensure text is visible on colored backgrounds */
+}
+.close-panel {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    font-size: 20px;
+    cursor: pointer;
+    color: #333;
+    z-index: 1002; /* Ensure it's above the panel content */
+}
+
+
+.close-panel:hover {
+    color: #ff0000;
+}
+.foldable-header {
+    cursor: pointer;
+    user-select: none;
+    background-color: #f0f0f0;
+    padding: 10px;
+    margin: 0;
+    border: 1px solid #ccc;
+    border-radius: 5px 5px 0 0;
+}
+
+.foldable-header:hover {
+    background-color: #e0e0e0;
+}
+
+.fold-icon {
+    float: right;
+    transition: transform 0.3s ease;
+}
+
+.foldable-content {
+    border: 1px solid #ccc;
+    border-top: none;
+    padding: 10px;
+    border-radius: 0 0 5px 5px;
+}
+
+#debug-info-container {
+    margin-top: 20px;
+}
+
+    </style>
+</head>
+
+<body>
+    <!-- Add this new div for the loading overlay -->
+    <div id="loading-overlay">
+        <div class="spinner"></div>
+        <p id="loading-message" style="margin-left: 20px;">Loading graph data...</p>
+    </div>
+
+    <div class="button-container">
+        <button class="btn" onclick="window.location.href='/'">
+            <i class="fas fa-home"></i> Go back to main page
+        </button>
+        <button class="btn back-btn" id="back-to-search" data-search-url="/MADE-PUBLIC%20Data%20Transfer/?q=*">
+            <i class="fas fa-arrow-left"></i> Back to search results
+        </button>
+        <label class="btn" for="json-file-input">
+            <i class="fas fa-upload"></i> Manually upload metadata JSON
+            <input type="file" id="json-file-input" accept=".json" style="display:none;">
+        </label>
+        <button class="btn" id="reset-graph">
+            <i class="fas fa-redo"></i> Reset graph
+        </button>
+        <button class="btn" id="toggle-node-list">
+            <i class="fas fa-list"></i> Visible Nodes
+        </button>
+        <button class="btn" id="toggle-edge-list">
+            <i class="fas fa-list"></i> Visible Edges
+        </button>
+        <div id="chat-container"
+            style="display: none; position: fixed; right: 20px; bottom: 70px; width: 1000px; height: 600px; background-color: white; border: 1px solid #ccc; border-radius: 5px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); z-index: 1000;">
+            <div id="chat-header"
+                style="background-color: #007bff; color: white; padding: 10px; border-top-left-radius: 5px; border-top-right-radius: 5px; cursor: pointer;">
+                Chat with LLM
+                <span id="close-chat" style="float: right; cursor: pointer;">×</span>
+            </div>
+            <div id="summary-buttons" style="padding: 10px; border-bottom: 1px solid #ccc;">
+                <button id="summarize-all-nodes" style="background-color: #ffcccb; margin-right: 5px;">Provide a Summary of All Nodes</button>
+                <button id="summarize-pinned-nodes" style="background-color: #90EE90; margin-right: 5px;">Provide a Summary of Pinned Nodes</button>
+                <button id="summarize-visible-nodes" style="background-color: #ADD8E6;">Provide a Summary of Visible Nodes</button>
+            </div>
+            <div id="chat-messages-container" style="height: 460px; position: relative;">
+                <div id="chat-messages" style="height: 100%; overflow-y: auto; padding: 10px;"></div>
+                <div id="loading-indicator"
+                    style="display: none; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: url('/static/pics/loading.gif') no-repeat center center; background-color: rgba(255, 255, 255, 0.5); background-size: 50px 50px;">
+                </div>
+            </div>
+            <div id="chat-input"
+                style="padding: 10px; border-top: 1px solid #ccc; display: flex; justify-content: space-between; align-items: center;">
+                <textarea id="user-input" placeholder="Type your message..."
+                    style="width: 70%; padding: 5px; height: 60px; resize: none;"></textarea>
+                <button id="send-message" style="width: 15%; padding: 5px; height: 60px;">Send</button>
+                <button id="reset-conversation"
+                    style="width: 25%; padding: 5px; background-color: #f8f9fa; color: #007bff; border: 1px solid #007bff; height: 60px;">Reset</button>
+            </div>
+        </div>
+        <button id="toggle-chat" class="btn" style="position: fixed; right: 20px; bottom: 20px; z-index: 1001;">
+            <i class="fas fa-comments"></i> Chat with LLM
+        </button>
+    </div>
+
+    <div id="node-list-panel">
+        <span class="close-panel">×</span>
+        <h3>Visible Nodes
+            <button id="hide-all-btn" class="visibility-btn">Hide All Nodes</button>
+            <button id="show-all-btn" class="visibility-btn">Show All Nodes</button>
+        </h3>
+        <input type="text" id="search-bar" placeholder="Search nodes...">
+        <div id="pinned-entries-container">
+            <h4>Pinned Entries <button id="unpin-all-btn" class="visibility-btn">Unpin All</button></h4>
+            <div id="pinned-entries"></div>
+        </div>
+        <div id="node-list"></div>
+        <div id="no-results">No matching nodes found.</div>
+    </div>
+    <div id="edge-list-panel">
+        <span class="close-panel">×</span>
+        <h3>Visible Edges
+            <button id="hide-all-edges-btn" class="visibility-btn">Hide All Edges</button>
+            <button id="show-all-edges-btn" class="visibility-btn">Show All Edges</button>
+        </h3>
+        <div id="edge-categories">
+            <div id="same-creator" class="edge-category">
+                <h4>Same Creator</h4>
+                <div class="edge-list"></div>
+            </div>
+            <div id="same-thrust" class="edge-category">
+                <h4>Same Thrust</h4>
+                <div class="edge-list"></div>
+            </div>
+            <div id="same-data-type" class="edge-category">
+                <h4>Same Data Type</h4>
+                <div class="edge-list"></div>
+            </div>
+            <div id="same-related-topic" class="edge-category">
+                <h4>Same Related Topic</h4>
+                <div class="edge-list"></div>
+            </div>
+            <div id="same-year" class="edge-category">
+                <h4>Same Year</h4>
+                <div class="edge-list"></div>
+            </div>
+            <div id="same-year-month" class="edge-category">
+                <h4>Same Year Month</h4>
+                <div class="edge-list"></div>
+            </div>
+            <div id="same-pi-affiliated" class="edge-category">
+                <h4>Same PI Affiliated</h4>
+                <div class="edge-list"></div>
+            </div>
+            <div id="same-document-format" class="edge-category">
+                <h4>Same Document Format</h4>
+                <div class="edge-list"></div>
+            </div>
+            <div id="same-data-tags" class="edge-category">
+                <h4>Same Data Tags</h4>
+                <div class="edge-list"></div>
+            </div>
+        </div>
+    </div>
+    <h1>Interactive Graph Visualization</h1>
+    <div id="cy"></div>
+    <div id="debug-info-container">
+        <h2 id="debug-info-header" class="foldable-header">
+            Node-Edge List <span class="fold-icon">▼</span>
+        </h2>
+        <div id="debug-info" class="foldable-content" style="display: none;">
+            <pre id="debug-output"></pre>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.21.1/cytoscape.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qtip2/3.0.3/jquery.qtip.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/cytoscape-qtip@2.8.0/cytoscape-qtip.min.js"></script>
+    <script>
+
+        let cy; // Declare cy in the global scope
+        const edgeColorMap = {
+            'Same Creator': '#FF8080',
+            'Same Thrust': '#4DA6FF',
+            'Same Data Type': '#66FF66',
+            'Same Related Topic': '#FFA64D',
+            'Same Year': '#CC66FF',
+            'Same Year Month': '#33FFCC',
+            'Same PI Affiliated': '#FF66B2',
+            'Same Document Format': '#B2FF66',
+            'Same Data Tags': '#66B2FF'
+        };
+        // Add this function to update the loading message
+        function updateLoadingMessage(message, percentage = null) {
+            const loadingMessage = document.getElementById('loading-message');
+            if (percentage !== null) {
+                loadingMessage.textContent = `${message} ${percentage}%`;
+            } else {
+                loadingMessage.textContent = message;
+            }
+        }
+
+        // Add this function to hide the loading overlay
+        function hideLoadingOverlay() {
+            document.getElementById('loading-overlay').style.display = 'none';
+        }
+        function appendDebugInfo(info) {
+            const debugOutput = document.getElementById('debug-output');
+            debugOutput.innerHTML += info + '\n';
+            console.log(info);
+        }
+
+        // Function to wrap long text
+        function wrapLabel(label, maxLength = 20) {
+            if (label.length <= maxLength) return label;
+
+            const words = label.split(' ');
+            let lines = [];
+            let currentLine = '';
+
+            for (let word of words) {
+                if ((currentLine + word).length > maxLength) {
+                    if (currentLine) lines.push(currentLine);
+                    currentLine = word;
+                } else {
+                    currentLine += (currentLine ? ' ' : '') + word;
+                }
+            }
+            if (currentLine) lines.push(currentLine);
+
+            return lines.join('\n');
+        }
+        // Function to update the node list
+        function updateNodeList() {
+            const nodeList = document.getElementById('node-list');
+            const searchBar = document.getElementById('search-bar');
+            const noResults = document.getElementById('no-results');
+            const hideAllBtn = document.getElementById('hide-all-btn');
+            const showAllBtn = document.getElementById('show-all-btn');
+            const unpinAllBtn = document.getElementById('unpin-all-btn');
+            const pinnedEntriesContainer = document.getElementById('pinned-entries-container');
+            const pinnedEntries = document.getElementById('pinned-entries');
+
+            function renderNodes(filter = '') {
+                nodeList.innerHTML = '';
+                pinnedEntries.innerHTML = '';
+                let visibleCount = 0;
+                let pinnedCount = 0;
+
+                cy.nodes().forEach(node => {
+                    const nodeData = node.data();
+                    const searchableText = [
+                        nodeData.label,
+                        nodeData.creator,
+                        nodeData.dataTags.join(', '),
+                        nodeData.documentFormat,
+                        nodeData.dataType.join(', '),
+                        nodeData.relatedTopic.join(', '),
+                        nodeData.thrust
+                    ].join(' ').toLowerCase();
+
+                    const matchesFilter = searchableText.includes(filter.toLowerCase());
+                    const isPinned = nodeData.pinned === true;
+
+                    if (isPinned) {
+                        const pinnedDiv = createNodeElement(node, true, true, matchesFilter);
+                        pinnedEntries.appendChild(pinnedDiv);
+                        pinnedCount++;
+                    }
+
+                    if (matchesFilter && !isPinned) {
+                        const div = createNodeElement(node, false, false, matchesFilter);
+                        nodeList.appendChild(div);
+                        visibleCount++;
+                    }
+                });
+
+                noResults.style.display = visibleCount === 0 && pinnedCount === 0 ? 'block' : 'none';
+                pinnedEntriesContainer.style.display = pinnedCount > 0 ? 'block' : 'none';
+            }
+
+            function createNodeElement(node, isPinned, isPinnedBox, matchesFilter) {
+                const nodeData = node.data();
+                const div = document.createElement('div');
+                div.className = 'node-item';
+
+                const headerDiv = document.createElement('div');
+                headerDiv.className = 'node-header';
+
+                const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.id = `node-${node.id()}${isPinnedBox ? '-pinned' : ''}`;
+                checkbox.className = 'node-checkbox';
+                checkbox.checked = isPinned || matchesFilter || node.data('checked') !== false;
+                node.data('checked', checkbox.checked);
+
+                const label = document.createElement('label');
+                label.htmlFor = checkbox.id;
+                label.className = 'node-title';
+                label.textContent = nodeData.label;
+
+                const visibilityToggle = document.createElement('span');
+                visibilityToggle.className = 'visibility-toggle';
+                visibilityToggle.innerHTML = node.data('visible') !== false ? '👁️' : '👁️‍🗨️';
+
+                const pinToggle = document.createElement('span');
+                pinToggle.className = 'pin-toggle';
+                pinToggle.innerHTML = isPinned ? '📌' : '📍';
+
+                headerDiv.appendChild(checkbox);
+                headerDiv.appendChild(label);
+                headerDiv.appendChild(visibilityToggle);
+                headerDiv.appendChild(pinToggle);
+
+                div.appendChild(headerDiv);
+
+                const infoDiv = document.createElement('div');
+                infoDiv.className = 'node-info';
+
+                const infoItems = [
+                    { class: 'creator', label: 'Creator', text: nodeData.creator },
+                    { class: 'data-tags', label: 'Data Tags', text: nodeData.dataTags.join(', ') },
+                    { class: 'document-format', label: 'Format', text: nodeData.documentFormat },
+                    { class: 'data-type', label: 'Data Type', text: nodeData.dataType.join(', ') },
+                    { class: 'related-topic', label: 'Related Topic', text: nodeData.relatedTopic.join(', ') },
+                    { class: 'thrust', label: 'Thrust', text: nodeData.thrust }
+                ];
+
+                infoItems.forEach(item => {
+                    if (item.text) {
+                        const span = document.createElement('span');
+                        span.className = `info-box ${item.class}`;
+                        span.innerHTML = `<span class="info-label">${item.label}:</span> ${item.text}`;
+                        infoDiv.appendChild(span);
+                    }
+                });
+
+                div.appendChild(infoDiv);
+
+                // Event listeners
+                checkbox.addEventListener('change', (event) => {
+                    node.data('checked', event.target.checked);
+                    updateGraphVisibility();
+                });
+
+                visibilityToggle.addEventListener('click', () => {
+                    const newVisibility = node.data('visible') === false;
+                    node.data('visible', newVisibility);
+                    visibilityToggle.innerHTML = newVisibility ? '👁️' : '👁️‍🗨️';
+                    updateGraphVisibility();
+                });
+
+                pinToggle.addEventListener('click', () => {
+                    const newPinned = !node.data('pinned');
+                    node.data('pinned', newPinned);
+                    pinToggle.innerHTML = newPinned ? '📌' : '📍';
+                    renderNodes(searchBar.value);
+                    updateGraphVisibility();
+                    // Update node color in Cytoscape
+                    node.style('background-color', newPinned ? 'lightsalmon' : '#6FB1FC');
+                });
+
+                return div;
+            }
+
+            renderNodes(searchBar.value);
+
+            searchBar.addEventListener('input', (event) => {
+                renderNodes(event.target.value);
+                updateGraphVisibility();
+            });
+
+            hideAllBtn.addEventListener('click', () => {
+                cy.nodes().forEach(node => {
+                    if (!node.data('pinned')) {
+                        node.data('visible', false);
+                    }
+                });
+                renderNodes(searchBar.value);
+                updateGraphVisibility();
+            });
+
+            showAllBtn.addEventListener('click', () => {
+                cy.nodes().forEach(node => {
+                    node.data('visible', true);
+                });
+                renderNodes(searchBar.value);
+                updateGraphVisibility();
+            });
+            unpinAllBtn.addEventListener('click', () => {
+                cy.nodes().forEach(node => {
+                    node.data('pinned', false);
+                });
+                renderNodes(searchBar.value);
+                updateGraphVisibility();
+            });
+        }
+        // Update the updateEdgeList function
+        function updateEdgeList() {
+            const edgeCategories = document.getElementById('edge-categories');
+            const hideAllEdgesBtn = document.getElementById('hide-all-edges-btn');
+            const showAllEdgesBtn = document.getElementById('show-all-edges-btn');
+
+            // Clear existing edge lists
+            document.querySelectorAll('.edge-list').forEach(list => list.innerHTML = '');
+
+            // Get visible edge types and group them by category
+            const visibleRelationships = getVisibleEdgeTypes();
+            const groupedRelationships = groupRelationshipsByCategory(visibleRelationships);
+
+            // Populate edge lists for each category
+            Object.entries(groupedRelationships).forEach(([category, relationships]) => {
+                const categoryElement = document.getElementById(category);
+                if (categoryElement) {
+                    const edgeList = categoryElement.querySelector('.edge-list');
+                    relationships.forEach(relationship => {
+                        const div = createEdgeElement(relationship);
+                        edgeList.appendChild(div);
+                    });
+                }
+            });
+
+            // Event listeners for hide/show all buttons
+            hideAllEdgesBtn.addEventListener('click', hideAllEdges);
+            showAllEdgesBtn.addEventListener('click', showAllEdges);
+            // Add this at the end of the updateEdgeList() function
+
+        }
+
+        function createEdgeElement(relationship) {
+            const div = document.createElement('div');
+            div.className = 'edge-item';
+
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.id = `edge-${relationship.replace(/\s+/g, '-')}`;
+            checkbox.className = 'edge-checkbox';
+            checkbox.checked = true;
+
+            const label = document.createElement('label');
+            label.htmlFor = checkbox.id;
+            label.className = 'edge-label';
+            label.textContent = relationship;
+
+            div.appendChild(checkbox);
+            div.appendChild(label);
+
+            checkbox.addEventListener('change', (event) => {
+                updateEdgeVisibility(relationship, event.target.checked);
+            });
+
+            return div;
+        }
+
+        function groupRelationshipsByCategory(relationships) {
+            const grouped = {
+                'same-creator': [],
+                'same-thrust': [],
+                'same-data-type': [],
+                'same-related-topic': [],
+                'same-year': [],
+                'same-year-month': [],
+                'same-pi-affiliated': [],
+                'same-document-format': [],
+                'same-data-tags': []
+            };
+
+            relationships.forEach(relationship => {
+                if (relationship.startsWith('Same Creator')) {
+                    grouped['same-creator'].push(relationship);
+                } else if (relationship.startsWith('Same Thrust')) {
+                    grouped['same-thrust'].push(relationship);
+                } else if (relationship.startsWith('Same Data Type')) {
+                    grouped['same-data-type'].push(relationship);
+                } else if (relationship.startsWith('Same Related Topic')) {
+                    grouped['same-related-topic'].push(relationship);
+                } else if (relationship.startsWith('Same Year-') && !relationship.includes('Month')) {
+                    grouped['same-year'].push(relationship);
+                } else if (relationship.startsWith('Same Year Month')) {
+                    grouped['same-year-month'].push(relationship);
+                } else if (relationship.startsWith('Same PI Affiliated')) {
+                    grouped['same-pi-affiliated'].push(relationship);
+                } else if (relationship.startsWith('Same Document Format')) {
+                    grouped['same-document-format'].push(relationship);
+                } else if (relationship.startsWith('Same Data Tags')) {
+                    grouped['same-data-tags'].push(relationship);
+                }
+            });
+
+            return grouped;
+        }
+
+        function hideAllEdges() {
+            cy.startBatch();
+            cy.edges().forEach(edge => {
+                edge.style('display', 'none');
+            });
+            document.querySelectorAll('.edge-checkbox').forEach(checkbox => {
+                checkbox.checked = false;
+            });
+            cy.endBatch();
+            cy.layout({ name: 'cose', animate: false }).run();
+        }
+
+        function showAllEdges() {
+            cy.startBatch();
+            cy.edges().forEach(edge => {
+                const sourceVisible = edge.source().visible();
+                const targetVisible = edge.target().visible();
+                edge.style('display', (sourceVisible && targetVisible) ? 'element' : 'none');
+
+                // Set edge color
+                const relationship = edge.data('relationship');
+                for (const [key, color] of Object.entries(edgeColorMap)) {
+                    if (relationship.startsWith(key)) {
+                        edge.style('line-color', color);
+                        break;
+                    }
+                }
+            });
+            document.querySelectorAll('.edge-checkbox').forEach(checkbox => {
+                checkbox.checked = true;
+            });
+            cy.endBatch();
+            cy.layout({ name: 'cose', animate: false }).run();
+        }
+        // Update the updateEdgeVisibility function
+        function updateEdgeVisibility(relationship, isVisible) {
+            cy.batch(() => {
+                cy.edges().forEach(edge => {
+                    if (edge.data('relationship') === relationship) {
+                        const sourceVisible = edge.source().visible();
+                        const targetVisible = edge.target().visible();
+                        edge.style('display', (isVisible && sourceVisible && targetVisible) ? 'element' : 'none');
+
+                        // Update edge color
+                        for (const [key, color] of Object.entries(edgeColorMap)) {
+                            if (relationship.startsWith(key)) {
+                                edge.style('line-color', color);
+                                break;
+                            }
+                        }
+                    }
+                });
+            });
+            cy.layout({ name: 'cose', animate: false }).run();
+        }
+
+        function toggleEdgeListPanel() {
+            const panel = document.getElementById('edge-list-panel');
+            panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+        }
+        function updateGraphVisibility() {
+            const searchBar = document.getElementById('search-bar');
+            const filter = searchBar.value.toLowerCase();
+
+            cy.batch(() => {
+                cy.nodes().forEach(node => {
+                    const nodeData = node.data();
+                    const searchableText = [
+                        nodeData.label,
+                        nodeData.creator,
+                        nodeData.dataTags.join(', '),
+                        nodeData.documentFormat,
+                        nodeData.dataType.join(', '),
+                        nodeData.relatedTopic.join(', '),
+                        nodeData.thrust
+                    ].join(' ').toLowerCase();
+
+                    const matchesFilter = searchableText.includes(filter);
+                    const isChecked = node.data('checked') !== false;
+                    const isVisible = node.data('visible') !== false;
+                    const isPinned = node.data('pinned') === true;
+
+                    const shouldDisplay = (isPinned || ((matchesFilter || !filter) && isChecked && isVisible));
+                    node.style('display', shouldDisplay ? 'element' : 'none');
+                    node.style('background-color', isPinned ? 'lightsalmon' : '#6FB1FC');
+
+                    node.connectedEdges().forEach(edge => {
+                        const sourceVisible = edge.source().visible();
+                        const targetVisible = edge.target().visible();
+                        edge.style('display', (sourceVisible && targetVisible) ? 'element' : 'none');
+                    });
+                });
+            });
+
+            // Update the edge list after changing node visibility
+            updateEdgeList();
+
+            // Optionally, update the layout to account for hidden elements
+            cy.layout({ name: 'cose', animate: false }).run();
+            if (!window.edgeListInitialized) updateEdgeList();
+        }
+        function getVisibleEdgeTypes() {
+            const visibleEdgeTypes = new Set();
+            cy.edges().forEach(edge => {
+                if (edge.visible()) {
+                    visibleEdgeTypes.add(edge.data('relationship'));
+                }
+            });
+            return Array.from(visibleEdgeTypes);
+        }
+
+        // Add this function to toggle the node list panel
+        function toggleNodeListPanel() {
+            const panel = document.getElementById('node-list-panel');
+            panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+        }
+
+
+
+
+
+        // Replace the existing graph data parsing code with this:
+        let graphData;
+
+        function loadGraphData(data) {
+            graphData = data;
+            if (!graphData) {
+                console.error('No graph data found');
+                alert('No valid graph data found. Please upload a valid JSON file.');
+                return;
+            }
+
+            // Clear any existing graph
+            if (cy) {
+                cy.destroy();
+            }
+
+            initializeGraph();
+            initializeEdgeVisibility();
+        }
+
+        // Initial load from sessionStorage
+        const storedData = JSON.parse(sessionStorage.getItem('graphVisualizationData'));
+        if (storedData) {
+            loadGraphData(storedData);
+            // Clear the sessionStorage after loading to prevent issues on page refresh
+            sessionStorage.removeItem('graphVisualizationData');
+        }
+
+        document.getElementById('json-file-input').addEventListener('change', function (event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    try {
+                        const uploadedData = JSON.parse(e.target.result);
+                        // Store the uploaded data in sessionStorage
+                        sessionStorage.setItem('graphVisualizationData', JSON.stringify(uploadedData));
+                        // Reload the page to process the data as if it came from a direct redirect
+                        window.location.reload();
+                    } catch (error) {
+                        console.error('Error parsing JSON file:', error);
+                        alert('Error parsing JSON file. Please make sure it\'s a valid JSON.');
+                    }
+                };
+                reader.readAsText(file);
+            }
+        });
+        function getIconForDocumentFormat(format) {
+            const iconMap = {
+                'xlsx': "{% static 'pics/icon_xlsx.png' %}",
+                'xls': "{% static 'pics/icon_xls.png' %}",
+                'folder': "{% static 'pics/icon_folder.png' %}",
+                'opj': "{% static 'pics/icon_opj.png' %}",
+                'opju': "{% static 'pics/icon_opj.png' %}",
+                'csv': "{% static 'pics/icon_csv.png' %}",
+                'pdf': "{% static 'pics/icon_pdf.png' %}",
+                'txt': "{% static 'pics/icon_txt.png' %}",
+                'doc': "{% static 'pics/icon_doc.png' %}",
+                'docx': "{% static 'pics/icon_docx.png' %}",
+            };
+            const pictureFormats = ['bmp', 'tif', 'jpg', 'jpeg', 'png', 'gif'];
+
+            format = format.toLowerCase();
+            if (pictureFormats.includes(format)) {
+                return "{% static 'pics/icon_picture.png' %}";
+            }
+            return iconMap[format] || null;
+        }
+        function initializeGraph() {
+            if (!graphData || !graphData.ingest_data) {
+                console.error('Invalid graph data structure');
+                alert('Invalid graph data structure. Please ensure the JSON file is correctly formatted.');
+                return;
+            }
+            updateLoadingMessage('Processing graph data');
+            const totalElements = graphData.ingest_data.gmeta.length + graphData.ingest_data.edges.length;
+            let processedElements = 0;
+
+            var cygraphData = {
+                nodes: graphData.ingest_data.gmeta.map((gmetaItem, index) => {
+                    processedElements++;
+                    if (index % 10 === 0 || index === graphData.ingest_data.gmeta.length - 1) {
+                        const percentage = Math.round((processedElements / totalElements) * 100);
+                        updateLoadingMessage('Processing graph data', percentage);
+                    }
+                    const nodeData = {
+                        id: gmetaItem.subject,
+                        label: wrapLabel(gmetaItem.all[0].Title),
+                        creator: gmetaItem.all[0].creator,
+                        link: gmetaItem.globus_app_link,
+                        piAffiliated: gmetaItem.all[0]['PI Affiliated'],
+                        dataTags: gmetaItem.all[0]['Data Tags'],
+                        date: gmetaItem.all[0].date,
+                        thrust: gmetaItem.all[0].Thrust,
+                        documentFormat: gmetaItem.all[0]['Document Format'],
+                        icon: getIconForDocumentFormat(gmetaItem.all[0]['Document Format']),
+                        dataType: gmetaItem.all[0]['Data Type'],
+                        relatedTopic: gmetaItem.all[0]['Related Topic'],
+                        pinned: false
+                    };
+
+                    // Debug output for each node
+                    appendDebugInfo(`Node - ID: ${nodeData.id}, Label: ${nodeData.label.replace('\n', ' ')}, Creator: ${nodeData.creator}, Link: ${nodeData.link}`);
+
+                    return { data: nodeData };
+                }),
+                edges: graphData.ingest_data.edges.map((edgeItem, index) => {
+                    processedElements++;
+                    if (index % 10 === 0 || index === graphData.ingest_data.edges.length - 1) {
+                        const percentage = Math.round((processedElements / totalElements) * 100);
+                        updateLoadingMessage('Processing graph data', percentage);
+                    }
+                    const edgeData = {
+                        source: edgeItem.source,
+                        target: edgeItem.target,
+                        relationship: edgeItem.relationship
+                    };
+
+                    // Debug output for each edge
+                    appendDebugInfo(`Edge - Source: ${edgeData.source}, Target: ${edgeData.target}, Relationship: ${edgeData.relationship}`);
+
+                    return { data: edgeData };
+                })
+            };
+
+            updateLoadingMessage('Initializing graph...');
+            // Initialize Cytoscape
+            cy = cytoscape({
+                container: document.getElementById('cy'),
+                elements: cygraphData,
+                style: [
+                    {
+                        selector: 'node',
+                        style: {
+                            'label': 'data(label)',
+                            'background-color': '#6FB1FC',
+                            'shape': 'ellipse',
+                            'text-valign': 'center',
+                            'text-halign': 'center',
+                            'text-wrap': 'wrap',
+                            'text-max-width': '100px',
+                            'width': 'label',
+                            'height': 'label',
+                            'padding': '15px',
+                            'font-size': '5px',
+                            'font-family': 'Arial, Helvetica, sans-serif',
+                            'border-width': '2px',
+                            'border-color': '#000000',
+                            'border-opacity': '1',
+                            'background-image': 'data(icon)',
+                            'background-fit': 'none',
+                            'background-opacity': '0.5',
+                            'background-position-x': '50%',
+                            'background-position-y': '95%',
+                            'background-width': '15px',
+                            'background-height': '15px',
+                        }
+                    },
+                    {
+                        selector: 'node[pinned]',
+                        style: {
+                            'background-color': 'lightsalmon',
+                            'background-image': 'data(icon)',
+                            'background-fit': 'none',
+                            'background-opacity': '0.5',
+                            'background-position-x': '50%',
+                            'background-position-y': '95%',
+                            'background-width': '15px',
+                            'background-height': '15px',
+                        }
+                    },
+                    {
+                        selector: 'edge',
+                        style: {
+                            'width': 3,
+                            'line-color': function (ele) {
+                                const relationship = ele.data('relationship');
+                                for (const [key, color] of Object.entries(edgeColorMap)) {
+                                    if (relationship.startsWith(key)) {
+                                        return color;
+                                    }
+                                }
+                                return '#ccc'; // default color if no match found
+                            },
+                            'label': 'data(relationship)',
+                            'curve-style': 'bezier',
+                            'font-size': '3px',
+                            'font-family': 'Arial, Helvetica, sans-serif'
+                        }
+                    }
+                ],
+                layout: {
+                    name: 'cose',
+                    idealEdgeLength: 500,  // Increase this value
+                    nodeOverlap: 20,
+                    nodeRepulsion: 6000,   // Increase this value
+                    padding: 50,
+                    randomize: true,
+                    componentSpacing: 100,
+                    gravity: 0.1,          // Decrease this value
+                    fit: true,
+                    animate: false,
+                    animationDuration: 0
+                }
+            });
+            document.getElementById('toggle-node-list').addEventListener('click', toggleNodeListPanel);
+            document.getElementById('toggle-edge-list').addEventListener('click', toggleEdgeListPanel);
+
+            updateNodeList();
+            // updateEdgeList();
+            updateGraphVisibility(); // Initial update to ensure correct visibility     
+            // Add click event to nodes
+            cy.on('tap', 'node', function (evt) {
+                var node = evt.target;
+                var link = node.data('link');
+                if (link) {
+                    window.open(link, '_blank');
+                }
+            });
+            updateLoadingMessage('Adding node information...');
+            // Add qtip for hover information
+            cy.nodes().qtip({
+                content: function () {
+                    var node = this;
+                    return `
+                        <strong>Title:</strong> ${node.data('label')}<br>
+                        <strong>Creator:</strong> ${node.data('creator')}<br>
+                        <strong>PI Affiliated:</strong> ${node.data('piAffiliated').join(', ')}<br>
+                        <strong>Data Tags:</strong> ${node.data('dataTags').join(', ')}<br>
+                        <strong>Document Format:</strong> ${node.data('documentFormat')}<br>
+                        <strong>Data Type:</strong> ${node.data('dataType').join(', ')}<br>
+                        <strong>Date:</strong> ${node.data('date')}<br>
+                        <strong>Thrust:</strong> ${node.data('thrust')}<br>
+                        <strong>Related Topic:</strong> ${node.data('relatedTopic').join(', ')}
+                    `;
+                },
+                position: {
+                    my: 'top center',
+                    at: 'bottom center'
+                },
+                style: {
+                    classes: 'qtip-bootstrap',
+                    tip: {
+                        width: 16,
+                        height: 8
+                    }
+                },
+                show: {
+                    event: 'mouseover'
+                },
+                hide: {
+                    event: 'mouseout'
+                }
+            });
+
+            // Change cursor on hover
+            cy.on('mouseover', 'node', function (evt) {
+                document.body.style.cursor = 'pointer';
+            });
+            cy.on('mouseout', 'node', function (evt) {
+                document.body.style.cursor = 'default';
+            });
+
+            // Event listener for reset graph button
+            // Modify the reset graph button event listener
+            // Modify the reset graph button event listener
+            document.getElementById('reset-graph').addEventListener('click', function () {
+                cy.fit(); // Reset zoom and pan
+                cy.layout({ name: 'cose' }).run(); // Re-run the layout
+
+                // Reset all nodes to checked and visible
+                cy.nodes().forEach(node => {
+                    node.data('checked', true);
+                    node.data('visible', true);
+                    node.style('display', 'element');
+                });
+
+                // Make all edges visible
+                cy.edges().forEach(edge => {
+                    edge.style('display', 'element');
+                });
+                // Reset all edge checkboxes
+                document.querySelectorAll('.edge-checkbox').forEach(checkbox => {
+                    checkbox.checked = true;
+                });
+                // Clear search bar
+                document.getElementById('search-bar').value = '';
+
+                // Update node list and graph visibility
+                updateNodeList();
+                updateEdgeList();
+                updateGraphVisibility();
+            });
+
+            // Add this new script at the end of your existing script
+            document.getElementById('back-to-search').addEventListener('click', function () {
+                var searchUrl = this.getAttribute('data-search-url');
+                if (searchUrl) {
+                    window.location.href = searchUrl;
+                } else {
+                    // Fallback to using history if the URL is not set
+                    window.history.back();
+                }
+            });
+
+
+            hideLoadingOverlay();
+            sessionStorage.removeItem('graphVisualizationData');
+        }
+        function initializeEdgeVisibility() {
+            document.querySelectorAll('.edge-checkbox').forEach(checkbox => {
+                if (!checkbox.id.includes('Same-Thrust')) {
+                    checkbox.checked = false;
+                    updateEdgeVisibility(checkbox.nextElementSibling.textContent, false);
+                }
+            });
+        }
+
+        
+
+
+
+
+
+
+        // Chat functionality
+        console.log('Chat functionality script loaded');
+
+        const chatContainer = document.getElementById('chat-container');
+        const chatMessages = document.getElementById('chat-messages');
+        const userInput = document.getElementById('user-input');
+        const sendMessage = document.getElementById('send-message');
+        const toggleChat = document.getElementById('toggle-chat');
+        const closeChat = document.getElementById('close-chat');
+        const resetConversation = document.getElementById('reset-conversation');
+        const loadingIndicator = document.getElementById('loading-indicator');
+        const chatMessagesContainer = document.getElementById('chat-messages-container');
+
+
+        console.log('Chat elements:', {
+            chatContainer,
+            chatMessages,
+            userInput,
+            sendMessage,
+            toggleChat,
+            closeChat
+        });
+        function showLoadingIndicator() {
+            loadingIndicator.style.display = 'block';
+        }
+
+        function hideLoadingIndicator() {
+            loadingIndicator.style.display = 'none';
+        }
+
+        let isInitialMessage = true;
+
+        toggleChat.addEventListener('click', () => {
+            console.log('Toggle chat clicked');
+            chatContainer.style.display = chatContainer.style.display === 'none' ? 'block' : 'none';
+            toggleChat.style.display = 'none';
+            if (isInitialMessage) {
+                sendInitialMessage();
+            }
+        });
+
+        closeChat.addEventListener('click', () => {
+            console.log('Close chat clicked');
+            chatContainer.style.display = 'none';
+            toggleChat.style.display = 'block';
+        });
+
+        // Update send button event listener
+        sendMessage.addEventListener('click', (e) => {
+            e.preventDefault();
+            sendUserMessage();
+        });
+        // Update the reset conversation function
+        resetConversation.addEventListener('click', () => {
+            if (confirm('Are you sure you want to reset the conversation? This action cannot be undone.')) {
+                console.log('Resetting conversation');
+                chatMessages.innerHTML = ''; // Clear only the messages
+                conversationHistory = []; // Reset conversation history
+                hideLoadingIndicator(); // Ensure loading indicator is hidden
+                isInitialMessage = true;
+                sendInitialMessage();
+            }
+        });
+        function sendInitialMessage() {
+            fetchAIResponse('', true);
+            isInitialMessage = false;
+        }
+
+        let conversationHistory = [];
+
+        function sendUserMessage() {
+            console.log('Sending user message');
+            const message = userInput.value.trim();
+            if (message) {
+                addMessageToChat('You', message);
+                userInput.value = ''; // Clear the input
+                userInput.style.height = '60px'; // Reset the height
+                userInput.blur(); // Remove focus from the textarea
+                fetchAIResponse(message);
+            }
+        }
+        // Update event listener for textarea
+        userInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                if (e.shiftKey) {
+                    // Shift+Enter: allow new line
+                    return;
+                } else {
+                    // Enter without Shift: send message
+                    e.preventDefault();
+                    sendUserMessage();
+                }
+            }
+        });
+        // Add this new function to handle textarea auto-resize
+        function autoResizeTextarea() {
+            this.style.height = '60px'; // Reset height to default
+            this.style.height = (this.scrollHeight) + 'px';
+        }
+        // Modify the addMessageToChat function to accept a background color
+function addMessageToChat(sender, message, backgroundColor = null) {
+    console.log('Adding message to chat:', { sender, message, backgroundColor });
+    const messageElement = document.createElement('div');
+    messageElement.className = `message ${sender === 'You' || sender === 'You (Data Sent)' ? 'human-message' : 'ai-message'}`;
+    if (backgroundColor) {
+        messageElement.style.backgroundColor = backgroundColor;
+    }
+    messageElement.innerHTML = `<strong>${sender}:</strong> ${message}`;
+    chatMessages.appendChild(messageElement);
+    chatMessagesContainer.scrollTop = chatMessagesContainer.scrollHeight;
+
+    // Only update conversation history for user messages
+    if (sender === 'You' || sender === 'You (Data Sent)') {
+        conversationHistory.push({
+            role: 'Human',
+            content: message
+        });
+    }
+}
+
+        function fetchAIResponse(prompt, isInitial = false) {
+            console.log('Fetching AI response');
+            showLoadingIndicator();
+
+            fetch('/run_ollama_interactive/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify({
+                    prompt: prompt,
+                    conversation_history: conversationHistory,
+                    is_initial_message: isInitial
+                })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('AI response received:', data);
+                    hideLoadingIndicator();
+
+                    // Remove the condition and always show the AI response
+                    addMessageToChat('AI', data.output);
+
+                    // Update the conversation history with the response from the server
+                    conversationHistory = data.conversation_history;
+                    console.log('Updated conversation history:', conversationHistory);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    hideLoadingIndicator();
+                    addMessageToChat('AI', 'Sorry, an error occurred. Please try again.');
+                });
+        }
+
+        // Function to get CSRF token
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        // Add these functions to your existing JavaScript code
+
+function summarizeAllNodes() {
+    fetchSummary('all');
+}
+
+function summarizePinnedNodes() {
+    const pinnedNodes = cy.nodes().filter(node => node.data('pinned'));
+    fetchSummary('pinned', pinnedNodes);
+}
+
+function summarizeVisibleNodes() {
+    const visibleNodes = cy.nodes().filter(node => node.visible());
+    fetchSummary('visible', visibleNodes);
+}
+
+function summarizeAllNodes() {
+    fetchSummary('all', 'Provide a Summary of All Nodes', '#ffcccb');
+}
+
+function summarizePinnedNodes() {
+    const pinnedNodes = cy.nodes().filter(node => node.data('pinned'));
+    fetchSummary('pinned', 'Provide a Summary of Pinned Nodes', '#90EE90', pinnedNodes);
+}
+
+function summarizeVisibleNodes() {
+    const visibleNodes = cy.nodes().filter(node => node.visible());
+    fetchSummary('visible', 'Provide a Summary of Visible Nodes', '#ADD8E6', visibleNodes);
+}
+
+function fetchSummary(type, buttonText, color, nodes = null) {
+    let data = {};
+    if (type === 'all') {
+        data = graphData;
+    } else {
+        data = {
+            ingest_type: "GMetaList",
+            ingest_data: {
+                gmeta: nodes.map(node => {
+                    return graphData.ingest_data.gmeta.find(item => item.subject === node.id());
+                }).filter(Boolean)
+            }
+        };
+    }
+
+    // Add the user's action to the chat
+    addMessageToChat('You (Data Sent)', buttonText, color);
+
+    // Send the summary request to the backend
+    fetch('/extract_metadata_summary/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCookie('csrftoken')
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(data => {
+        // Instead of directly adding the summary to the chat,
+        // we'll send it to the AI model
+        fetchAIResponse(data.summary);
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        addMessageToChat('AI', 'Sorry, an error occurred while fetching the summary.');
+    });
+}
+// Function to close panels
+function closePanels() {
+    document.getElementById('node-list-panel').style.display = 'none';
+    document.getElementById('edge-list-panel').style.display = 'none';
+}
+document.getElementById('debug-info-header').addEventListener('click', function() {
+    var content = document.getElementById('debug-info');
+    var icon = this.querySelector('.fold-icon');
+    
+    if (content.style.display === 'none') {
+        content.style.display = 'block';
+        icon.textContent = '▲';
+        icon.style.transform = 'rotate(0deg)';
+    } else {
+        content.style.display = 'none';
+        icon.textContent = '▼';
+        icon.style.transform = 'rotate(0deg)';
+    }
+});
+// Add event listeners for close buttons
+document.querySelectorAll('.close-panel').forEach(button => {
+    button.addEventListener('click', function() {
+        this.closest('#node-list-panel, #edge-list-panel').style.display = 'none';
+    });
+});
+// Add event listeners for the new buttons
+document.getElementById('summarize-all-nodes').addEventListener('click', summarizeAllNodes);
+document.getElementById('summarize-pinned-nodes').addEventListener('click', summarizePinnedNodes);
+document.getElementById('summarize-visible-nodes').addEventListener('click', summarizeVisibleNodes);
+        console.log('Chat functionality script completed');
+
+
+    </script>
+
+</body>
+
+</html>

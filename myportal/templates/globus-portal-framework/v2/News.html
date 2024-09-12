@@ -1,0 +1,111 @@
+{% extends "globus-portal-framework/v2/base.html" %}
+{% load static %}
+
+{% block body %}
+    <div style="position:fixed; top:0; left:0; width:100%; height:100%; background-image: url('{% static 'pics/news.png' %}'); background-size: cover; opacity: 0.25; z-index: -1;"></div>
+
+    <!-- Custom styles -->
+    <style>
+        /* Custom styles for carousel images */
+        .carousel-img {
+            width: 50%; /* Set image width to 50% of its parent */
+            margin: 0 auto; /* Center the image */
+        }
+        /* Center the carousel */
+        #newsCarousel {
+            display: block; /* Needed to apply margin auto */
+            margin-left: auto;
+            margin-right: auto;
+        }
+        /* Custom styles for carousel captions */
+        .carousel-caption {
+            color: black; /* Set text color to black */
+            background: rgba(255, 255, 255, 0.8); /* White background with some opacity */
+            width: 50%; /* Match the image width */
+            margin: 0 auto; /* Center the caption */
+            padding: 0.5em; /* Add some padding around the text */
+        }
+        /* Add this new rule to ensure the color is black for all h3 within the caption, even if other styles are trying to override it */
+        #newsCarousel .carousel-caption h3 {
+            color: black !important; /* Force text color to black */
+        }
+    </style>
+
+    <!-- Bootstrap CSS and JS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <!-- News Carousel Section -->
+    <div class="container-fluid mt-5">
+        <div class="row">
+            <div class="col">
+                <div id="newsCarousel" class="carousel slide" data-ride="carousel">
+                    <!-- Indicators -->
+                    <ol class="carousel-indicators">
+                        <li data-target="#newsCarousel" data-slide-to="0" class="active"></li>
+                        <li data-target="#newsCarousel" data-slide-to="1"></li>
+                        <li data-target="#newsCarousel" data-slide-to="2"></li>
+                    </ol>
+
+                    <!-- Wrapper for slides -->
+                    <div class="carousel-inner">
+                        <div class="carousel-item active">
+                            <img class="carousel-img d-block mx-auto" src="{% static 'pics/news1.jpg' %}" alt="News 1">
+                            <div class="carousel-caption d-block">
+                                <h3>New logo for MADE-PUBLIC</h3>
+                            </div>
+                        </div>
+                        <div class="carousel-item">
+                            <a href="https://pme.uchicago.edu/news/pme-researchers-receive-nsf-grant-sustainable-future-manufacturing">
+                                <img class="carousel-img d-block mx-auto" src="{% static 'pics/news2.jpg' %}" alt="News 2">
+                                <div class="carousel-caption d-block">
+                                    <h3>PME researchers receive NSF grant for sustainable future manufacturing</h3>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="carousel-item">
+                            <a href="https://www.nsf.gov/news/special_reports/announcements/100220.jsp">
+                                <img class="carousel-img d-block mx-auto" src="{% static 'pics/news3.jpg' %}" alt="News 3">
+                                <div class="carousel-caption d-block">
+                                    <h3>NSF announces investment in future of manufacturing</h3>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Controls -->
+                    <a class="carousel-control-prev" href="#newsCarousel" role="button" data-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                    <a class="carousel-control-next" href="#newsCarousel" role="button" data-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Place this where you want the YouTube video to appear -->
+    <!-- Place this where you want the video to appear -->
+    <div class="video-container" style="width: 50%; margin: 0 auto; overflow: hidden;">
+        <video preload="none" autoplay loop playsinline style="width: 100%; height: auto;" src="https://video.wixstatic.com/video/55e9ff_61fa2e6020b24165b7c39b0f904733e8/1080p/mp4/file.mp4" muted></video>
+    </div>
+    <!-- Custom script for toggling -->
+    <script>
+        $(document).ready(function(){
+            $(".close-button").click(function(){
+                // Using 'data-target' attribute to specify which section to toggle
+                var target = $(this).data('target');
+                $(target).toggleClass('show');
+            });
+            
+            // Initialize Carousel
+            $('#newsCarousel').carousel({
+                interval: 3000 // The interval time for image scrolling, in milliseconds
+            });
+        });
+    </script>
+{% endblock %}

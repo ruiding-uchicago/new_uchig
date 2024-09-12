@@ -1,0 +1,7 @@
+/* detail-overview.css */
+
+.card {
+    /* Rounded corners */
+    border-radius: 20px; /* Adjust the radius as needed */
+    background: rgb(193, 193, 199); /* Semi-transparent white background */
+}

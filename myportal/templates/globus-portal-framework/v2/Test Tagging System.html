@@ -1,0 +1,1188 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Upload and Visualization</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        body,
+        html {
+            height: 100%;
+            margin: 0;
+        }
+
+        .tagging-section h4 {
+            font-weight: bold;
+            /* Make the text bold */
+            margin-bottom: 10px;
+            /* Add some space below the heading */
+        }
+
+        /* Add border and padding to each section for clear distinction */
+        .section-wrapper {
+            border: 1px solid #ccc;
+            /* Add a light grey border */
+            padding: 10px;
+            /* Add some padding inside the border */
+            margin-bottom: 20px;
+            /* Add some space between sections */
+        }
+
+        .back-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            /* Change from left to right */
+            z-index: 1000;
+        }
+
+        .container {
+            display: flex;
+            height: 100vh;
+            margin: 0;
+            /* Remove any default margin */
+            padding: 0;
+            /* Remove any default padding */
+            width: 100%;
+            /* Ensure the container takes full width */
+        }
+
+        .tagging-section {
+            flex: 0 0 55%;
+            /* 25% of the container */
+            background-color: #f4f4f4;
+            padding: 20px;
+            overflow-y: auto;
+            border-right: 2px solid #ccc;
+            margin: 0;
+            /* Ensure no default margin */
+        }
+
+        .file-tree-container {
+            flex: 0 0 160%;
+            /* Take up the remaining space */
+            padding: 20px;
+            margin: 0;
+            overflow-y: auto;
+            /* Add scroll if content overflows */
+        }
+
+        #file-tree {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #fff;
+            padding: 10px;
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        .file-input-label {
+            display: block;
+            background-color: #007bff;
+            color: white;
+            padding: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .file-tree ul {
+            list-style-type: none;
+            padding-left: 20px;
+        }
+
+        .file-tree li {
+            margin: 5px 0;
+            display: flex;
+            align-items: center;
+            white-space: nowrap;
+            background-color: #f8f9fa;
+            cursor: pointer;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .file-tree li.selected {
+            border: 2px solid blue;
+        }
+
+        .file-icon {
+            margin-right: 5px;
+        }
+
+        .file-tag {
+            margin-left: 10px;
+            font-size: 0.9em;
+            color: #555;
+        }
+
+        .action-buttons {
+            margin-top: 15px;
+        }
+
+        .file-icon.tagged {
+            color: green;
+        }
+
+        .file-icon.untagged {
+            color: red;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 2px 6px;
+            margin: 2px;
+            font-size: 0.8em;
+            border-radius: 4px;
+            color: white;
+        }
+
+        .thrust-tag {
+            background-color: #007bff;
+        }
+
+        .pi-tag {
+            background-color: #28a745;
+        }
+
+        .topic-tag {
+            background-color: #17a2b8;
+        }
+
+        .data-tag {
+            background-color: #ffc107;
+        }
+
+        .data-type-tag {
+            background-color: #dc3545;
+        }
+
+        .document-type-tag {
+            background-color: #6c757d;
+            /* You can choose any color you prefer */
+        }
+
+        .abstract-tag,
+        .link-tag {
+            background-color: #6610f2;
+            /* Example color */
+        }
+
+        /* Tooltip styles */
+        .tag:hover::after {
+            content: attr(data-content);
+            position: absolute;
+            left: 100%;
+            top: 0;
+            white-space: nowrap;
+            background-color: #333;
+            color: #fff;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.8em;
+            z-index: 1;
+        }
+
+        .untagged-items-container {
+            border: 1px solid #ccc;
+            margin-top: 20px;
+            padding: 10px;
+        }
+
+        .untagged-items-container h4 {
+            margin-bottom: 10px;
+        }
+
+        #untagged-items-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        #untagged-items-list li {
+            margin: 5px 0;
+            color: red;
+        }
+
+        #creator-display {
+            display: inline-block;
+            margin-left: 20px;
+            background-color: #007bff;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+
+        /* Prevent text selection styling */
+        .no-select {
+            user-select: none;
+            -moz-user-select: none;
+            -webkit-user-select: none;
+            -ms-user-select: none;
+        }
+
+        /* Toggle Switch Styling */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked+.slider {
+            background-color: #2196F3;
+        }
+
+        input:focus+.slider {
+            box-shadow: 0 0 1px #2196F3;
+        }
+
+        input:checked+.slider:before {
+            transform: translateX(26px);
+        }
+
+        /* Enhanced file-input-label visibility */
+        .file-input-label {
+            cursor: pointer;
+            user-select: none;
+        }
+
+        /* Increase the size of specific input fields */
+        #abstract-description,
+        #outer-link,
+        #globus-path {
+            width: 100%;
+            /* Make the input take full width of its container */
+            min-height: 40px;
+            /* Increase the height */
+            padding: 8px;
+            /* Add some padding for text inside */
+            margin-bottom: 15px;
+            /* Add some space below the input field */
+            border: 1px solid #ccc;
+            /* Add a border to make the input field stand out */
+            border-radius: 4px;
+            /* Slightly round the corners */
+        }
+
+        /* New class for full-width buttons */
+        .full-width-button {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        /* Adjust the untagged items container */
+        .untagged-items-container {
+            margin-top: 20px;
+        }
+
+        .section-box {
+            border: 1px solid #ccc;
+            padding: 15px;
+            margin-bottom: 20px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+        }
+
+        .section-box h4 {
+            margin-top: 0;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        /* Ensure buttons in the JSON upload instruction section are full width */
+        .json-upload-instruction button {
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .disabled-section {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        #redirect-globus {
+            margin-top: 10px;
+        }
+
+        /* New styles for the step progress bar */
+        .step-progress-bar {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+
+        .step-progress-bar .steps {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .step-progress-bar .step {
+            text-align: center;
+            position: relative;
+        }
+
+        .step-progress-bar .step-circle {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: 2px solid #ccc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 5px;
+            background-color: white;
+            position: relative;
+            z-index: 2;
+        }
+
+        .step-progress-bar .step.completed .step-circle {
+            border-color: #28a745;
+            background-color: #28a745;
+            color: white;
+        }
+
+        .step-progress-bar .progress {
+            position: absolute;
+            top: 15px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: #ccc;
+        }
+
+        .step-progress-bar .progress-bar {
+            height: 100%;
+            background-color: #28a745;
+            width: 0;
+            transition: width 0.5s ease-in-out;
+        }
+    </style>
+</head>
+
+<body>
+    <button class="back-button btn btn-primary" onclick="window.location.href='/'">
+        <i class="fas fa-home"></i>
+    </button>
+    <div class="container">
+        <div class="tagging-section">
+
+            <div class="section-wrapper">
+                <h4>(Step 1)Creator:</h4>
+                <input type="text" id="creator-name" placeholder="Enter creator name">
+                <button id="confirm-creator">Confirm</button>
+            </div>
+            <div id="tagging-panels" class="disabled-section">
+                <h3>(Step 3)Tagging</h3>
+                <div>
+                    Subfolder & File Inlcuded:
+                    <input type="checkbox" id="subfolder-file-cover" />
+                </div>
+                <div class="section-wrapper">
+                    <h4>Thrust: (select 1 only)</h4>
+                    <div id="thrust-tags">
+                        <label><input type="checkbox" name="thrust-tag" value="Thrust 1"> Thrust 1</label>
+                        <label><input type="checkbox" name="thrust-tag" value="Thrust 2"> Thrust 2</label>
+                        <label><input type="checkbox" name="thrust-tag" value="Thrust 3"> Thrust 3</label>
+                        <label><input type="checkbox" name="thrust-tag" value="Thrust 4"> Thrust 4</label>
+                        <label><input type="checkbox" name="thrust-tag" value="Thrust 5"> Thrust 5</label>
+                        <label><input type="checkbox" name="thrust-tag" value="Others"> Others</label>
+                        <input type="text" id="thrust-other" style="display:none;" placeholder="Enter other thrust">
+                    </div>
+                </div>
+
+                <div class="section-wrapper">
+                    <h4>PI Affiliated:</h4>
+                    <div id="pi-tags">
+                        <label><input type="checkbox" name="pi-tag" value="Junhong Chen"> Junhong Chen</label>
+                        <label><input type="checkbox" name="pi-tag" value="Yuxin Chen"> Yuxin Chen</label>
+                        <label><input type="checkbox" name="pi-tag" value="Elizabeth Ainsworth"> Elizabeth
+                            Ainsworth</label>
+                        <label><input type="checkbox" name="pi-tag" value="Santanu Chaudhuri"> Santanu Chaudhuri</label>
+                        <label><input type="checkbox" name="pi-tag" value="Mark Hersam"> Mark Hersam</label>
+                        <label><input type="checkbox" name="pi-tag" value="Stuart Rowan"> Stuart Rowan</label>
+                        <label><input type="checkbox" name="pi-tag" value="Wei Chen"> Wei Chen</label>
+                        <label><input type="checkbox" name="pi-tag" value="Jonathan Claussen"> Jonathan Claussen</label>
+                        <label><input type="checkbox" name="pi-tag" value="Jennifer Dunn"> Jennifer Dunn</label>
+                        <label><input type="checkbox" name="pi-tag" value="Dokyoung Lee"> Dokyoung Lee</label>
+                        <label><input type="checkbox" name="pi-tag" value="Zhiyong Cai"> Zhiyong Cai</label>
+                        <label><input type="checkbox" name="pi-tag" value="Others"> Others</label>
+                        <input type="text" id="pi-other" style="display:none;" placeholder="Enter other PI">
+                    </div>
+                </div>
+
+                <div class="section-wrapper">
+                    <h4>Related Topic:</h4>
+                    <div id="topic-tags">
+                        <label><input type="checkbox" name="topic-tag" value="Printing"> Printing</label>
+                        <label><input type="checkbox" name="topic-tag" value="FET sensors"> FET sensors</label>
+                        <label><input type="checkbox" name="topic-tag" value="Lithium Ion Batteries"> Lithium Ion
+                            Batteries</label>
+                        <label><input type="checkbox" name="topic-tag" value="Plant Growth"> Plant Growth</label>
+                        <label><input type="checkbox" name="topic-tag" value="Crop Science"> Crop Science</label>
+                        <label><input type="checkbox" name="topic-tag" value="Biochemistry"> Biochemistry</label>
+                        <label><input type="checkbox" name="topic-tag" value="DFT Simulation"> DFT Simulation</label>
+                        <label><input type="checkbox" name="topic-tag" value="MD Simulation"> MD Simulation</label>
+                        <label><input type="checkbox" name="topic-tag" value="Functional Nanomaterial Synthesis">
+                            Functional
+                            Nanomaterial Synthesis</label>
+                        <label><input type="checkbox" name="topic-tag" value="Ink Formulation"> Ink Formulation</label>
+                        <label><input type="checkbox" name="topic-tag" value="Cheimcal Engieerning"> Cheimcal
+                            Engieerning</label>
+                        <label><input type="checkbox" name="topic-tag" value="Machine Learning"> Machine
+                            Learning</label>
+                        <label><input type="checkbox" name="topic-tag" value="Manufacturing"> Manufacturing</label>
+                        <label><input type="checkbox" name="topic-tag" value="Policy"> Policy</label>
+                        <label><input type="checkbox" name="topic-tag" value="Data Analytics"> Data Analytics</label>
+                        <label><input type="checkbox" name="topic-tag" value="TEA/LCA/MFA"> TEA/LCA/MFA</label>
+                        <label><input type="checkbox" name="topic-tag" value="Others"> Others</label>
+                        <input type="text" id="topic-other" style="display:none;" placeholder="Enter other topic">
+                    </div>
+                </div>
+
+                <div class="section-wrapper">
+                    <h4>Data Tags:</h4>
+                    <div id="data-tags">
+                        <label><input type="checkbox" name="data-tag" value="Experimental Exploration">
+                            Experimental</label>
+                        <label><input type="checkbox" name="data-tag" value="Theoretical Simulation">
+                            Theoretical</label>
+                        <label><input type="checkbox" name="data-tag" value="Exploration Results"> Exploration
+                            Results</label>
+                        <label><input type="checkbox" name="data-tag" value="Code Repository"> Code Repository</label>
+                        <label><input type="checkbox" name="data-tag" value="Raw Experimental Data"> Raw Experimental
+                            Data</label>
+                        <label><input type="checkbox" name="data-tag" value="Meeting Records"> Meeting Records</label>
+                        <label><input type="checkbox" name="data-tag" value="Adminstrative Files"> Adminstrative
+                            Files</label>
+                        <label><input type="checkbox" name="data-tag" value="Material Characterization"> Material
+                            Characterization</label>
+                        <label><input type="checkbox" name="data-tag" value="Literatures"> Literatures</label>
+                        <label><input type="checkbox" name="data-tag" value="Others"> Others</label>
+                        <input type="text" id="data-tag-other" style="display:none;" placeholder="Enter other data tag">
+                    </div>
+                </div>
+
+                <div class="section-wrapper">
+                    <h4>Data Type:</h4>
+                    <div id="data-type-tags">
+                        <label><input type="checkbox" name="data-type-tag" value="Dataset"> Dataset</label>
+                        <label><input type="checkbox" name="data-type-tag" value="Records"> Records</label>
+                        <label><input type="checkbox" name="data-type-tag" value="Publication"> Publication</label>
+                        <label><input type="checkbox" name="data-type-tag" value="Experiment Results"> Experiment
+                            Results</label>
+                        <label><input type="checkbox" name="data-type-tag" value="Images"> Images</label>
+                        <label><input type="checkbox" name="data-type-tag" value="Videos"> Videos</label>
+                        <label><input type="checkbox" name="data-type-tag" value="Code Scripts"> Code Scripts</label>
+                        <label><input type="checkbox" name="data-type-tag" value="Computation Results"> Computation
+                            Results</label>
+                        <label><input type="checkbox" name="data-type-tag" value="Machine Learning Model Files"> Machine
+                            Learning Model Files</label>
+                        <label><input type="checkbox" name="data-type-tag" value="Others"> Others</label>
+                        <input type="text" id="data-type-other" style="display:none;"
+                            placeholder="Enter other data type">
+                    </div>
+                </div>
+
+                <div class="section-wrapper">
+                    <h4>Abstract Description:</h4>
+                    <textarea id="abstract-description" placeholder="Enter abstract description" rows="5"></textarea>
+                </div>
+                <div class="section-wrapper">
+                    <h4>Outer Link:</h4>
+                    <input type="text" id="outer-link" placeholder="Enter outer link">
+                </div>
+            </div>
+            <button id="apply-tag" class="full-width-button disabled-section">Apply Tag (Step 4, click here to apply
+                tags to the files, may take several seconds to wait)</button>
+            <div class="action-buttons disabled-section">
+                <button id="clear-all">Start Over Again</button>
+                <button id="clear-selected-tags">Clear Selected Tags</button>
+                <button id="clear-tags">Clear All Tags</button>
+                <button id="deselect-all">Deselect All</button>
+            </div>
+
+        </div>
+        <div class="file-tree-container">
+            <label for="file-input" class="file-input-label btn btn-primary disabled" id="file-input-label">(Step 2)
+                Select Files or Folder</label>
+            <div class="toggle-switch">
+                <label for="mode-toggle" class="switch">
+                    <input type="checkbox" id="mode-toggle">
+                    <span class="slider round"></span>
+                </label>
+                <span id="mode-label">Select Folder (One)</span>
+            </div>
+            <input type="file" id="file-input" webkitdirectory multiple hidden disabled>
+            <input type="file" id="file-input" webkitdirectory multiple hidden>
+            <button id="toggle-files" class="btn btn-secondary">Hide All Files</button>
+            <div id="creator-display" style="display: none;">Creator: <span id="creator-name-display"></span></div>
+            <div id="file-tree" class="file-tree">
+                <!-- File tree will be rendered here -->
+            </div>
+
+
+            <div class="section-box untagged-items-container">
+                <h4>Untagged Items:</h4>
+                <ul id="untagged-items-list"></ul>
+                <div id="all-tagged-message"
+                    style="display: none; color: green; font-weight: bold; margin-top: 10px; padding: 10px; background-color: #e8f5e9; border: 1px solid #c8e6c9; border-radius: 4px;">
+                    All Folder/File Tagged, Please Proceed to Generate Meta Data File.
+                </div>
+            </div>
+
+            <div class="section-box globus-path-container">
+                <h4>(Step 5) Upload Your Data Folder to the Corresponding Globus Repository Folder</h4>
+                <label for="globus-path">Globus Path: (Please indicate where you have uploaded already in Globus system
+                    under the MADE_PUBLIC_DATA folder, for example, if you directly put your whole folder processed by
+                    this page (by "Select Files or Folders") under the "Thrust 3/" folder, then input here "Thrust
+                    3/". As example: the uploaded whole "Data from Rapti" folder is placed under the "Thrust 3/" folder,
+                    so the type bar here was only "Thrust 3/")</label>
+                <input type="text" id="globus-path" placeholder="Enter Globus path(eg. Thrust 3/)">
+                <button id="redirect-globus" class="btn btn-primary full-width-button">(Step 5) Redirect to
+                    corresponding Globus Directory</button>
+            </div>
+
+            <div class="section-box generate-metadata-container">
+                <button id="generate-metadata" class="btn btn-primary full-width-button">(Step 6) Generate Metadata JSON
+                    File</button>
+            </div>
+
+            <div class="section-box json-upload-instruction">
+                <h4>(Step 7) Please upload the just now generated json file automatically downloaded by your browser to
+                    the public json storage path, please to click this button to be redirected to the path, and upload
+                    that json:</h4>
+                <button id="upload-json" class="btn btn-primary"
+                    onclick="window.open('https://app.globus.org/file-manager?origin_id=af7bda53-6d04-11e5-ba46-22000b92c6ec&origin_path=%2Fproject2%2Fchenyuxin%2FMADE_PUBLIC_REPO%2FJSON_upload%2F', '_blank')">(Step
+                    7) Upload the Meta Data JSON File to the JSON Storage Folder for the Administrator to
+                    proceed</button>
+            </div>
+            <!-- End of new content -->
+
+        </div>
+    </div>
+    <!-- Add this new section just before the closing </body> tag -->
+    <div class="step-progress-bar">
+        <div class="progress">
+            <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+        </div>
+        <div class="steps">
+            <div class="step" data-step="1">
+                <div class="step-circle">1</div>
+                <div class="step-text">Creator</div>
+            </div>
+            <div class="step" data-step="2">
+                <div class="step-circle">2</div>
+                <div class="step-text">Select Files</div>
+            </div>
+            <div class="step" data-step="3">
+                <div class="step-circle">3</div>
+                <div class="step-text">Tagging</div>
+            </div>
+            <div class="step" data-step="4">
+                <div class="step-circle">4</div>
+                <div class="step-text">Apply Tags</div>
+            </div>
+            <div class="step" data-step="5">
+                <div class="step-circle">5</div>
+                <div class="step-text">Globus Path</div>
+            </div>
+            <div class="step" data-step="6">
+                <div class="step-circle">6</div>
+                <div class="step-text">Generate JSON</div>
+            </div>
+            <div class="step" data-step="7">
+                <div class="step-circle">7</div>
+                <div class="step-text">Upload JSON</div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            const fileInput = document.getElementById('file-input');
+
+            const modeToggle = document.getElementById('mode-toggle');
+            const modeLabel = document.getElementById('mode-label');
+
+            modeToggle.addEventListener('change', function () {
+                if (this.checked) {
+                    fileInput.removeAttribute('webkitdirectory');
+                    modeLabel.textContent = 'Select File(s)';
+                } else {
+                    fileInput.setAttribute('webkitdirectory', '');
+                    modeLabel.textContent = 'Select Folder (One)';
+                }
+            });
+            const fileTreeContainer = document.getElementById('file-tree');
+            let showFiles = true;
+            let lastSelectedItem = null;
+            let fileTags = {};
+            let foldersCollapsed = {};
+
+            fileInput.addEventListener('change', handleFileUpload);
+
+            function handleFileUpload(e) {
+                const files = e.target.files;
+
+                if (modeToggle.checked) {  // If we are in file selection mode
+                    displayFileStructure(files, true);
+                } else {  // Folder selection mode
+                    displayFileStructure(files, false);
+                }
+            }
+
+            // New JavaScript for the step progress bar
+            function updateStepProgress(step) {
+                $('.step-progress-bar .step').each(function () {
+                    if ($(this).data('step') <= step) {
+                        $(this).addClass('completed');
+                        $(this).find('.step-circle').html('<i class="fas fa-check"></i>');
+                    } else {
+                        $(this).removeClass('completed');
+                        $(this).find('.step-circle').text($(this).data('step'));
+                    }
+                });
+
+                var progressPercentage = ((step - 1) / 6) * 100;
+                $('.step-progress-bar .progress-bar').css('width', progressPercentage + '%');
+            }
+
+            function displayFileStructure(files, isFileMode) {
+                let fileMap = {};
+                for (let file of files) {
+                    let paths = file.webkitRelativePath ? file.webkitRelativePath.split('/') : [file.name];
+                    let currentPath = '';
+                    paths.forEach((path, index) => {
+                        currentPath += path;
+                        if (!fileMap[currentPath]) {
+                            let isFile = isFileMode || index === paths.length - 1;
+                            let documentType = isFile ? (path.includes('.') ? path.split('.').pop() : 'Others') : 'Folder';
+                            fileMap[currentPath] = {
+                                path: currentPath,
+                                children: [],
+                                isFile: isFile,
+                                depth: index,
+                                tag: fileTags[currentPath] || '',
+                                documentType: documentType
+                            };
+                        }
+                        if (index > 0 && !isFileMode) {
+                            const parentPath = currentPath.slice(0, currentPath.length - path.length - 1);
+                            if (fileMap[parentPath] && !fileMap[parentPath].children.includes(currentPath)) {
+                                fileMap[parentPath].children.push(currentPath);
+                            }
+                        }
+                        currentPath += '/';
+                    });
+                }
+
+                // Ensure all files are considered in file mode
+                if (isFileMode) {
+                    fileTreeContainer.innerHTML = '';
+                    for (let filePath in fileMap) {
+                        fileTreeContainer.innerHTML += createTreeHtml(fileMap, fileMap[filePath], 0);
+                    }
+                } else {
+                    fileTreeContainer.innerHTML = createTreeHtml(fileMap, fileMap[Object.keys(fileMap)[0]], 0);
+                }
+
+                bindClickEvents();
+                updateUntaggedItemsList();
+            }
+
+
+            function bindClickEvents() {
+                $('.file-tree li').click(function (e) {
+                    e.stopPropagation();
+                    const $this = $(this);
+                    const isFolder = !$this.hasClass('file');
+                    const path = $this.data('path');
+
+                    if (isFolder) {
+                        if (!e.shiftKey && !e.ctrlKey) {
+                            $('body').removeClass('no-select');
+                            $('.file-tree li').removeClass('selected');
+                            $this.addClass('selected');
+                            lastSelectedItem = $this;
+                        }
+
+                        if (e.ctrlKey) {
+                            $this.toggleClass('selected');
+                        } else {
+                            toggleFolder($this, path);
+                        }
+                    } else {
+                        if (e.shiftKey) {
+                            $('body').addClass('no-select');
+                            handleShiftSelection($this);
+                        } else if (e.ctrlKey) {
+                            $this.toggleClass('selected');
+                        } else {
+                            $('body').removeClass('no-select');
+                            $('.file-tree li').removeClass('selected');
+                            $this.addClass('selected');
+                            lastSelectedItem = $this;
+                        }
+                    }
+                    updateStepProgress(2);
+                });
+            }
+
+            function toggleFolder($folder, path) {
+                // Toggle the collapsed state for the specific folder
+                foldersCollapsed[path] = !foldersCollapsed[path];
+
+                // Find the direct children of the clicked folder and toggle their visibility
+                const isCollapsed = foldersCollapsed[path];
+                const $childrenUl = $folder.next('ul');
+                if ($childrenUl.length) {
+                    $childrenUl.toggle(!isCollapsed);
+                } else {
+                    // If the folder has not been expanded before, render its children
+                    const fileMap = createFileMap(fileInput.files); // Assume createFileMap is a function that builds the file structure
+                    $folder.after(createTreeHtml(fileMap, fileMap[path], $folder.data('level') + 1));
+                }
+
+                // Change the folder icon based on its state (collapsed or expanded)
+                $folder.find('> .file-icon').toggleClass('fa-folder', isCollapsed).toggleClass('fa-folder-open', !isCollapsed);
+            }
+
+            function handleShiftSelection(currentItem) {
+                if (!lastSelectedItem) {
+                    currentItem.addClass('selected');
+                    lastSelectedItem = currentItem;
+                    return;
+                }
+
+                const allItems = $('.file-tree li:not(.folder)');
+                const currentIndex = allItems.index(currentItem);
+                const lastIndex = allItems.index(lastSelectedItem);
+
+                if (currentIndex > lastIndex) {
+                    allItems.slice(lastIndex, currentIndex + 1).addClass('selected');
+                } else {
+                    allItems.slice(currentIndex, lastIndex + 1).addClass('selected');
+                }
+            }
+
+            function createTreeHtml(fileMap, node, level) {
+                if (!node) return '';
+                let html = `<li class="${node.isFile ? 'file' : 'folder'} ${node.tag ? 'tagged' : 'untagged'}" data-path="${node.path}" data-level="${level}">`;
+                html += `<span class="file-icon ${node.isFile ? 'fas fa-file' : foldersCollapsed[node.path] ? 'fas fa-folder' : 'fas fa-folder-open'} ${node.tag ? 'tagged' : 'untagged'}"></span>`;
+                html += `<span class="file-name" title="${node.path.split('/').pop()}">${node.path.split('/').pop()}</span>`;
+                html += `<span class="tag document-type-tag">${node.documentType}</span>`; // Display the document type tag for both files and folders
+                html += `<span class="file-tag">${node.tag}</span>`;
+                if (!node.isFile) {
+                    html += `<button class="toggle-folder btn btn-sm btn-secondary">Toggle Files</button>`;
+                }
+                html += `</li>`;
+
+                if (node.children.length > 0 && (!node.isFile || showFiles || foldersCollapsed[node.path])) {
+                    html += '<ul style="display: ' + (foldersCollapsed[node.path] ? 'none' : 'block') + ';">';
+                    node.children.forEach(childPath => {
+                        html += createTreeHtml(fileMap, fileMap[childPath], level + 1);
+                    });
+                    html += '</ul>';
+                }
+
+                return html;
+            }
+
+
+            $('#thrust-tags input[name="thrust-tag"]').change(function () {
+                const othersChecked = $('#thrust-tags input[name="thrust-tag"][value="Others"]').is(':checked');
+                $('#thrust-other').toggle(othersChecked);
+            });
+            $('#pi-tags input[name="pi-tag"]').change(function () {
+                const othersChecked = $('#pi-tags input[name="pi-tag"][value="Others"]').is(':checked');
+                $('#pi-other').toggle(othersChecked);
+            });
+            $('#topic-tags input[name="topic-tag"]').change(function () {
+                const othersChecked = $('#topic-tags input[name="topic-tag"][value="Others"]').is(':checked');
+                $('#topic-other').toggle(othersChecked);
+            });
+            $('#data-tags input[name="data-tag"]').change(function () {
+                const othersChecked = $('#data-tags input[name="data-tag"][value="Others"]').is(':checked');
+                $('#data-tag-other').toggle(othersChecked);
+            });
+            $('#data-type-tags input[name="data-type-tag"]').change(function () {
+                const othersChecked = $('#data-type-tags input[name="data-type-tag"][value="Others"]').is(':checked');
+                $('#data-type-other').toggle(othersChecked);
+            });
+            $('#apply-tag').click(function () {
+                const subfolderFileCover = $('#subfolder-file-cover').is(':checked');
+                const abstractDescription = $('#abstract-description').val();
+                const outerLink = $('#outer-link').val();
+
+
+                $('.file-tree li.selected').each(function () {
+                    const path = $(this).data('path');
+
+                    const thrustTags = $('#thrust-tags input[name="thrust-tag"]:checked').map(function () {
+                        return this.value === "Others" ? $('#thrust-other').val() : this.value;
+                    }).get().filter(value => value).join(', ');
+
+                    const piTags = $('#pi-tags input[name="pi-tag"]:checked').map(function () {
+                        return this.value === "Others" ? $('#pi-other').val() : this.value;
+                    }).get().filter(value => value).join(', ');
+
+                    const topicTags = $('#topic-tags input[name="topic-tag"]:checked').map(function () {
+                        return this.value === "Others" ? $('#topic-other').val() : this.value;
+                    }).get().filter(value => value).join(', ');
+
+                    const dataTags = $('#data-tags input[name="data-tag"]:checked').map(function () {
+                        return this.value === "Others" ? $('#data-tag-other').val() : this.value;
+                    }).get().filter(value => value).join(', ');
+
+                    const dataTypeTags = $('#data-type-tags input[name="data-type-tag"]:checked').map(function () {
+                        return this.value === "Others" ? $('#data-type-other').val() : this.value;
+                    }).get().filter(value => value).join(', ');
+
+                    const tag = `[${thrustTags}, ${piTags}, ${topicTags}, ${dataTags}, ${dataTypeTags} ]`;
+
+                    if (tag !== "[None, None, None, None, None, , ]") {
+                        applyTagToItem(this, path, tag, [thrustTags, piTags, topicTags, dataTags, dataTypeTags], abstractDescription, outerLink);
+
+                        if (subfolderFileCover && !$(this).hasClass('file')) {
+                            applyTagToSubfoldersAndFiles(path, tag, [thrustTags, piTags, topicTags, dataTags, dataTypeTags], abstractDescription, outerLink);
+                        }
+                    } else {
+                        // If 'None' is selected, clear the tag
+                        applyTagToItem(this, path, tag, [thrustTags, piTags, topicTags, dataTags, dataTypeTags]);
+                    }
+
+                });
+                updateStepProgress(4);
+            });
+
+            function applyTagToItem(item, path, tag, tagCategories, abstractDescription, outerLink) {
+                const tagContainer = $(item).find('.file-tag');
+                tagContainer.empty(); // Clear existing tags
+
+                // Check if any tags are applied
+                if (tag !== "[None, None, None, None, None, , ]" && tagCategories.join('').trim() !== '') {
+                    $(item).removeClass('untagged').addClass('tagged');
+
+                    tagCategories.forEach((tagCategory, index) => {
+                        const tags = tagCategory.split(', ').filter(value => value);
+                        tags.forEach(tagValue => {
+                            const tagSpan = $(`<span class="tag ${index === 0 ? 'thrust-tag' : index === 1 ? 'pi-tag' : index === 2 ? 'topic-tag' : index === 3 ? 'data-tag' : 'data-type-tag'}">${tagValue}</span>`);
+                            tagContainer.append(tagSpan);
+                        });
+                    });
+
+                    if (abstractDescription) {
+                        const abstractSpan = $(`<span class="tag abstract-tag" title="${abstractDescription}">Abstract Description</span>`);
+                        tagContainer.append(abstractSpan);
+                    }
+
+                    if (outerLink) {
+                        const linkSpan = $(`<span class="tag link-tag" title="${outerLink}">Outer Link</span>`);
+                        tagContainer.append(linkSpan);
+                    }
+                } else {
+                    $(item).removeClass('tagged').addClass('untagged');
+                }
+
+                fileTags[path] = tag;
+
+                $(item).find('.file-icon').removeClass('tagged untagged').addClass($(item).hasClass('tagged') ? 'tagged' : 'untagged');
+
+                updateUntaggedItemsList();
+            }
+            
+            function generateMetadataJSON() {
+                const globusPath = $('#globus-path').val();
+                const creatorName = $('#creator-name').val().trim();
+                const currentDate = new Date().toISOString().slice(0, 16).replace('T', ' ');
+                const baseGlobusPath = 'globus://af7bda53-6d04-11e5-ba46-22000b92c6ec/project2/chenyuxin/MADE_PUBLIC_REPO/';
+                const jsonData = {
+                    ingest_type: "GMetaList",
+                    ingest_data: {
+                        gmeta: []
+                    }
+                };
+
+                $('.file-tree li.tagged').each(function () {
+                    const path = $(this).data('path');
+                    const pathParts = path.split('/');
+                    const fileName = pathParts.pop();
+                    const fileExtension = fileName.includes('.') ? fileName.split('.').pop() : 'Folder';
+                    const folderName = pathParts.pop();
+                    const parentFolder = pathParts.pop() || ''; // Get the parent folder name
+
+                    const $tagSpans = $(this).find('.file-tag .tag');
+                    const thrustTag = $tagSpans.filter('.thrust-tag').map(function () { return $(this).text(); }).get()[0];
+                    const piTags = $tagSpans.filter('.pi-tag').map(function () { return $(this).text(); }).get().join(',');
+                    const topicTags = $tagSpans.filter('.topic-tag').map(function () { return $(this).text(); }).get().sort().join(',');
+                    const dataTags = $tagSpans.filter('.data-tag').map(function () { return $(this).text(); }).get().sort().join(',');
+                    const dataTypeTags = $tagSpans.filter('.data-type-tag').map(function () { return $(this).text(); }).get().sort().join(',');
+                    const abstractDescription = $(this).find('.abstract-tag').attr('title') || '';
+                    const outerLink = $(this).find('.link-tag').attr('title') || '';
+
+                    const idDate = currentDate.replace(/ /g, 'T');
+                    const gmetaId = `${thrustTag}-${globusPath}-${parentFolder}-${folderName}-${fileName}-${thrustTag}-${creatorName}-${piTags}${idDate}`;
+                    const encodedSubject = `${baseGlobusPath}${encodeURI(globusPath)}${encodeURI(path)}`;
+                    const rawUrl = `${baseGlobusPath}${globusPath}${path}`;
+
+                    const gmetaEntry = {
+                        id: gmetaId,
+                        subject: encodedSubject,
+                        visible_to: ["urn:globus:groups:id:bb420e57-7835-11ee-b0db-d9a5237cb2e9"],
+                        content: {
+                            Title: fileName,
+                            "Document Format": fileExtension,
+                            "Abstract Description": abstractDescription,
+                            "Data Type": dataTypeTags.split(','),
+                            "Outer Link": outerLink,
+                            url: rawUrl,
+                            creator: creatorName,
+                            "Related Topic": topicTags.split(','),
+                            "PI Affiliated": piTags.split(','),
+                            "Data Tags": dataTags.split(','),
+                            Thrust: thrustTag,
+                            date: currentDate.replace(/ /g, 'T'),
+                            "original_collection_name": "UChicago RCC Midway"
+                        }
+                    };
+
+                    jsonData.ingest_data.gmeta.push(gmetaEntry);
+                });
+
+                downloadJSONFile(jsonData, `${creatorName}_${globusPath.split('/').pop()}_${currentDate.replace(/:/g, '_').replace(/ /g, 'T')}.json`);
+            }
+            function downloadJSONFile(jsonData, fileName) {
+                const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(jsonData, null, 2));
+                const downloadAnchorNode = document.createElement('a');
+                downloadAnchorNode.setAttribute("href", dataStr);
+                downloadAnchorNode.setAttribute("download", fileName);
+                document.body.appendChild(downloadAnchorNode);
+                downloadAnchorNode.click();
+                downloadAnchorNode.remove();
+            }
+
+            function enableStep5() {
+                $('#redirect-globus').prop('disabled', false);
+                $('#globus-path').prop('disabled', false);
+            }
+
+            function enableStep6() {
+                $('#generate-metadata').prop('disabled', false);
+            }
+
+            function enableStep7() {
+                $('.json-upload-instruction').removeClass('disabled-section');
+            }
+
+
+
+            // Modify the updateUntaggedItemsList function
+            function updateUntaggedItemsList() {
+                const untaggedItemsList = $('#untagged-items-list');
+                untaggedItemsList.empty();
+
+                $('.file-tree li.untagged').each(function () {
+                    const itemName = $(this).find('.file-name').text();
+                    untaggedItemsList.append(`<li>${itemName}</li>`);
+                });
+
+                if ($('.file-tree li.untagged').length === 0) {
+                    $('#all-tagged-message').show();
+                    enableStep5(); // Enable Step 5 when all items are tagged
+                } else {
+                    $('#all-tagged-message').hide();
+                    $('#redirect-globus').prop('disabled', true);
+                    $('#globus-path').prop('disabled', true);
+                }
+            }
+
+            function applyTagToSubfoldersAndFiles(path, tag, tagCategories) {
+                // Recursively apply tags to subfolders and files
+                $('.file-tree li').filter(function () {
+                    const itemPath = $(this).data('path');
+                    return itemPath.startsWith(path) && itemPath !== path;
+                }).each(function () {
+                    const itemPath = $(this).data('path');
+                    applyTagToItem(this, itemPath, tag, tagCategories);
+                });
+            }
+            // Modify the $('#generate-metadata').click function
+            $('#generate-metadata').click(function () {
+                generateMetadataJSON();
+                enableStep7(); // Enable Step 7 after generating metadata
+                updateStepProgress(6);
+            });
+            $('#upload-json').click(function () {
+                updateStepProgress(7);
+            });
+            $('#clear-all').click(function () {
+                fileTreeContainer.innerHTML = '';
+                fileInput.value = '';
+                fileTags = {};
+                foldersCollapsed = {};
+                $('body').removeClass('no-select');
+                $('.file-tree li').removeClass('selected');
+            });
+
+            $('#clear-selected-tags').click(function () {
+                $('.file-tree li.selected').each(function () {
+                    const path = $(this).data('path');
+                    $(this).find('.file-tag').empty();
+                    $(this).removeClass('tagged').addClass('untagged');
+                    $(this).find('.file-icon').removeClass('tagged').addClass('untagged');
+                    delete fileTags[path];
+                });
+                updateUntaggedItemsList();
+            });
+
+            $('#clear-tags').click(function () {
+                $('.file-tree li').each(function () {
+                    const path = $(this).data('path');
+                    $(this).find('.file-tag').empty();
+                    $(this).removeClass('tagged').addClass('untagged');
+                    $(this).find('.file-icon').removeClass('tagged').addClass('untagged');
+                    delete fileTags[path];
+                });
+                updateUntaggedItemsList();
+            });
+            function enableStep2() {
+                $('#file-input').prop('disabled', false);
+                $('#file-input-label').removeClass('disabled');
+            }
+
+            function enableStep3And4() {
+                $('#tagging-panels').removeClass('disabled-section');
+                $('#apply-tag').removeClass('disabled-section');
+                $('.action-buttons').removeClass('disabled-section');
+            }
+            $('#redirect-globus').prop('disabled', true);
+            $('#globus-path').prop('disabled', true);
+            $('#generate-metadata').prop('disabled', true);
+            $('.json-upload-instruction').addClass('disabled-section');
+            $('#confirm-creator').click(function () {
+                var creatorName = $('#creator-name').val().trim();
+                if (creatorName) {
+                    $('#creator-name-display').text(creatorName);
+                    $('#creator-display').show();
+                    enableStep2();
+                    updateStepProgress(1);
+                } else {
+                    $('#creator-display').hide();
+                    $('#file-input').prop('disabled', true);
+                    $('#file-input-label').addClass('disabled');
+                }
+            });
+            // Modify the $('#redirect-globus').click function
+            $('#redirect-globus').click(function () {
+                const globusPath = $('#globus-path').val().trim();
+                if (globusPath) {
+                    const encodedPath = encodeURIComponent('/project2/chenyuxin/MADE_PUBLIC_REPO/' + globusPath);
+                    const globusUrl = `https://app.globus.org/file-manager?origin_id=af7bda53-6d04-11e5-ba46-22000b92c6ec&origin_path=${encodedPath}`;
+                    window.open(globusUrl, '_blank');
+                    enableStep6(); // Enable Step 6 after clicking the redirect button
+                    updateStepProgress(5);
+                } else {
+                    alert('Please enter a Globus path first.');
+                }
+            });
+            $('#globus-path').on('input', function () {
+                if ($(this).val().trim()) {
+                    $('#redirect-globus').prop('disabled', false);
+                } else {
+                    $('#redirect-globus').prop('disabled', true);
+                }
+            });
+            $('#file-input').change(function () {
+                if (this.files.length > 0) {
+                    enableStep3And4();
+                    updateStepProgress(3);
+                }
+            });
+
+            $('#deselect-all').click(function () {
+                $('.file-tree li').removeClass('selected');
+            });
+
+            $('#toggle-files').click(function () {
+                showFiles = !showFiles;
+                $(this).text(showFiles ? 'Hide All Files' : 'Show All Files');
+
+                // Toggle each folder's collapsed state based on showFiles
+                $('.folder').each(function () {
+                    const path = $(this).data('path');
+                    foldersCollapsed[path] = !showFiles;
+                    const $childrenUl = $(this).next('ul');
+                    if ($childrenUl.length) {
+                        $childrenUl.toggle(showFiles);
+                    } else if (showFiles) {
+                        // If the folder has not been expanded before and we are showing files, render its children
+                        const fileMap = createFileMap(fileInput.files); // Assumes createFileMap is a function that builds the file structure
+                        $(this).after(createTreeHtml(fileMap, fileMap[path], $(this).data('level') + 1));
+                    }
+
+                    // Update the folder icon based on the state
+                    $(this).find('.file-icon').toggleClass('fa-folder', !showFiles).toggleClass('fa-folder-open', showFiles);
+                });
+            });
+
+            $(document).on('mouseup keyup', function (e) {
+                if (e.type === 'mouseup' || e.keyCode === 16) {
+                    $('body').removeClass('no-select');
+                }
+            }).on('keydown', function (e) {
+                if (e.keyCode === 16) {
+                    $('body').addClass('no-select');
+                }
+            });
+
+            $('.file-tree-container').on('click', '.toggle-folder', function () {
+                const path = $(this).data('path');
+                const $folder = $(`.file-tree li[data-path="${path}"]`);
+                toggleFolder($folder, path);
+            });
+        });
+    </script>
+</body>
+
+</html>

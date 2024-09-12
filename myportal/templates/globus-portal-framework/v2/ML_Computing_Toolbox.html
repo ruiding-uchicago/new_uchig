@@ -1,0 +1,272 @@
+{% extends "globus-portal-framework/v2/base.html" %}
+{% load static %}
+
+{% block body %}
+    <div style="position:fixed; top:0; left:0; width:100%; height:100%; background-image: url('{% static 'pics/OPT.png' %}'); background-size: cover; opacity: 0.25; z-index: -1;"></div>
+
+
+    <!-- Bootstrap CSS and JS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+
+
+
+
+
+    <div class="container-fluid">
+        <h1>Bayesian Optimization</h1>  <!-- Large Title -->
+        <!-- Background -->
+
+        <!-- Custom button -->
+        <button id="customButton">Choose File</button>
+
+        <!-- Hidden original input -->
+        <input type="file" id="csvFile" style="display:none">
+        <!-- Monitoring Window -->
+        <pre id="monitor"></pre>
+
+        <!-- Status Message -->
+        <div id="statusMessage"></div>
+
+        <!-- Database Overview -->
+        <div id="db-overview"></div>
+
+        <!-- Feature indexes -->
+        <label>Feature Start Index:</label>
+        <input type="number" id="featureStart">
+        <label>Feature End Index:</label>
+        <input type="number" id="featureEnd">
+
+        <!-- Output Index -->
+        <label>Output Index: (-1 typically, last column)</label>
+        <input type="number" id="outputIndex">
+
+        <!-- n_calls, n_random_starts, acq_func -->
+        <label>n_calls:</label>
+        <input type="number" id="nCalls" value="15">
+        <label>n_random_starts:</label>
+        <input type="number" id="nRandomStarts" value="5">
+        <label>Acquisition Function:</label>
+        <select id="acqFunc">
+            <option value="EI">Expected Improvement (EI)</option>
+            <option value="PI">Probability of Improvement (PI)</option>
+            <option value="LCB">Lower Confidence Bound (LCB)</option>
+        </select>
+
+        <!-- Bounds -->
+        <div id="boundsContainer"></div>
+
+        <!-- Seed -->
+        <label>Seed: (Only Effect the First Result if Number of Runs>1)</label>
+        <input type="number" id="seed">
+        <label>Number of Runs:</label>
+        <input type="number" id="numRuns">
+        <!-- Run Button -->
+        <button id="runBtn">Run</button>
+
+        <!-- Monitoring Window -->
+        <pre id="monitor"></pre>
+
+        <!-- Results -->
+        <div id="resultsBox"></div>
+
+        <!-- Clear Button -->
+        <button id="clearBtn">Clear</button>
+        <!-- Online BO -->
+        <!-- Hidden original input -->
+        <input type="file" id="csvFile" style="display:none">
+        <!-- File name display -->
+        <span id="fileLabel">No file chosen</span>
+        <script>
+            $(document).ready(function() {
+
+                let featureStart, featureEnd;
+                
+                $('#customButton').click(function(){
+                    $('#csvFile').click();
+                });
+
+                // File Input Change
+                $('#csvFile').change(function() {
+                    
+                    const fileName = $(this).val().split('\\').pop();
+                    $('#fileLabel').text(fileName);
+                    
+                    const file = this.files[0];
+                    const reader = new FileReader();
+                    
+                    reader.onload = function(e) {
+                        // Parse CSV and display overview
+                        const rows = e.target.result.split('\n');
+                        $('#db-overview').text(rows.slice(0, 5).join('\n'));
+                    };
+                    
+                    reader.readAsText(file);
+                });
+        
+
+                
+                // Update bounds input fields
+                function updateBounds() {
+                    featureStart = parseInt($('#featureStart').val());
+                    featureEnd = parseInt($('#featureEnd').val());
+                    let boundsHTML = '';
+                    for(let i = featureStart; i <= featureEnd; i++) {
+                        boundsHTML += `<input type="text" name="bounds[]" id="bound${i}" placeholder="-10,10"> `;
+                    }
+                    console.log("Feature Start (inside updateBounds): ", featureStart);
+                    console.log("Feature End (inside updateBounds): ", featureEnd);
+                    $('#boundsContainer').html(boundsHTML);
+                }
+
+                $('#featureStart, #featureEnd').change(updateBounds);
+                
+
+                function getCookie(name) {
+                    let cookieValue = null;
+                    if (document.cookie && document.cookie !== '') {
+                        const cookies = document.cookie.split(';');
+                        for (let i = 0; i < cookies.length; i++) {
+                            const cookie = jQuery.trim(cookies[i]);
+                            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                                break;
+                            }
+                        }
+                    }
+                    return cookieValue;
+                }
+
+                const csrftoken = getCookie('csrftoken');
+                
+
+                const numRuns = parseInt($('#numRuns').val(), 10);  // Get the number of runs
+                let aggregatedResults = [];  // To store aggregated results
+
+                // Run button click
+                $('#runBtn').click(function() {
+                    // Add this line to show 'computing' message when button is clicked
+                    $('#statusMessage').text('Computing...');
+                    console.log("Feature Start (inside runBtn click): ", $('#featureStart').val());
+                    console.log("Feature End (inside runBtn click): ", $('#featureEnd').val());
+                    
+                    const numRuns = parseInt($('#numRuns').val(), 10);  // Get the number of runs
+                    let aggregatedResults = [];  // To store aggregated results
+
+                    
+                    const form = new FormData();
+                    const csvFile = document.getElementById('csvFile').files[0];
+                    form.append('csvFile', csvFile);
+
+                    // Other form fields
+                    form.append('featureStart', $('#featureStart').val());
+                    form.append('featureEnd', $('#featureEnd').val());
+                    form.append('outputIndex', $('#outputIndex').val());
+                    form.append('nCalls', $('#nCalls').val());
+                    form.append('nRandomStarts', $('#nRandomStarts').val());
+                    form.append('acqFunc', $('#acqFunc').val());
+                    form.append('seed', $('#seed').val());
+                    form.append('numRuns', $('#numRuns').val());
+
+                    const featureStart = parseInt($('#featureStart').val(), 10);
+                    const featureEnd = parseInt($('#featureEnd').val(), 10);
+                    const bounds = [];
+
+                    for(let i = featureStart; i <= featureEnd; i++) {
+                        bounds.push($('#bound' + i).val());
+                    }
+
+                    form.append('bounds', JSON.stringify(bounds));
+                    
+                    // Include CSRF token
+                    const csrftoken = getCookie('csrftoken');  // Assuming you have a method to get CSRF token
+                    form.append('csrfmiddlewaretoken', csrftoken);
+                    
+                    console.log("Feature Start (before AJAX): ", $('#featureStart').val());
+                    console.log("Feature End (before AJAX): ", $('#featureEnd').val());
+                    console.log("Bounds (before AJAX): ", bounds)
+
+                    const originalSeed = $('#seed').val();
+
+                    const runSingleOptimization = function(currentRun) {
+                        
+                        // Modify seed if it's not the first run
+                        if (currentRun > 1) {
+                            // Set a random seed for subsequent runs
+                            form.set('seed', Math.floor(Math.random() * 100000));
+                        } else {
+                            // Use the original seed for the first run
+                            form.set('seed', originalSeed);
+                        }
+
+                        $.ajax({
+                        url: "/run_bayesian_optimization/",
+                        type: "POST",
+                        processData: false,
+                        contentType: false,
+                        data: form,
+                        success: function(response) {
+                            aggregatedResults.push(response);  // Store the result
+                            $('#monitor').text(response.monitor_output);
+
+                            if (currentRun < numRuns) {
+                                runSingleOptimization(currentRun + 1);  // Recursive call for next run
+                            } else {
+                                let bestParameters = aggregatedResults.map(result => result.best_parameters);
+                                let bestObjectives = aggregatedResults.map(result => result.best_objective);
+                                $('#resultsBox').text(`Aggregated Best parameters: ${JSON.stringify(bestParameters)}\nAggregated Best objectives: ${JSON.stringify(bestObjectives)}`);
+                            }
+                            // Add this line to change the message to 'finished'
+                            if (currentRun === numRuns) {
+                                $('#statusMessage').text('Finished');
+                            }
+                        },
+                        error: function(error) {
+                            console.error('An error occurred:', error);
+                            // Add this line to change the message to 'Error' if an error occurs
+                            $('#statusMessage').text('Error');
+                        }
+                    });
+                };
+
+                runSingleOptimization(1);  // Start the first optimization run
+                });
+        
+                // Updated clear button click
+                $('#clearBtn').click(function() {
+                    // Clear text inputs
+                    $('input[type="text"]').val('');
+                    $('input[type="number"]').val('');  // Clear number inputs
+                    $('input[type="file"]').val('');  // Clear file inputs if you want
+                    $('select').prop('selectedIndex', 0);  // Reset select boxes
+        
+                    // Clear specific fields by ID if above doesn't work
+                    $('#featureStart').val('');
+                    $('#featureEnd').val('');
+                    $('#outputIndex').val('');
+                    $('#nCalls').val('15');  // Set to default value
+                    $('#nRandomStarts').val('5');  // Set to default value
+                    $('#seed').val('');
+                    $('#numRuns').val('');
+                    $('#acqFunc').prop('selectedIndex', 0);  // Reset to the first option
+        
+                    // Clear other elements
+                    $('#db-overview').text('');
+                    $('#monitor').text('');
+                    $('#resultsBox').text('');
+                });
+            });
+        </script>
+    </div>
+
+    <div class="container-fluid">
+        <h1>ALICE (Active Learning and Interpretation Committee for Eco-manufacturing)</h1>  <!-- Large Title -->
+        <label>(result&analysis report would be sent to your email after computation is done)</label>
+        <!-- Background -->
+    </div>
+
+{% endblock %}
+

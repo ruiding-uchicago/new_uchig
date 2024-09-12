@@ -1,0 +1,1445 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chemical Sensor Component Graph</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.21.1/cytoscape.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+
+        #cy {
+            width: 95%;
+            height: 1200px;
+            display: block;
+            margin: 20px auto;
+            border: 2px solid #333;
+            position: relative;
+        }
+
+        .home-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            font-size: 24px;
+            width: 50px;
+            height: 50px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .home-button:hover {
+            background-color: #45a049;
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .switch-container {
+            position: absolute;
+            top: 50px;
+            right: 100px;
+            display: flex;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+            overflow: hidden;
+            z-index: 10;
+        }
+
+        .switch-button {
+            padding: 10px 15px;
+            cursor: pointer;
+            border: none;
+            background-color: #ddd;
+            transition: background-color 0.3s;
+        }
+
+        .switch-button.active {
+            background-color: #525252;
+            color: white;
+        }
+
+        .search-panel {
+            position: absolute;
+            top: 120px;
+            right: 100px;
+            width: 300px;
+            background-color: white;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+
+        #doiSearch {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-bottom: 1px solid #ccc;
+            box-sizing: border-box;
+        }
+
+        #doiList {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        #doiList div {
+            padding: 10px;
+            cursor: pointer;
+        }
+
+        #doiList div:hover {
+            background-color: #f0f0f0;
+        }
+
+        #hoverPanel {
+            display: none;
+            position: absolute;
+            background-color: rgb(255, 255, 255);
+            border: 1px solid #cccccc;
+            padding: 5px;
+            z-index: 999;
+            pointer-events: none;
+            font-size: 36px;
+            /* Increase this value for larger text */
+            font-weight: bold;
+            /* Optional: makes the text bold */
+        }
+
+        .switch-button:first-child {
+            margin-right: 20px;
+            /* Add some space between "Clear and Reset" and other buttons */
+        }
+
+        #editPanel {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 20px;
+            border: 1px solid #ccc;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+
+        #editPanel input,
+        #editPanel select {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        #materialList {
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        #materialList div {
+            cursor: pointer;
+            padding: 5px;
+        }
+
+        #materialList div:hover {
+            background-color: #f0f0f0;
+        }
+
+        .edit-panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .close-x {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 0;
+            line-height: 1;
+        }
+
+        .close-x:hover {
+            color: #ff0000;
+        }
+
+        .model-selection {
+            position: absolute;
+            top: 50px;
+            left: 100px;
+            width: 300px;
+            z-index: 10;
+        }
+
+        #modelSelect {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        #computeButton,
+        #clearPredictionButton {
+            padding: 10px;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        #computeButton {
+            background-color: #4CAF50;
+            flex-grow: 1;
+            margin-right: 10px;
+        }
+
+        #computeButton:hover {
+            background-color: #45a049;
+        }
+
+        #clearPredictionButton {
+            background-color: #f44336;
+            flex-grow: 0;
+        }
+
+        #clearPredictionButton:hover {
+            background-color: #d32f2f;
+        }
+
+        #inferenceResults {
+            position: absolute;
+            top: 150px;
+            left: 100px;
+            width: 400px;
+            background-color: white;
+            border: 1px solid #ccc;
+            padding: 10px;
+            z-index: 10;
+        }
+
+        #inferenceResults h3 {
+            margin-top: 0;
+            font-weight: bold;
+        }
+
+        #resultsContent {
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        .node-predicted {
+            border-color: #00BFFF !important;
+            border-width: 15px !important;
+        }
+
+        .message {
+            padding: 8px 12px;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            max-width: 80%;
+            clear: both;
+        }
+
+        .human-message {
+            background-color: #e6f2ff;
+            float: right;
+        }
+
+        .ai-message {
+            background-color: #f0f0f0;
+            float: left;
+        }
+
+        .human-message[style*="background-color"] {
+            color: black;
+        }
+        .btn {
+    padding: 10px 15px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    margin-right: 10px;
+}
+
+.btn:hover {
+    background-color: #0056b3;
+}
+    </style>
+</head>
+
+<body>
+    <button class="home-button" onclick="window.location.href='/'">
+        <i class="fas fa-home"></i>
+    </button>
+    <div class="switch-container">
+        <button class="switch-button" onclick="clearAndReset()">Clear and Reset</button>
+        <button class="switch-button active" onclick="switchDesign('standard')">Standard</button>
+        <button class="switch-button" onclick="switchDesign('remote')">Remote Gate</button>
+        <button class="switch-button" onclick="switchDesign('floating')">Floating Gate</button>
+    </div>
+    <h3 style="position: absolute; top: 75px; right: 80px; width: 500px; text-align: center;">Loading A Knowledge Graph
+        Template from DOI:</h3>
+    <div class="search-panel">
+        <input type="text" id="doiSearch" placeholder="Search DOI...">
+        <div id="doiList"></div>
+    </div>
+    <div id="hoverPanel">
+    </div>
+    <div id="cy"></div>
+    <div class="model-selection">
+        <select id="modelSelect">
+            <option value="gnn_v2.1">Graph Neural Network v2.1 20240902</option>
+            <option value="gnn_v0.5">Graph Neural Network v0.5 20240605</option>
+            <option value="gnn_v0.0.1">Graph Neural Network v0.0.1 20240405</option>
+            <option value="snn">Spike Neural Network</option>
+        </select>
+        <div class="button-container">
+            <button id="computeButton">Globus Compute-Graph Inference</button>
+            <button id="clearPredictionButton">Clear Prediction</button>
+        </div>
+    </div>
+    <div id="inferenceResults">
+        <h3>Model Inference Results:</h3>
+        <div id="resultsContent"></div>
+    </div>
+    <div id="chat-container"
+        style="display: none; position: fixed; right: 20px; bottom: 70px; width: 1000px; height: 600px; background-color: white; border: 1px solid #ccc; border-radius: 5px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); z-index: 1000;">
+        <div id="chat-header"
+            style="background-color: #007bff; color: white; padding: 10px; border-top-left-radius: 5px; border-top-right-radius: 5px; cursor: pointer;">
+            Chat with LLM
+            <span id="close-chat" style="float: right; cursor: pointer;">×</span>
+        </div>
+        <div id="summary-buttons" style="padding: 10px; border-bottom: 1px solid #ccc;">
+            <button id="summarize-map" style="background-color: #ffcccb; margin-right: 5px;">A Summary for the current
+                map?</button>
+            <button id="important-nodes" style="background-color: #90EE90; margin-right: 5px;">Which Node(s) should be
+                concerned as potentially important?</button>
+            <button id="suggest-nodes" style="background-color: #ADD8E6;">Suggestions for nodes to set or
+                predict</button>
+        </div>
+        <div id="chat-messages-container" style="height: 520px; position: relative;">
+            <div id="chat-messages" style="height: 100%; overflow-y: auto; padding: 10px;"></div>
+            <div id="loading-indicator"
+                style="display: none; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: url('/static/pics/loading.gif') no-repeat center center; background-color: rgba(255, 255, 255, 0.5); background-size: 50px 50px;">
+            </div>
+        </div>
+        <div id="chat-input"
+            style="padding: 10px; border-top: 1px solid #ccc; display: flex; justify-content: space-between; align-items: center;">
+            <textarea id="user-input" placeholder="Type your message..."
+                style="width: 70%; padding: 5px; height: 60px; resize: none;"></textarea>
+            <button id="send-message" style="width: 15%; padding: 5px; height: 60px;">Send</button>
+            <button id="reset-conversation"
+                style="width: 25%; padding: 5px; background-color: #f8f9fa; color: #007bff; border: 1px solid #007bff; height: 60px;">Reset</button>
+        </div>
+    </div>
+    <button id="toggle-chat" class="btn" style="position: fixed; right: 20px; bottom: 20px; z-index: 1001; padding: 10px 15px; font-size: 16px; cursor: pointer; background-color: #007bff; color: white; border: none; border-radius: 5px;">
+        <i class="fas fa-comments"></i> Chat with LLM
+    </button>
+    <div id="graph-loading-indicator"
+        style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: url('/static/pics/loading.gif') no-repeat center center; background-color: rgba(255, 255, 255, 0.7); background-size: 100px 100px; z-index: 9999;">
+    </div>
+    <script>
+        var cy;
+        var currentDesign = 'standard';
+        var csvData;
+
+        document.addEventListener('DOMContentLoaded', function () {
+            loadCSVData();
+            initializeCytoscape();
+        });
+
+        function loadCSVData() {
+            Papa.parse('/static/json/Manual_Liter_database.csv', {
+                download: true,
+                header: true,
+                complete: function (results) {
+                    csvData = results.data;
+                    setupDoiSearch();
+                }
+            });
+        }
+
+        function setupDoiSearch() {
+            const searchInput = document.getElementById('doiSearch');
+            const doiList = document.getElementById('doiList');
+
+            searchInput.addEventListener('input', function () {
+                const searchTerm = this.value.toLowerCase();
+                const matchingDois = csvData
+                    .filter(row => row.DOI && row.DOI.toLowerCase().includes(searchTerm))
+                    .map(row => row.DOI);
+
+                doiList.innerHTML = '';
+                matchingDois.forEach(doi => {
+                    const div = document.createElement('div');
+                    div.textContent = doi;
+                    div.onclick = function () {
+                        searchInput.value = doi;
+                        updateGraph(doi);
+                        doiList.innerHTML = '';
+                    };
+                    doiList.appendChild(div);
+                });
+            });
+            // Add this new event listener
+            searchInput.addEventListener('focus', function () {
+                // Show all DOIs when the input is focused
+                const allDois = csvData.map(row => row.DOI).filter(doi => doi);
+                doiList.innerHTML = '';
+                allDois.forEach(doi => {
+                    const div = document.createElement('div');
+                    div.textContent = doi;
+                    div.onclick = function () {
+                        searchInput.value = doi;
+                        updateGraph(doi);
+                        doiList.innerHTML = '';
+                    };
+                    doiList.appendChild(div);
+                });
+            });
+        }
+
+        function initializeCytoscape() {
+            cy = cytoscape({
+                container: document.getElementById('cy'),
+                // userPanningEnabled: false,
+                // userZoomingEnabled: false,
+                elements: getElements(),
+                style: [
+                    {
+                        selector: 'node',
+                        style: {
+                            'label': 'data(label)',
+                            'text-valign': 80,
+                            'text-halign': 'center',
+                            'width': 80,
+                            'height': 80,
+                            'font-size': 30,
+                            'text-wrap': 'wrap',
+                            'text-max-width': 200,
+                            'border-color': '#7e7e7e',
+                            'border-width': 5
+                        }
+                    },
+                    {
+                        selector: 'node[hasData]',
+                        style: {
+                            'border-color': '#09FF00', // Light green
+                            'border-width': 15
+                        }
+                    },
+                    {
+                        selector: 'node[id = "Channel"], node[id = "Source"], node[id = "Drain"], node[id = "Gate"], node[id = "DielectricLayer"], node[id = "Substrate"], node[id = "SurfaceFunctionalization"], node[id = "Probe"]',
+                        style: {
+                            'background-color': '#4e79a7'
+                        }
+                    },
+                    {
+                        selector: 'node[id = "AnnealingSetUp"], node[id = "AnnealingAtmosphere"], node[id = "HydrothermalSetUp"]',
+                        style: {
+                            'background-color': '#59a14f'
+                        }
+                    },
+                    {
+                        selector: 'node[id = "TargetChemical"]',
+                        style: {
+                            'background-color': '#e15759',
+                            'width': 160,
+                            'height': 160,
+                            'font-size': 42
+                        }
+                    },
+                    {
+                        selector: 'node[id = "TestingMedium"], node[id = "TestingTemperature"], node[id = "TestingMedium"], node[id = "TestingpHValue"]',
+                        style: {
+                            'background-color': '#f28e2b'
+                        }
+                    },
+                    {
+                        selector: 'node[id = "Dimensionality"]',
+                        style: {
+                            'background-color': '#68a3ad'
+                        }
+                    },
+                    {
+                        selector: 'node[id = "LowerDetectionLimit"], node[id = "UpperDetectionLimit"], node[id = "ResponseTime"], node[id = "RecoveryTime"], node[id = "Sensitivity"]',
+                        style: {
+                            'background-color': '#b07aa1'
+                        }
+                    },
+                    {
+                        selector: 'edge',
+                        style: {
+                            'width': 6,
+                            'line-color': '#999',
+                            'curve-style': 'bezier'
+                        }
+                    },
+                    {
+                        selector: 'edge[source = "AnnealingSetUp"], edge[source = "AnnealingAtmosphere"], edge[source = "HydrothermalSetUp"], edge[target = "AnnealingSetUp"], edge[target = "AnnealingAtmosphere"], edge[target = "HydrothermalSetUp"]',
+                        style: {
+                            'line-color': '#59a14f'
+                        }
+                    },
+                    {
+                        selector: 'edge[source = "Dimensionality"], edge[target = "Dimensionality"]',
+                        style: {
+                            'line-color': '#68a3ad'
+                        }
+                    },
+                    {
+                        selector: 'edge[source = "LowerDetectionLimit"], edge[source = "UpperDetectionLimit"], edge[source = "ResponseTime"], edge[source = "RecoveryTime"], edge[source = "Sensitivity"], edge[target = "LowerDetectionLimit"], edge[target = "UpperDetectionLimit"], edge[target = "ResponseTime"], edge[target = "RecoveryTime"], edge[target = "Sensitivity"]',
+                        style: {
+                            'line-color': '#b07aa1'
+                        }
+                    },
+                    {
+                        selector: 'edge[source = "TestingTemperature"], edge[source = "TestingpHValue"], edge[target = "TestingTemperature"], edge[target = "TestingpHValue"]',
+                        style: {
+                            'line-color': '#f28e2b'
+                        }
+                    },
+
+                ],
+                layout: {
+                    name: 'cose',
+                    idealEdgeLength: 100,
+                    nodeOverlap: 20,
+                    refresh: 20,
+                    fit: true,
+                    padding: 30,
+                    randomize: false,
+                    componentSpacing: 100,
+                    nodeRepulsion: 400000,
+                    edgeElasticity: 100,
+                    nestingFactor: 5,
+                    gravity: 80,
+                    numIter: 1000,
+                    initialTemp: 200,
+                    coolingFactor: 0.95,
+                    minTemp: 1.0,
+                }
+            });
+            cy.on('mouseover', 'node', function (evt) {
+                var node = evt.target;
+                var dataValue = node.data('dataValue');
+                if (dataValue) {
+                    var hoverPanel = document.getElementById('hoverPanel');
+                    hoverPanel.innerHTML = dataValue;
+                    hoverPanel.style.display = 'block';
+                    hoverPanel.style.left = (evt.renderedPosition.x + 10) + 'px';
+                    hoverPanel.style.top = (evt.renderedPosition.y + 10) + 'px';
+                }
+            });
+
+            cy.on('mouseout', 'node', function () {
+                document.getElementById('hoverPanel').style.display = 'none';
+            });
+
+            cy.on('mousemove', 'node', function (evt) {
+                var hoverPanel = document.getElementById('hoverPanel');
+                hoverPanel.style.left = (evt.renderedPosition.x + 10) + 'px';
+                hoverPanel.style.top = (evt.renderedPosition.y + 10) + 'px';
+            });
+            cy.on('click', 'node', function (evt) {
+                var node = evt.target;
+                openEditPanel(node);
+            });
+        }
+
+        function getElements() {
+            // Define your nodes here (they remain the same for all designs)
+            var nodes = [
+                { data: { id: 'Channel', label: 'Channel' } },
+                { data: { id: 'Source', label: 'Source' } },
+                { data: { id: 'Drain', label: 'Drain' } },
+                { data: { id: 'Gate', label: 'Gate' } },
+                { data: { id: 'DielectricLayer', label: 'Dielectric Layer' } },
+                { data: { id: 'Substrate', label: 'Substrate' } },
+                { data: { id: 'SurfaceFunctionalization', label: 'Surface Functionalization' } },
+                { data: { id: 'Probe', label: 'Probe' } },
+                { data: { id: 'AnnealingSetUp', label: 'Annealing Set Up' } },
+                { data: { id: 'AnnealingAtmosphere', label: 'Annealing Atmosphere' } },
+                { data: { id: 'HydrothermalSetUp', label: 'Hydrothermal Set Up' } },
+                { data: { id: 'TargetChemical', label: 'Target Chemical' } },
+                { data: { id: 'TestingMedium', label: 'Testing Medium' } },
+                { data: { id: 'TestingTemperature', label: 'Testing Temperature' } },
+                { data: { id: 'TestingpHValue', label: 'Testing pH Value' } },
+                { data: { id: 'LowerDetectionLimit', label: 'Lower Detection Limit' } },
+                { data: { id: 'UpperDetectionLimit', label: 'Upper Detection Limit' } },
+                { data: { id: 'ResponseTime', label: 'Response Time' } },
+                { data: { id: 'RecoveryTime', label: 'Recovery Time' } },
+                { data: { id: 'Sensitivity', label: 'Sensitivity' } },
+                { data: { id: 'Dimensionality', label: 'Dimensionality' } },
+            ];
+            // Filter out the Gate node for floating design
+            if (currentDesign === 'floating') {
+                nodes = nodes.filter(node => node.data.id !== 'Gate');
+            }
+            // Define edges based on the current design
+            var edges = [];
+            switch (currentDesign) {
+                case 'standard':
+                    edges = [
+                        { data: { source: 'Channel', target: 'Source' } },
+                        { data: { source: 'Channel', target: 'Drain' } },
+                        { data: { source: 'Channel', target: 'DielectricLayer' } },
+                        { data: { source: 'Channel', target: 'Substrate' } },
+                        { data: { source: 'DielectricLayer', target: 'Probe' } },
+                        { data: { source: 'DielectricLayer', target: 'TestingMedium' } },
+                        { data: { source: 'Probe', target: 'SurfaceFunctionalization' } },
+                        { data: { source: 'Probe', target: 'TargetChemical' } },
+                        { data: { source: 'TestingMedium', target: 'Gate' } },
+                        { data: { source: 'TestingMedium', target: 'TargetChemical' } },
+                        { data: { source: 'TestingMedium', target: 'Probe' } },
+                        { data: { source: 'TestingMedium', target: 'TestingTemperature' } },
+                        { data: { source: 'TestingMedium', target: 'TestingpHValue' } },
+                        { data: { source: 'AnnealingSetUp', target: 'AnnealingAtmosphere' } },
+                        { data: { source: 'AnnealingSetUp', target: 'Channel' } },
+                        { data: { source: 'AnnealingSetUp', target: 'Source' } },
+                        { data: { source: 'AnnealingSetUp', target: 'Drain' } },
+                        { data: { source: 'AnnealingAtmosphere', target: 'Channel' } },
+                        { data: { source: 'AnnealingAtmosphere', target: 'Source' } },
+                        { data: { source: 'AnnealingAtmosphere', target: 'Drain' } },
+                        { data: { source: 'HydrothermalSetUp', target: 'SurfaceFunctionalization' } },
+                        { data: { source: 'HydrothermalSetUp', target: 'Probe' } },
+                        { data: { source: 'Sensitivity', target: 'TestingMedium' } },
+                        { data: { source: 'Sensitivity', target: 'TargetChemical' } },
+                        { data: { source: 'Sensitivity', target: 'Probe' } },
+                        { data: { source: 'LowerDetectionLimit', target: 'TestingMedium' } },
+                        { data: { source: 'LowerDetectionLimit', target: 'TargetChemical' } },
+                        { data: { source: 'LowerDetectionLimit', target: 'Probe' } },
+                        { data: { source: 'LowerDetectionLimit', target: 'UpperDetectionLimit' } },
+                        { data: { source: 'UpperDetectionLimit', target: 'TestingMedium' } },
+                        { data: { source: 'UpperDetectionLimit', target: 'TargetChemical' } },
+                        { data: { source: 'UpperDetectionLimit', target: 'Probe' } },
+                        { data: { source: 'ResponseTime', target: 'TestingMedium' } },
+                        { data: { source: 'ResponseTime', target: 'TargetChemical' } },
+                        { data: { source: 'ResponseTime', target: 'Probe' } },
+                        { data: { source: 'ResponseTime', target: 'RecoveryTime' } },
+                        { data: { source: 'RecoveryTime', target: 'TestingMedium' } },
+                        { data: { source: 'RecoveryTime', target: 'TargetChemical' } },
+                        { data: { source: 'RecoveryTime', target: 'Probe' } },
+                        { data: { source: 'Dimensionality', target: 'Channel' } },
+                        { data: { source: 'Dimensionality', target: 'Source' } },
+                        { data: { source: 'Dimensionality', target: 'Drain' } },
+                        { data: { source: 'Dimensionality', target: 'DielectricLayer' } },
+                        { data: { source: 'Dimensionality', target: 'Substrate' } },
+                        { data: { source: 'Dimensionality', target: 'Probe' } },
+                        { data: { source: 'Dimensionality', target: 'Gate' } },
+                        { data: { source: 'Dimensionality', target: 'SurfaceFunctionalization' } },
+                    ];
+                    break;
+                case 'remote':
+                    edges = [
+                        { data: { source: 'Channel', target: 'Source' } },
+                        { data: { source: 'Channel', target: 'Drain' } },
+                        { data: { source: 'Channel', target: 'DielectricLayer' } },
+                        { data: { source: 'SurfaceFunctionalization', target: 'Substrate' } },
+                        { data: { source: 'Gate', target: 'Substrate' } },
+                        { data: { source: 'DielectricLayer', target: 'Gate' } },
+                        { data: { source: 'Probe', target: 'SurfaceFunctionalization' } },
+                        { data: { source: 'Probe', target: 'TargetChemical' } },
+                        { data: { source: 'TestingMedium', target: 'TargetChemical' } },
+                        { data: { source: 'TestingMedium', target: 'Probe' } },
+                        { data: { source: 'TestingMedium', target: 'TestingTemperature' } },
+                        { data: { source: 'TestingMedium', target: 'TestingpHValue' } },
+                        { data: { source: 'AnnealingSetUp', target: 'AnnealingAtmosphere' } },
+                        { data: { source: 'AnnealingSetUp', target: 'Channel' } },
+                        { data: { source: 'AnnealingSetUp', target: 'Source' } },
+                        { data: { source: 'AnnealingSetUp', target: 'Drain' } },
+                        { data: { source: 'AnnealingAtmosphere', target: 'Channel' } },
+                        { data: { source: 'AnnealingAtmosphere', target: 'Source' } },
+                        { data: { source: 'AnnealingAtmosphere', target: 'Drain' } },
+                        { data: { source: 'HydrothermalSetUp', target: 'SurfaceFunctionalization' } },
+                        { data: { source: 'TestingMedium', target: 'SurfaceFunctionalization' } },
+                        { data: { source: 'HydrothermalSetUp', target: 'Probe' } },
+                        { data: { source: 'Sensitivity', target: 'TestingMedium' } },
+                        { data: { source: 'Sensitivity', target: 'TargetChemical' } },
+                        { data: { source: 'Sensitivity', target: 'Probe' } },
+                        { data: { source: 'LowerDetectionLimit', target: 'TestingMedium' } },
+                        { data: { source: 'LowerDetectionLimit', target: 'TargetChemical' } },
+                        { data: { source: 'LowerDetectionLimit', target: 'Probe' } },
+                        { data: { source: 'LowerDetectionLimit', target: 'UpperDetectionLimit' } },
+                        { data: { source: 'UpperDetectionLimit', target: 'TestingMedium' } },
+                        { data: { source: 'UpperDetectionLimit', target: 'TargetChemical' } },
+                        { data: { source: 'UpperDetectionLimit', target: 'Probe' } },
+                        { data: { source: 'ResponseTime', target: 'TestingMedium' } },
+                        { data: { source: 'ResponseTime', target: 'TargetChemical' } },
+                        { data: { source: 'ResponseTime', target: 'Probe' } },
+                        { data: { source: 'ResponseTime', target: 'RecoveryTime' } },
+                        { data: { source: 'RecoveryTime', target: 'TestingMedium' } },
+                        { data: { source: 'RecoveryTime', target: 'TargetChemical' } },
+                        { data: { source: 'RecoveryTime', target: 'Probe' } },
+                        { data: { source: 'Dimensionality', target: 'Channel' } },
+                        { data: { source: 'Dimensionality', target: 'Source' } },
+                        { data: { source: 'Dimensionality', target: 'Drain' } },
+                        { data: { source: 'Dimensionality', target: 'DielectricLayer' } },
+                        { data: { source: 'Dimensionality', target: 'Substrate' } },
+                        { data: { source: 'Dimensionality', target: 'Probe' } },
+                        { data: { source: 'Dimensionality', target: 'Gate' } },
+                        { data: { source: 'Dimensionality', target: 'SurfaceFunctionalization' } },
+                    ];
+                    break;
+                case 'floating':
+                    edges = [
+                        { data: { source: 'Channel', target: 'Source' } },
+                        { data: { source: 'Channel', target: 'Drain' } },
+                        { data: { source: 'Channel', target: 'DielectricLayer' } },
+                        { data: { source: 'Channel', target: 'Substrate' } },
+                        { data: { source: 'DielectricLayer', target: 'Probe' } },
+                        { data: { source: 'DielectricLayer', target: 'TestingMedium' } },
+                        { data: { source: 'Probe', target: 'SurfaceFunctionalization' } },
+                        { data: { source: 'Probe', target: 'TargetChemical' } },
+                        { data: { source: 'TestingMedium', target: 'TargetChemical' } },
+                        { data: { source: 'TestingMedium', target: 'Probe' } },
+                        { data: { source: 'TestingMedium', target: 'TestingTemperature' } },
+                        { data: { source: 'TestingMedium', target: 'TestingpHValue' } },
+                        { data: { source: 'AnnealingSetUp', target: 'AnnealingAtmosphere' } },
+                        { data: { source: 'AnnealingSetUp', target: 'Channel' } },
+                        { data: { source: 'AnnealingSetUp', target: 'Source' } },
+                        { data: { source: 'AnnealingSetUp', target: 'Drain' } },
+                        { data: { source: 'AnnealingAtmosphere', target: 'Channel' } },
+                        { data: { source: 'AnnealingAtmosphere', target: 'Source' } },
+                        { data: { source: 'AnnealingAtmosphere', target: 'Drain' } },
+                        { data: { source: 'HydrothermalSetUp', target: 'SurfaceFunctionalization' } },
+                        { data: { source: 'HydrothermalSetUp', target: 'Probe' } },
+                        { data: { source: 'Sensitivity', target: 'TestingMedium' } },
+                        { data: { source: 'Sensitivity', target: 'TargetChemical' } },
+                        { data: { source: 'Sensitivity', target: 'Probe' } },
+                        { data: { source: 'LowerDetectionLimit', target: 'TestingMedium' } },
+                        { data: { source: 'LowerDetectionLimit', target: 'TargetChemical' } },
+                        { data: { source: 'LowerDetectionLimit', target: 'Probe' } },
+                        { data: { source: 'LowerDetectionLimit', target: 'UpperDetectionLimit' } },
+                        { data: { source: 'UpperDetectionLimit', target: 'TestingMedium' } },
+                        { data: { source: 'UpperDetectionLimit', target: 'TargetChemical' } },
+                        { data: { source: 'UpperDetectionLimit', target: 'Probe' } },
+                        { data: { source: 'ResponseTime', target: 'TestingMedium' } },
+                        { data: { source: 'ResponseTime', target: 'TargetChemical' } },
+                        { data: { source: 'ResponseTime', target: 'Probe' } },
+                        { data: { source: 'ResponseTime', target: 'RecoveryTime' } },
+                        { data: { source: 'RecoveryTime', target: 'TestingMedium' } },
+                        { data: { source: 'RecoveryTime', target: 'TargetChemical' } },
+                        { data: { source: 'RecoveryTime', target: 'Probe' } },
+                        { data: { source: 'Dimensionality', target: 'Channel' } },
+                        { data: { source: 'Dimensionality', target: 'Source' } },
+                        { data: { source: 'Dimensionality', target: 'Drain' } },
+                        { data: { source: 'Dimensionality', target: 'DielectricLayer' } },
+                        { data: { source: 'Dimensionality', target: 'Substrate' } },
+                        { data: { source: 'Dimensionality', target: 'Probe' } },
+                        { data: { source: 'Dimensionality', target: 'SurfaceFunctionalization' } },
+                    ];
+                    break;
+            }
+
+            return nodes.concat(edges);
+        }
+        function switchDesignBasedOnType(designType) {
+            let newDesign;
+            switch (designType.toLowerCase()) {
+                case 'remote gate':
+                    newDesign = 'remote';
+                    break;
+                case 'floating':
+                    newDesign = 'floating';
+                    break;
+                case 'standard':
+                case 'dual gate':
+                case 'gate-all-around':
+                default:
+                    newDesign = 'standard';
+                    break;
+            }
+
+            currentDesign = newDesign;
+            updateSwitchButtons(newDesign);
+        }
+
+        function updateSwitchButtons(activeDesign) {
+            document.querySelectorAll('.switch-button').forEach(button => {
+                button.classList.remove('active');
+                if (button.textContent.toLowerCase().includes(activeDesign)) {
+                    button.classList.add('active');
+                }
+            });
+        }
+        function switchDesign(design) {
+            currentDesign = design;
+            updateGraph();
+            updateSwitchButtons(design);
+        }
+
+        function updateGraph(selectedDOI) {
+            if (!selectedDOI) {
+                selectedDOI = document.getElementById('doiSearch').value;
+            }
+            const selectedData = csvData.find(row => row.DOI === selectedDOI);
+
+            if (!selectedData) {
+                return;
+            }
+            // Add this line to get the structure design type
+            const structureDesignType = selectedData['Structure Design Type'] || 'standard';
+
+            // Add this line to switch the design automatically
+            switchDesignBasedOnType(structureDesignType);
+
+            cy.elements().remove();
+            cy.add(getElements());
+
+            // Update node labels with CSV data
+            cy.nodes().forEach(node => {
+                const nodeId = node.id();
+                let newLabel = node.data('label').split('\n')[0]; // Keep only the original label
+                let dataValue = '';
+
+                switch (nodeId) {
+                    case 'TargetChemical':
+                        dataValue = selectedData['Target Chemical'] || 'N/A';
+                        break;
+                    case 'LowerDetectionLimit':
+                        dataValue = selectedData['Lower Detection Limit'] || 'N/A';
+                        break;
+                    case 'UpperDetectionLimit':
+                        dataValue = selectedData['Upper Detection Limit'] || 'N/A';
+                        break;
+                    case 'Sensitivity':
+                        dataValue = selectedData['Sensitivity'] || 'N/A';
+                        break;
+                    case 'ResponseTime':
+                        dataValue = selectedData['Response Time'] || 'N/A';
+                        break;
+                    case 'RecoveryTime':
+                        dataValue = selectedData['Recovery Time'] || 'N/A';
+                        break;
+                    case 'Channel':
+                        dataValue = selectedData['Channel'] || 'N/A';
+                        break;
+                    case 'DielectricLayer':
+                        dataValue = selectedData['Dielectric Layer'] || 'N/A';
+                        break;
+                    case 'Gate':
+                        dataValue = selectedData['Gate'] || 'N/A';
+                        break;
+                    case 'Source':
+                        dataValue = selectedData['Source'] || 'N/A';
+                        break;
+                    case 'Drain':
+                        dataValue = selectedData['Drain'] || 'N/A';
+                        break;
+                    case 'Probe':
+                        dataValue = selectedData['Probe'] || 'N/A';
+                        break;
+                    case 'Substrate':
+                        dataValue = selectedData['Substrate'] || 'N/A';
+                        break;
+                    case 'SurfaceFunctionalization':
+                        dataValue = selectedData['Surface Functionalization'] || 'N/A';
+                        break;
+                    case 'TestingTemperature':
+                        dataValue = selectedData['Testing Temperature'] || 'N/A';
+                        break;
+                    case 'TestingpHValue':
+                        dataValue = selectedData['Testing pH Value'] || 'N/A';
+                        break;
+                    case 'TestingMedium':
+                        dataValue = selectedData['Testing Medium'] || 'N/A';
+                        break;
+                    case 'Dimensionality':
+                        dataValue = selectedData['Structure Dimensionality'] || 'N/A';
+                        break;
+                    case 'AnnealingAtmosphere':
+                        dataValue = selectedData['Annealing Atomosphere'] || 'N/A';
+                        break;
+                    case 'AnnealingSetUp':
+                        const annealingTemp = selectedData['Annealing Temperature'] || 'N/A';
+                        const annealingTime = selectedData['Annealing Time'] || 'N/A';
+                        dataValue = `Temp: ${annealingTemp}\nTime: ${annealingTime}`;
+                        break;
+                    case 'HydrothermalSetUp':
+                        const hydroTemp = selectedData['Hydrothermal Temperature'] || 'N/A';
+                        const hydroTime = selectedData['Hydrothermal Time'] || 'N/A';
+                        dataValue = `Temp: ${hydroTemp}\nTime: ${hydroTime}`;
+                        break;
+                }
+
+                if (dataValue && dataValue !== 'N/A' && dataValue !== 'Temp: N/A\nTime: N/A') {
+                    node.data('hasData', true);
+                    node.data('dataValue', dataValue);
+                } else {
+                    node.removeData('hasData');
+                    node.removeData('dataValue');
+                }
+
+                node.data('label', newLabel);
+            });
+            cy.nodes().forEach(node => {
+                node.removeClass('node-predicted');
+                if (!node.data('hasData')) {
+                    node.style('border-color', '#7e7e7e');
+                    node.style('border-width', 5);
+                }
+            });
+            cy.layout({ name: 'cose' }).run();
+        }
+        function openEditPanel(node) {
+            const nodeId = node.id();
+            const currentValue = node.data('dataValue') || '';
+            const position = node.renderedPosition();
+
+            let editContent = '';
+
+            switch (nodeId) {
+                case 'TestingpHValue':
+                case 'TestingTemperature':
+                case 'RecoveryTime':
+                case 'ResponseTime':
+                case 'UpperDetectionLimit':
+                case 'LowerDetectionLimit':
+                    editContent = `
+                <input type="text" id="editValue" value="${currentValue}">
+                <button onclick="updateNodeValue('${nodeId}')">Update</button>
+                <button onclick="clearNodeValue('${nodeId}')">Clear</button>
+            `;
+                    break;
+                case 'AnnealingSetUp':
+                case 'HydrothermalSetUp':
+                    const [temp, time] = (currentValue || 'Temp: \nTime: ').split('\n');
+                    editContent = `
+                <input type="text" id="editTemp" placeholder="Temperature" value="${temp ? temp.split(': ')[1] : ''}">
+                <input type="text" id="editTime" placeholder="Time" value="${time ? time.split(': ')[1] : ''}">
+                <button onclick="updateNodeValue('${nodeId}')">Update</button>
+                <button onclick="clearNodeValue('${nodeId}')">Clear</button>
+            `;
+                    break;
+                case 'Sensitivity':
+                    const [type, value, concentration] = currentValue.split(',');
+                    editContent = `
+                <select id="editType">
+                    <option value="%" ${type === '%' ? 'selected' : ''}>%</option>
+                    <option value="A" ${type === 'A' ? 'selected' : ''}>A</option>
+                    <option value="V" ${type === 'V' ? 'selected' : ''}>V</option>
+                </select>
+                <input type="text" id="editValue" value="${value || ''}">
+                <input type="text" id="editConcentration" value="${concentration || ''}">
+                <button onclick="updateNodeValue('${nodeId}')">Update</button>
+                <button onclick="clearNodeValue('${nodeId}')">Clear</button>
+            `;
+                    break;
+                default:
+                    editContent = `
+                <input type="text" id="searchMaterial" placeholder="Search material...">
+                <div id="materialList"></div>
+                <button onclick="updateNodeValue('${nodeId}')">Update</button>
+                <button onclick="clearNodeValue('${nodeId}')">Clear</button>
+            `;
+                    break;
+            }
+
+            const editPanel = document.createElement('div');
+            editPanel.id = 'editPanel';
+            editPanel.innerHTML = `
+        <div class="edit-panel-header">
+            <h3>Edit ${node.data('label')}</h3>
+            <button class="close-x" onclick="closeEditPanel()">×</button>
+        </div>
+        ${editContent}
+        <button onclick="closeEditPanel()">Close</button>
+    `;
+
+            document.body.appendChild(editPanel);
+
+            // Position the panel near the node
+            const panelRect = editPanel.getBoundingClientRect();
+            editPanel.style.left = `${position.x + 10}px`;
+            editPanel.style.top = `${position.y - panelRect.height / 2}px`;
+
+            if (nodeId !== 'TestingpHValue' && nodeId !== 'TestingTemperature' &&
+                nodeId !== 'RecoveryTime' && nodeId !== 'ResponseTime' &&
+                nodeId !== 'UpperDetectionLimit' && nodeId !== 'LowerDetectionLimit' &&
+                nodeId !== 'AnnealingSetUp' && nodeId !== 'HydrothermalSetUp' &&
+                nodeId !== 'Sensitivity') {
+                setupMaterialSearch(nodeId);
+            }
+        }
+        function updateNodeValue(nodeId) {
+            const node = cy.getElementById(nodeId);
+            let newValue;
+
+            switch (nodeId) {
+                case 'TestingpHValue':
+                case 'TestingTemperature':
+                case 'RecoveryTime':
+                case 'ResponseTime':
+                case 'UpperDetectionLimit':
+                case 'LowerDetectionLimit':
+                    newValue = document.getElementById('editValue').value;
+                    break;
+                case 'AnnealingSetUp':
+                case 'HydrothermalSetUp':
+                    const temp = document.getElementById('editTemp').value;
+                    const time = document.getElementById('editTime').value;
+                    newValue = `Temp: ${temp}\nTime: ${time}`;
+                    break;
+                case 'Sensitivity':
+                    const type = document.getElementById('editType').value;
+                    const value = document.getElementById('editValue').value;
+                    const concentration = document.getElementById('editConcentration').value;
+                    newValue = `${type},${value},${concentration}`;
+                    break;
+                default:
+                    newValue = document.getElementById('searchMaterial').value;
+                    break;
+            }
+
+            if (newValue) {
+                node.data('dataValue', newValue);
+                node.data('hasData', true);
+                node.style('border-color', '#09FF00');
+                node.style('border-width', 15);
+            }
+
+            closeEditPanel();
+        }
+        function clearNodeValue(nodeId) {
+            const node = cy.getElementById(nodeId);
+            node.removeData('dataValue');
+            node.removeData('hasData');
+            node.data('label', node.data('label').split('\n')[0]); // Keep only the original label
+
+            // Update the node's style
+            node.style('border-color', '#7e7e7e');
+            node.style('border-width', 5);
+
+            closeEditPanel();
+        }
+
+        function closeEditPanel() {
+            const editPanel = document.getElementById('editPanel');
+            if (editPanel) {
+                editPanel.remove();
+            }
+        }
+        function setupMaterialSearch(nodeId) {
+            const searchInput = document.getElementById('searchMaterial');
+            const materialList = document.getElementById('materialList');
+
+            function updateMaterialList() {
+                const searchTerm = searchInput.value.toLowerCase();
+                let columnName;
+
+                // Map nodeId to CSV column names
+                const columnMap = {
+                    'TargetChemical': 'Target Chemical',
+                    'DielectricLayer': 'Dielectric Layer',
+                    'AnnealingAtmosphere': 'Annealing Atomosphere', // Note: This matches the typo in your CSV
+                    'SurfaceFunctionalization': 'Surface Functionalization',
+                    'TestingMedium': 'Testing Medium',
+                    'Dimensionality': 'Structure Dimensionality',
+                    'Channel': 'Channel',
+                    'Gate': 'Gate',
+                    'Source': 'Source',
+                    'Drain': 'Drain',
+                    'Probe': 'Probe',
+                    'Substrate': 'Substrate',
+                    // Add other mappings as needed
+                };
+
+                columnName = columnMap[nodeId] || nodeId;
+
+                const matchingMaterials = [...new Set(csvData
+                    .filter(row => row[columnName] && row[columnName].toLowerCase().includes(searchTerm))
+                    .map(row => row[columnName]))];
+
+                materialList.innerHTML = '';
+                matchingMaterials.forEach(material => {
+                    const div = document.createElement('div');
+                    div.textContent = material;
+                    div.onclick = function () {
+                        searchInput.value = material;
+                    };
+                    materialList.appendChild(div);
+                });
+            }
+
+            searchInput.addEventListener('input', updateMaterialList);
+
+            // Initial update of the material list
+            updateMaterialList();
+        }
+        function clearAndReset() {
+            // Clear the search input
+            document.getElementById('doiSearch').value = '';
+
+            // Clear the DOI list
+            document.getElementById('doiList').innerHTML = '';
+
+            // Reset the graph to its initial state
+            cy.elements().remove();
+            cy.add(getElements());
+
+            // Remove any data from nodes
+            cy.nodes().forEach(node => {
+                node.removeData('hasData');
+                node.removeData('dataValue');
+                node.data('label', node.data('label').split('\n')[0]); // Keep only the original label
+            });
+
+            // Re-apply the layout
+            cy.layout({ name: 'cose' }).run();
+
+            // Reset the design to 'standard'
+            currentDesign = 'standard';
+            document.querySelectorAll('.switch-button').forEach(button => {
+                button.classList.remove('active');
+            });
+            document.querySelector('.switch-button:nth-child(2)').classList.add('active');
+        }
+        function performGraphInference() {
+            const selectedModel = document.getElementById('modelSelect').value;
+            const resultsContent = document.getElementById('resultsContent');
+
+            // Count nodes that need prediction
+            const nodesToPredict = cy.nodes().filter(node => !node.data('hasData')).length;
+
+            // Calculate computation time
+            const computationTime = 2500 * nodesToPredict;
+
+            // Show loading indicator
+            showLoadingIndicator();
+
+            // Simulate computation time
+            resultsContent.innerHTML = 'Computing...';
+
+            setTimeout(() => {
+                let inferenceResult = '';
+                switch (selectedModel) {
+                    case 'gnn_v2.1':
+                        inferenceResult = 'Graph Neural Network v2.1 inference complete.\n\n';
+                        break;
+                    case 'gnn_v0.5':
+                        inferenceResult = 'Graph Neural Network v0.5 inference complete.\n\n';
+                        break;
+                    case 'gnn_v0.0.1':
+                        inferenceResult = 'Graph Neural Network v0.0.1 inference complete.\n\n';
+                        break;
+                    case 'snn':
+                        inferenceResult = 'Spike Neural Network inference complete.\n\n';
+                        break;
+                }
+
+                // Update nodes without data and generate inference results
+                cy.nodes().forEach(node => {
+                    if (!node.data('hasData')) {
+                        const predictedValue = predictNodeValue(node.id());
+                        node.data('dataValue', predictedValue);
+                        node.data('hasData', true);
+                        node.data('isPredicted', true);
+                        node.style('border-color', '#00BFFF');
+                        node.style('border-width', 15);
+
+                        inferenceResult += `Node-${node.id()}: ${predictedValue}\n`;
+                    }
+                });
+
+                resultsContent.innerHTML = inferenceResult.replace(/\n/g, '<br>');
+
+                // Hide loading indicator
+                hideLoadingIndicator();
+            }, computationTime);
+        }
+        function clearPrediction() {
+            cy.nodes().forEach(node => {
+                if (node.data('isPredicted')) {
+                    node.removeData('dataValue');
+                    node.removeData('hasData');
+                    node.removeData('isPredicted');
+                    node.style('border-color', '#7e7e7e');
+                    node.style('border-width', 5);
+                }
+            });
+
+            // Clear the inference results
+            document.getElementById('resultsContent').innerHTML = '';
+        }
+        document.getElementById('clearPredictionButton').addEventListener('click', clearPrediction);
+        function predictNodeValue(nodeId) {
+            switch (nodeId) {
+                case 'TestingpHValue':
+                    return (Math.random() * (14 - 0) + 0).toFixed(2);
+                case 'TestingTemperature':
+                    return Math.floor(Math.random() * (100 - 0) + 0) + '°C';
+                case 'RecoveryTime':
+                case 'ResponseTime':
+                    return Math.floor(Math.random() * 100) + ' s';
+                case 'UpperDetectionLimit':
+                case 'LowerDetectionLimit':
+                    return Math.floor(Math.random() * 1000) + ' ppm';
+                case 'Sensitivity':
+                    const types = ['%', 'A', 'V'];
+                    const type = types[Math.floor(Math.random() * types.length)];
+                    const value = (Math.random() * 100).toFixed(2);
+                    const concentration = Math.floor(Math.random() * 1000) + ' ppm';
+                    return `${type},${value},${concentration}`;
+                case 'AnnealingSetUp':
+                    const annealingTempMin = Math.min(...csvData.map(row => parseFloat(row['Annealing Temperature']) || 0));
+                    const annealingTempMax = Math.max(...csvData.map(row => parseFloat(row['Annealing Temperature']) || 0));
+                    const annealingTimeMin = Math.min(...csvData.map(row => parseFloat(row['Annealing Time']) || 0));
+                    const annealingTimeMax = Math.max(...csvData.map(row => parseFloat(row['Annealing Time']) || 0));
+
+                    const predictedAnnealingTemp = Math.floor(Math.random() * (annealingTempMax - annealingTempMin + 1) + annealingTempMin);
+                    const predictedAnnealingTime = Math.floor(Math.random() * (annealingTimeMax - annealingTimeMin + 1) + annealingTimeMin);
+
+                    return `Temp: ${predictedAnnealingTemp}°C\nTime: ${predictedAnnealingTime}min`;
+
+                case 'HydrothermalSetUp':
+                    const hydroTempMin = Math.min(...csvData.map(row => parseFloat(row['Hydrothermal Temperature']) || 0));
+                    const hydroTempMax = Math.max(...csvData.map(row => parseFloat(row['Hydrothermal Temperature']) || 0));
+                    const hydroTimeMin = Math.min(...csvData.map(row => parseFloat(row['Hydrothermal Time']) || 0));
+                    const hydroTimeMax = Math.max(...csvData.map(row => parseFloat(row['Hydrothermal Time']) || 0));
+
+                    const predictedHydroTemp = Math.floor(Math.random() * (hydroTempMax - hydroTempMin + 1) + hydroTempMin);
+                    const predictedHydroTime = Math.floor(Math.random() * (hydroTimeMax - hydroTimeMin + 1) + hydroTimeMin);
+
+                    return `Temp: ${predictedHydroTemp}°C\nTime: ${predictedHydroTime}h`;
+                default:
+                    // For material search type nodes, randomly choose from CSV
+                    const columnName = getColumnNameForNode(nodeId);
+                    const uniqueMaterials = [...new Set(csvData.map(row => row[columnName]).filter(Boolean))];
+                    return uniqueMaterials[Math.floor(Math.random() * uniqueMaterials.length)] || 'N/A';
+            }
+        }
+        function getColumnNameForNode(nodeId) {
+            const columnMap = {
+                'TargetChemical': 'Target Chemical',
+                'DielectricLayer': 'Dielectric Layer',
+                'AnnealingAtmosphere': 'Annealing Atomosphere',
+                'SurfaceFunctionalization': 'Surface Functionalization',
+                'TestingMedium': 'Testing Medium',
+                'Dimensionality': 'Structure Dimensionality',
+                'Channel': 'Channel',
+                'Gate': 'Gate',
+                'Source': 'Source',
+                'Drain': 'Drain',
+                'Probe': 'Probe',
+                'Substrate': 'Substrate',
+            };
+            return columnMap[nodeId] || nodeId;
+        }
+
+        document.getElementById('computeButton').addEventListener('click', performGraphInference);
+        let conversationHistory = [];
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const chatContainer = document.getElementById('chat-container');
+            const chatMessages = document.getElementById('chat-messages');
+            const userInput = document.getElementById('user-input');
+            const sendMessage = document.getElementById('send-message');
+            const toggleChat = document.getElementById('toggle-chat');
+            const closeChat = document.getElementById('close-chat');
+            const resetConversation = document.getElementById('reset-conversation');
+            const loadingIndicator = document.getElementById('loading-indicator');
+            const summarizeMap = document.getElementById('summarize-map');
+            const importantNodes = document.getElementById('important-nodes');
+            const suggestNodes = document.getElementById('suggest-nodes');
+
+            summarizeMap.addEventListener('click', () => sendGraphQuery("A Summary for the current map?"));
+            importantNodes.addEventListener('click', () => sendGraphQuery("Which Node(s) should be concerned as potentially important and worthy further discovery?"));
+            suggestNodes.addEventListener('click', () => sendGraphQuery("Suggestions for the nodes to be manually setting values or be predicted by AI model"));
+
+            function sendGraphQuery(question) {
+                const graphInfo = extractGraphInfo();
+                const message = constructMessage(question, graphInfo);
+
+                // Add user message to chat
+                addMessageToChat('You (Data Sent)', question, '#E6E6FA');
+
+                // Send to AI
+                fetchAIResponse(message);
+            }
+
+            function extractGraphInfo() {
+                let graphInfo = {
+                    design: currentDesign, // Assuming currentDesign is a global variable
+                    nodes: {}
+                };
+
+                cy.nodes().forEach(node => {
+                    graphInfo.nodes[node.id()] = {
+                        label: node.data('label'),
+                        dataValue: node.data('dataValue') || 'N/A'
+                    };
+                });
+
+                return graphInfo;
+            }
+
+            function constructMessage(question, graphInfo) {
+                let message = "Now we are trying to analyze a knowledge graph related to FET sensor that may serve as chemical/bio/gas sensor. It is either based on literature knowledge or from researcher creation. Material components, target chemicals, sensor performance metrics, and also synthesis parameters are all represented as nodes in this graph.\n\n";
+
+                message += `Current design: ${graphInfo.design}\n\n`;
+                message += "Node information:\n";
+                for (let [nodeId, nodeData] of Object.entries(graphInfo.nodes)) {
+                    message += `${nodeId}: ${nodeData.label} - ${nodeData.dataValue}\n`;
+                }
+
+                message += `\n${question}`;
+
+                return message;
+            }
+            let isInitialMessage = true;
+
+            toggleChat.addEventListener('click', () => {
+                chatContainer.style.display = chatContainer.style.display === 'none' ? 'block' : 'none';
+                toggleChat.style.display = 'none';
+                if (isInitialMessage) {
+                    sendInitialMessage();
+                }
+            });
+
+            closeChat.addEventListener('click', () => {
+                chatContainer.style.display = 'none';
+                toggleChat.style.display = 'block';
+            });
+
+            sendMessage.addEventListener('click', (e) => {
+                e.preventDefault();
+                sendUserMessage();
+            });
+
+            resetConversation.addEventListener('click', () => {
+                if (confirm('Are you sure you want to reset the conversation? This action cannot be undone.')) {
+                    chatMessages.innerHTML = '';
+                    conversationHistory = [];
+                    hideLoadingIndicator();
+                    isInitialMessage = true;
+                    sendInitialMessage();
+                }
+            });
+
+            userInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    sendUserMessage();
+                }
+            });
+
+            function sendInitialMessage() {
+                fetchAIResponse('', true);
+                isInitialMessage = false;
+            }
+
+            function sendUserMessage() {
+                const message = userInput.value.trim();
+                if (message) {
+                    addMessageToChat('You', message);
+                    userInput.value = '';
+                    userInput.style.height = '60px';
+                    userInput.blur();
+                    fetchAIResponse(message);
+                }
+            }
+
+            function addMessageToChat(sender, message, backgroundColor = null) {
+                const messageElement = document.createElement('div');
+                messageElement.className = `message ${sender === 'You' || sender === 'You (Data Sent)' ? 'human-message' : 'ai-message'}`;
+                if (backgroundColor) {
+                    messageElement.style.backgroundColor = backgroundColor;
+                }
+                messageElement.innerHTML = `<strong>${sender}:</strong> ${message}`;
+                chatMessages.appendChild(messageElement);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+
+            function fetchAIResponse(prompt, isInitial = false) {
+                showLoadingIndicator();
+
+                fetch('/run_ollama_interactive/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getCookie('csrftoken')
+                    },
+                    body: JSON.stringify({
+                        prompt: prompt,
+                        conversation_history: conversationHistory,
+                        is_initial_message: isInitial
+                    })
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        hideLoadingIndicator();
+                        addMessageToChat('AI', data.output);
+                        if (!isInitial) {
+                            conversationHistory.push({
+                                role: 'Human',
+                                content: prompt
+                            });
+                        }
+                        conversationHistory.push({
+                            role: 'AI',
+                            content: data.output
+                        });
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        hideLoadingIndicator();
+                        addMessageToChat('AI', 'Sorry, an error occurred. Please try again.');
+                    });
+            }
+
+            function showLoadingIndicator() {
+                loadingIndicator.style.display = 'block';
+            }
+
+            function hideLoadingIndicator() {
+                loadingIndicator.style.display = 'none';
+            }
+
+            function getCookie(name) {
+                let cookieValue = null;
+                if (document.cookie && document.cookie !== '') {
+                    const cookies = document.cookie.split(';');
+                    for (let i = 0; i < cookies.length; i++) {
+                        const cookie = cookies[i].trim();
+                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+            }
+        });
+        function showLoadingIndicator() {
+    document.getElementById('graph-loading-indicator').style.display = 'block';
+}
+
+function hideLoadingIndicator() {
+    document.getElementById('graph-loading-indicator').style.display = 'none';
+}
+    </script>
+
+</body>
+
+</html>

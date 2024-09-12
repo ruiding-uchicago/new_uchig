@@ -1,0 +1,1142 @@
+[
+    {
+        "subject": "globus%3A%2F%2Faf7bda53-6d04-11e5-ba46-22000b92c6ec%2Fproject2%2Fchenyuxin%2FMADE_PUBLIC_REPO%2FThrust%25203%2FPast%2520Publications%2520of%2520Rui%2520Ding",
+        "all": [
+            {
+                "Title": "Past Publications of Rui Ding",
+                "Document Format": "Folder",
+                "Abstract Description": "",
+                "Data Type": [
+                    "Publication"
+                ],
+                "Outer Link": "",
+                "url": "globus://af7bda53-6d04-11e5-ba46-22000b92c6ec/project2/chenyuxin/MADE_PUBLIC_REPO/Thrust 3/Past Publications of Rui Ding",
+                "creator": "Rui Ding",
+                "Related Topic": [
+                    "Machine Learning"
+                ],
+                "PI Affiliated": [
+                    "Junhong Chen",
+                    "Yuxin Chen"
+                ],
+                "Data Tags": [
+                    "Literatures"
+                ],
+                "Thrust": "Thrust 3",
+                "date": "2024-09-03T21:32",
+                "original_collection_name": "UChicago RCC Midway"
+            }
+        ],
+        "title": "Past Publications of Rui Ding",
+        "globus_app_link": "https://app.globus.org/file-manager?origin_id=af7bda53-6d04-11e5-ba46-22000b92c6ec&origin_path=%2Fproject2%2Fchenyuxin%2FMADE_PUBLIC_REPO%2FThrust+3",
+        "search_highlights": [
+            {
+                "name": "creator",
+                "title": "Creator",
+                "value": "Rui Ding",
+                "type": "str"
+            },
+            {
+                "name": "Data Tags",
+                "title": "Data tags",
+                "value": "Literatures",
+                "type": "str"
+            },
+            {
+                "name": "PI Affiliated",
+                "title": "Pi affiliated",
+                "value": [
+                    "Junhong Chen",
+                    "Yuxin Chen"
+                ],
+                "type": "str"
+            },
+            {
+                "name": "date",
+                "title": "Date",
+                "value": "2024-09-03T21:32:00",
+                "type": "date"
+            },
+            {
+                "name": "Thrust",
+                "title": "Thrust",
+                "value": "Thrust 3",
+                "type": "str"
+            }
+        ],
+        "https_url": "https://g-71c9e9.10bac.8443.data.globus.org/project2/chenyuxin/MADE_PUBLIC_REPO/Thrust 3/Past Publications of Rui Ding",
+        "dc": {
+            "formats": [
+                "text/plain"
+            ],
+            "creators": [
+                {
+                    "creatorName": "Rui Ding"
+                }
+            ],
+            "contributors": [
+                {
+                    "contributorName": "Rui Ding"
+                }
+            ],
+            "subjects": [
+                {
+                    "subject": "Literatures"
+                }
+            ],
+            "publicationYear": 2024,
+            "publisher": "Organization",
+            "dates": [
+                {
+                    "date": "2024-09-03T21:32:00",
+                    "dateType": "Created"
+                }
+            ],
+            "titles": [
+                {
+                    "title": "Past Publications of Rui Ding"
+                }
+            ],
+            "version": "1",
+            "resourceType": {
+                "resourceTypeGeneral": "Dataset",
+                "resourceType": "Dataset"
+            }
+        },
+        "document_format": "Folder",
+        "related_topic": [
+            "Machine Learning"
+        ],
+        "data_type": [
+            "Publication"
+        ],
+        "abstract_description": "",
+        "outer_link": ""
+    },
+    {
+        "subject": "globus%3A%2F%2Faf7bda53-6d04-11e5-ba46-22000b92c6ec%2Fproject2%2Fchenyuxin%2FMADE_PUBLIC_REPO%2FThrust%25203%2FPast%2520Publications%2520of%2520Rui%2520Ding%2FACS%2520AMI.pdf",
+        "all": [
+            {
+                "Title": "ACS AMI.pdf",
+                "Document Format": "pdf",
+                "Abstract Description": "Rui Ding 2023 JPS",
+                "Data Type": [
+                    "Publication"
+                ],
+                "Outer Link": "https://www.sciencedirect.com/science/article/pii/S0378775322013660",
+                "url": "globus://af7bda53-6d04-11e5-ba46-22000b92c6ec/project2/chenyuxin/MADE_PUBLIC_REPO/Thrust 3/Past Publications of Rui Ding/ACS AMI.pdf",
+                "creator": "Rui Ding",
+                "Related Topic": [
+                    "Machine Learning"
+                ],
+                "PI Affiliated": [
+                    "Junhong Chen",
+                    "Yuxin Chen"
+                ],
+                "Data Tags": [
+                    "Literatures"
+                ],
+                "Thrust": "Thrust 3",
+                "date": "2024-09-03T21:32",
+                "original_collection_name": "UChicago RCC Midway"
+            }
+        ],
+        "title": "ACS AMI.pdf",
+        "globus_app_link": "https://app.globus.org/file-manager?origin_id=af7bda53-6d04-11e5-ba46-22000b92c6ec&origin_path=%2Fproject2%2Fchenyuxin%2FMADE_PUBLIC_REPO%2FThrust+3%2FPast+Publications+of+Rui+Ding",
+        "search_highlights": [
+            {
+                "name": "creator",
+                "title": "Creator",
+                "value": "Rui Ding",
+                "type": "str"
+            },
+            {
+                "name": "Data Tags",
+                "title": "Data tags",
+                "value": "Literatures",
+                "type": "str"
+            },
+            {
+                "name": "PI Affiliated",
+                "title": "Pi affiliated",
+                "value": [
+                    "Junhong Chen",
+                    "Yuxin Chen"
+                ],
+                "type": "str"
+            },
+            {
+                "name": "date",
+                "title": "Date",
+                "value": "2024-09-03T21:32:00",
+                "type": "date"
+            },
+            {
+                "name": "Thrust",
+                "title": "Thrust",
+                "value": "Thrust 3",
+                "type": "str"
+            }
+        ],
+        "https_url": "https://g-71c9e9.10bac.8443.data.globus.org/project2/chenyuxin/MADE_PUBLIC_REPO/Thrust 3/Past Publications of Rui Ding/ACS AMI.pdf",
+        "dc": {
+            "formats": [
+                "text/plain"
+            ],
+            "creators": [
+                {
+                    "creatorName": "Rui Ding"
+                }
+            ],
+            "contributors": [
+                {
+                    "contributorName": "Rui Ding"
+                }
+            ],
+            "subjects": [
+                {
+                    "subject": "Literatures"
+                }
+            ],
+            "publicationYear": 2024,
+            "publisher": "Organization",
+            "dates": [
+                {
+                    "date": "2024-09-03T21:32:00",
+                    "dateType": "Created"
+                }
+            ],
+            "titles": [
+                {
+                    "title": "ACS AMI.pdf"
+                }
+            ],
+            "version": "1",
+            "resourceType": {
+                "resourceTypeGeneral": "Dataset",
+                "resourceType": "Dataset"
+            }
+        },
+        "document_format": "pdf",
+        "related_topic": [
+            "Machine Learning"
+        ],
+        "data_type": [
+            "Publication"
+        ],
+        "abstract_description": "Rui Ding 2023 JPS",
+        "outer_link": "https://www.sciencedirect.com/science/article/pii/S0378775322013660"
+    },
+    {
+        "subject": "globus%3A%2F%2Faf7bda53-6d04-11e5-ba46-22000b92c6ec%2Fproject2%2Fchenyuxin%2FMADE_PUBLIC_REPO%2FThrust%25203%2FPast%2520Publications%2520of%2520Rui%2520Ding%2FApplication%2520of%2520Machine%2520Learning%2520in%2520Optimizing%2520Proton%2520Exchange.pdf",
+        "all": [
+            {
+                "Title": "Application of Machine Learning in Optimizing Proton Exchange.pdf",
+                "Document Format": "pdf",
+                "Abstract Description": "Rui Ding 2022 EAI",
+                "Data Type": [
+                    "Publication"
+                ],
+                "Outer Link": "https://www.sciencedirect.com/science/article/pii/S2666546822000258",
+                "url": "globus://af7bda53-6d04-11e5-ba46-22000b92c6ec/project2/chenyuxin/MADE_PUBLIC_REPO/Thrust 3/Past Publications of Rui Ding/Application of Machine Learning in Optimizing Proton Exchange.pdf",
+                "creator": "Rui Ding",
+                "Related Topic": [
+                    "Machine Learning"
+                ],
+                "PI Affiliated": [
+                    "Junhong Chen",
+                    "Yuxin Chen"
+                ],
+                "Data Tags": [
+                    "Literatures"
+                ],
+                "Thrust": "Thrust 3",
+                "date": "2024-09-03T21:32",
+                "original_collection_name": "UChicago RCC Midway"
+            }
+        ],
+        "title": "Application of Machine Learning in Optimizing Proton Exchange.pdf",
+        "globus_app_link": "https://app.globus.org/file-manager?origin_id=af7bda53-6d04-11e5-ba46-22000b92c6ec&origin_path=%2Fproject2%2Fchenyuxin%2FMADE_PUBLIC_REPO%2FThrust+3%2FPast+Publications+of+Rui+Ding",
+        "search_highlights": [
+            {
+                "name": "creator",
+                "title": "Creator",
+                "value": "Rui Ding",
+                "type": "str"
+            },
+            {
+                "name": "Data Tags",
+                "title": "Data tags",
+                "value": "Literatures",
+                "type": "str"
+            },
+            {
+                "name": "PI Affiliated",
+                "title": "Pi affiliated",
+                "value": [
+                    "Junhong Chen",
+                    "Yuxin Chen"
+                ],
+                "type": "str"
+            },
+            {
+                "name": "date",
+                "title": "Date",
+                "value": "2024-09-03T21:32:00",
+                "type": "date"
+            },
+            {
+                "name": "Thrust",
+                "title": "Thrust",
+                "value": "Thrust 3",
+                "type": "str"
+            }
+        ],
+        "https_url": "https://g-71c9e9.10bac.8443.data.globus.org/project2/chenyuxin/MADE_PUBLIC_REPO/Thrust 3/Past Publications of Rui Ding/Application of Machine Learning in Optimizing Proton Exchange.pdf",
+        "dc": {
+            "formats": [
+                "text/plain"
+            ],
+            "creators": [
+                {
+                    "creatorName": "Rui Ding"
+                }
+            ],
+            "contributors": [
+                {
+                    "contributorName": "Rui Ding"
+                }
+            ],
+            "subjects": [
+                {
+                    "subject": "Literatures"
+                }
+            ],
+            "publicationYear": 2024,
+            "publisher": "Organization",
+            "dates": [
+                {
+                    "date": "2024-09-03T21:32:00",
+                    "dateType": "Created"
+                }
+            ],
+            "titles": [
+                {
+                    "title": "Application of Machine Learning in Optimizing Proton Exchange.pdf"
+                }
+            ],
+            "version": "1",
+            "resourceType": {
+                "resourceTypeGeneral": "Dataset",
+                "resourceType": "Dataset"
+            }
+        },
+        "document_format": "pdf",
+        "related_topic": [
+            "Machine Learning"
+        ],
+        "data_type": [
+            "Publication"
+        ],
+        "abstract_description": "Rui Ding 2022 EAI",
+        "outer_link": "https://www.sciencedirect.com/science/article/pii/S2666546822000258"
+    },
+    {
+        "subject": "globus%3A%2F%2Faf7bda53-6d04-11e5-ba46-22000b92c6ec%2Fproject2%2Fchenyuxin%2FMADE_PUBLIC_REPO%2FThrust%25203%2FPast%2520Publications%2520of%2520Rui%2520Ding%2FApplying%2520machine%2520learning%2520to%2520boost%2520the%2520development%2520of%2520high-performance%2520membrane%2520electrode%2520assembly%2520for%2520proton%2520exchange%2520membrane%2520fuel%2520cells.pdf",
+        "all": [
+            {
+                "Title": "Applying machine learning to boost the development of high-performance membrane electrode assembly for proton exchange membrane fuel cells.pdf",
+                "Document Format": "pdf",
+                "Abstract Description": "Rui Ding 2021 JMCA",
+                "Data Type": [
+                    "Publication"
+                ],
+                "Outer Link": "https://pubs.rsc.org/en/content/articlehtml/2021/ta/d0ta12571g",
+                "url": "globus://af7bda53-6d04-11e5-ba46-22000b92c6ec/project2/chenyuxin/MADE_PUBLIC_REPO/Thrust 3/Past Publications of Rui Ding/Applying machine learning to boost the development of high-performance membrane electrode assembly for proton exchange membrane fuel cells.pdf",
+                "creator": "Rui Ding",
+                "Related Topic": [
+                    "Machine Learning"
+                ],
+                "PI Affiliated": [
+                    "Junhong Chen",
+                    "Yuxin Chen"
+                ],
+                "Data Tags": [
+                    "Literatures"
+                ],
+                "Thrust": "Thrust 3",
+                "date": "2024-09-03T21:32",
+                "original_collection_name": "UChicago RCC Midway"
+            }
+        ],
+        "title": "Applying machine learning to boost the development of high-performance membrane electrode assembly for proton exchange membrane fuel cells.pdf",
+        "globus_app_link": "https://app.globus.org/file-manager?origin_id=af7bda53-6d04-11e5-ba46-22000b92c6ec&origin_path=%2Fproject2%2Fchenyuxin%2FMADE_PUBLIC_REPO%2FThrust+3%2FPast+Publications+of+Rui+Ding",
+        "search_highlights": [
+            {
+                "name": "creator",
+                "title": "Creator",
+                "value": "Rui Ding",
+                "type": "str"
+            },
+            {
+                "name": "Data Tags",
+                "title": "Data tags",
+                "value": "Literatures",
+                "type": "str"
+            },
+            {
+                "name": "PI Affiliated",
+                "title": "Pi affiliated",
+                "value": [
+                    "Junhong Chen",
+                    "Yuxin Chen"
+                ],
+                "type": "str"
+            },
+            {
+                "name": "date",
+                "title": "Date",
+                "value": "2024-09-03T21:32:00",
+                "type": "date"
+            },
+            {
+                "name": "Thrust",
+                "title": "Thrust",
+                "value": "Thrust 3",
+                "type": "str"
+            }
+        ],
+        "https_url": "https://g-71c9e9.10bac.8443.data.globus.org/project2/chenyuxin/MADE_PUBLIC_REPO/Thrust 3/Past Publications of Rui Ding/Applying machine learning to boost the development of high-performance membrane electrode assembly for proton exchange membrane fuel cells.pdf",
+        "dc": {
+            "formats": [
+                "text/plain"
+            ],
+            "creators": [
+                {
+                    "creatorName": "Rui Ding"
+                }
+            ],
+            "contributors": [
+                {
+                    "contributorName": "Rui Ding"
+                }
+            ],
+            "subjects": [
+                {
+                    "subject": "Literatures"
+                }
+            ],
+            "publicationYear": 2024,
+            "publisher": "Organization",
+            "dates": [
+                {
+                    "date": "2024-09-03T21:32:00",
+                    "dateType": "Created"
+                }
+            ],
+            "titles": [
+                {
+                    "title": "Applying machine learning to boost the development of high-performance membrane electrode assembly for proton exchange membrane fuel cells.pdf"
+                }
+            ],
+            "version": "1",
+            "resourceType": {
+                "resourceTypeGeneral": "Dataset",
+                "resourceType": "Dataset"
+            }
+        },
+        "document_format": "pdf",
+        "related_topic": [
+            "Machine Learning"
+        ],
+        "data_type": [
+            "Publication"
+        ],
+        "abstract_description": "Rui Ding 2021 JMCA",
+        "outer_link": "https://pubs.rsc.org/en/content/articlehtml/2021/ta/d0ta12571g"
+    },
+    {
+        "subject": "globus%3A%2F%2Faf7bda53-6d04-11e5-ba46-22000b92c6ec%2Fproject2%2Fchenyuxin%2FMADE_PUBLIC_REPO%2FThrust%25203%2FPast%2520Publications%2520of%2520Rui%2520Ding%2FAtomically%2520Dispersed%2C%2520Low%25E2%2580%2590Coordinate%2520Co%25E2%2580%2593N%2520Sites%2520on%2520Carbon%2520Nanotubes%2520as%2520Inexpensive%2520and%2520Efficient%2520Electrocatalysts%2520for%2520Hydrogen%2520Evolution.pdf",
+        "all": [
+            {
+                "Title": "Atomically Dispersed, Low\u9225\u600coordinate Co\u9225\u63d8 Sites on Carbon Nanotubes as Inexpensive and Efficient Electrocatalysts for Hydrogen Evolution.pdf",
+                "Document Format": "pdf",
+                "Abstract Description": "Rui Ding 2021 small",
+                "Data Type": [
+                    "Publication"
+                ],
+                "Outer Link": "https://onlinelibrary.wiley.com/doi/full/10.1002/smll.202105335",
+                "url": "globus://af7bda53-6d04-11e5-ba46-22000b92c6ec/project2/chenyuxin/MADE_PUBLIC_REPO/Thrust 3/Past Publications of Rui Ding/Atomically Dispersed, Low\u9225\u600coordinate Co\u9225\u63d8 Sites on Carbon Nanotubes as Inexpensive and Efficient Electrocatalysts for Hydrogen Evolution.pdf",
+                "creator": "Rui Ding",
+                "Related Topic": [
+                    "Machine Learning"
+                ],
+                "PI Affiliated": [
+                    "Junhong Chen",
+                    "Yuxin Chen"
+                ],
+                "Data Tags": [
+                    "Literatures"
+                ],
+                "Thrust": "Thrust 3",
+                "date": "2024-09-03T21:32",
+                "original_collection_name": "UChicago RCC Midway"
+            }
+        ],
+        "title": "Atomically Dispersed, Low\u9225\u600coordinate Co\u9225\u63d8 Sites on Carbon Nanotubes as Inexpensive and Efficient Electrocatalysts for Hydrogen Evolution.pdf",
+        "globus_app_link": "https://app.globus.org/file-manager?origin_id=af7bda53-6d04-11e5-ba46-22000b92c6ec&origin_path=%2Fproject2%2Fchenyuxin%2FMADE_PUBLIC_REPO%2FThrust+3%2FPast+Publications+of+Rui+Ding",
+        "search_highlights": [
+            {
+                "name": "creator",
+                "title": "Creator",
+                "value": "Rui Ding",
+                "type": "str"
+            },
+            {
+                "name": "Data Tags",
+                "title": "Data tags",
+                "value": "Literatures",
+                "type": "str"
+            },
+            {
+                "name": "PI Affiliated",
+                "title": "Pi affiliated",
+                "value": [
+                    "Junhong Chen",
+                    "Yuxin Chen"
+                ],
+                "type": "str"
+            },
+            {
+                "name": "date",
+                "title": "Date",
+                "value": "2024-09-03T21:32:00",
+                "type": "date"
+            },
+            {
+                "name": "Thrust",
+                "title": "Thrust",
+                "value": "Thrust 3",
+                "type": "str"
+            }
+        ],
+        "https_url": "https://g-71c9e9.10bac.8443.data.globus.org/project2/chenyuxin/MADE_PUBLIC_REPO/Thrust 3/Past Publications of Rui Ding/Atomically Dispersed, Low\u9225\u600coordinate Co\u9225\u63d8 Sites on Carbon Nanotubes as Inexpensive and Efficient Electrocatalysts for Hydrogen Evolution.pdf",
+        "dc": {
+            "formats": [
+                "text/plain"
+            ],
+            "creators": [
+                {
+                    "creatorName": "Rui Ding"
+                }
+            ],
+            "contributors": [
+                {
+                    "contributorName": "Rui Ding"
+                }
+            ],
+            "subjects": [
+                {
+                    "subject": "Literatures"
+                }
+            ],
+            "publicationYear": 2024,
+            "publisher": "Organization",
+            "dates": [
+                {
+                    "date": "2024-09-03T21:32:00",
+                    "dateType": "Created"
+                }
+            ],
+            "titles": [
+                {
+                    "title": "Atomically Dispersed, Low\u9225\u600coordinate Co\u9225\u63d8 Sites on Carbon Nanotubes as Inexpensive and Efficient Electrocatalysts for Hydrogen Evolution.pdf"
+                }
+            ],
+            "version": "1",
+            "resourceType": {
+                "resourceTypeGeneral": "Dataset",
+                "resourceType": "Dataset"
+            }
+        },
+        "document_format": "pdf",
+        "related_topic": [
+            "Machine Learning"
+        ],
+        "data_type": [
+            "Publication"
+        ],
+        "abstract_description": "Rui Ding 2021 small",
+        "outer_link": "https://onlinelibrary.wiley.com/doi/full/10.1002/smll.202105335"
+    },
+    {
+        "subject": "globus%3A%2F%2Faf7bda53-6d04-11e5-ba46-22000b92c6ec%2Fproject2%2Fchenyuxin%2FMADE_PUBLIC_REPO%2FThrust%25203%2FPast%2520Publications%2520of%2520Rui%2520Ding%2FBoosting%2520the%2520optimization%2520of%2520membrane%2520electrode%2520assembly%2520in%2520proton%2520exchange%2520membrane%2520fuel%2520cells%2520guided%2520by%2520explainable%2520artificial%2520intelligence.pdf",
+        "all": [
+            {
+                "Title": "Boosting the optimization of membrane electrode assembly in proton exchange membrane fuel cells guided by explainable artificial intelligence.pdf",
+                "Document Format": "pdf",
+                "Abstract Description": "Rui Ding 2021 EAI",
+                "Data Type": [
+                    "Publication"
+                ],
+                "Outer Link": "https://www.sciencedirect.com/science/article/pii/S2666546821000513",
+                "url": "globus://af7bda53-6d04-11e5-ba46-22000b92c6ec/project2/chenyuxin/MADE_PUBLIC_REPO/Thrust 3/Past Publications of Rui Ding/Boosting the optimization of membrane electrode assembly in proton exchange membrane fuel cells guided by explainable artificial intelligence.pdf",
+                "creator": "Rui Ding",
+                "Related Topic": [
+                    "Machine Learning"
+                ],
+                "PI Affiliated": [
+                    "Junhong Chen",
+                    "Yuxin Chen"
+                ],
+                "Data Tags": [
+                    "Literatures"
+                ],
+                "Thrust": "Thrust 3",
+                "date": "2024-09-03T21:32",
+                "original_collection_name": "UChicago RCC Midway"
+            }
+        ],
+        "title": "Boosting the optimization of membrane electrode assembly in proton exchange membrane fuel cells guided by explainable artificial intelligence.pdf",
+        "globus_app_link": "https://app.globus.org/file-manager?origin_id=af7bda53-6d04-11e5-ba46-22000b92c6ec&origin_path=%2Fproject2%2Fchenyuxin%2FMADE_PUBLIC_REPO%2FThrust+3%2FPast+Publications+of+Rui+Ding",
+        "search_highlights": [
+            {
+                "name": "creator",
+                "title": "Creator",
+                "value": "Rui Ding",
+                "type": "str"
+            },
+            {
+                "name": "Data Tags",
+                "title": "Data tags",
+                "value": "Literatures",
+                "type": "str"
+            },
+            {
+                "name": "PI Affiliated",
+                "title": "Pi affiliated",
+                "value": [
+                    "Junhong Chen",
+                    "Yuxin Chen"
+                ],
+                "type": "str"
+            },
+            {
+                "name": "date",
+                "title": "Date",
+                "value": "2024-09-03T21:32:00",
+                "type": "date"
+            },
+            {
+                "name": "Thrust",
+                "title": "Thrust",
+                "value": "Thrust 3",
+                "type": "str"
+            }
+        ],
+        "https_url": "https://g-71c9e9.10bac.8443.data.globus.org/project2/chenyuxin/MADE_PUBLIC_REPO/Thrust 3/Past Publications of Rui Ding/Boosting the optimization of membrane electrode assembly in proton exchange membrane fuel cells guided by explainable artificial intelligence.pdf",
+        "dc": {
+            "formats": [
+                "text/plain"
+            ],
+            "creators": [
+                {
+                    "creatorName": "Rui Ding"
+                }
+            ],
+            "contributors": [
+                {
+                    "contributorName": "Rui Ding"
+                }
+            ],
+            "subjects": [
+                {
+                    "subject": "Literatures"
+                }
+            ],
+            "publicationYear": 2024,
+            "publisher": "Organization",
+            "dates": [
+                {
+                    "date": "2024-09-03T21:32:00",
+                    "dateType": "Created"
+                }
+            ],
+            "titles": [
+                {
+                    "title": "Boosting the optimization of membrane electrode assembly in proton exchange membrane fuel cells guided by explainable artificial intelligence.pdf"
+                }
+            ],
+            "version": "1",
+            "resourceType": {
+                "resourceTypeGeneral": "Dataset",
+                "resourceType": "Dataset"
+            }
+        },
+        "document_format": "pdf",
+        "related_topic": [
+            "Machine Learning"
+        ],
+        "data_type": [
+            "Publication"
+        ],
+        "abstract_description": "Rui Ding 2021 EAI",
+        "outer_link": "https://www.sciencedirect.com/science/article/pii/S2666546821000513"
+    },
+    {
+        "subject": "globus%3A%2F%2Faf7bda53-6d04-11e5-ba46-22000b92c6ec%2Fproject2%2Fchenyuxin%2FMADE_PUBLIC_REPO%2FThrust%25203%2FPast%2520Publications%2520of%2520Rui%2520Ding%2FDesign%2520of%2520proton%2520exchange%2520membranes%2520with%2520high%2520durability%2520for%2520fuel%2520cells.pdf",
+        "all": [
+            {
+                "Title": "Design of proton exchange membranes with high durability for fuel cells.pdf",
+                "Document Format": "pdf",
+                "Abstract Description": "Rui Ding 2023 JMS",
+                "Data Type": [
+                    "Publication"
+                ],
+                "Outer Link": "https://www.sciencedirect.com/science/article/pii/S0376738823004878",
+                "url": "globus://af7bda53-6d04-11e5-ba46-22000b92c6ec/project2/chenyuxin/MADE_PUBLIC_REPO/Thrust 3/Past Publications of Rui Ding/Design of proton exchange membranes with high durability for fuel cells.pdf",
+                "creator": "Rui Ding",
+                "Related Topic": [
+                    "Machine Learning"
+                ],
+                "PI Affiliated": [
+                    "Junhong Chen",
+                    "Yuxin Chen"
+                ],
+                "Data Tags": [
+                    "Literatures"
+                ],
+                "Thrust": "Thrust 3",
+                "date": "2024-09-03T21:32",
+                "original_collection_name": "UChicago RCC Midway"
+            }
+        ],
+        "title": "Design of proton exchange membranes with high durability for fuel cells.pdf",
+        "globus_app_link": "https://app.globus.org/file-manager?origin_id=af7bda53-6d04-11e5-ba46-22000b92c6ec&origin_path=%2Fproject2%2Fchenyuxin%2FMADE_PUBLIC_REPO%2FThrust+3%2FPast+Publications+of+Rui+Ding",
+        "search_highlights": [
+            {
+                "name": "creator",
+                "title": "Creator",
+                "value": "Rui Ding",
+                "type": "str"
+            },
+            {
+                "name": "Data Tags",
+                "title": "Data tags",
+                "value": "Literatures",
+                "type": "str"
+            },
+            {
+                "name": "PI Affiliated",
+                "title": "Pi affiliated",
+                "value": [
+                    "Junhong Chen",
+                    "Yuxin Chen"
+                ],
+                "type": "str"
+            },
+            {
+                "name": "date",
+                "title": "Date",
+                "value": "2024-09-03T21:32:00",
+                "type": "date"
+            },
+            {
+                "name": "Thrust",
+                "title": "Thrust",
+                "value": "Thrust 3",
+                "type": "str"
+            }
+        ],
+        "https_url": "https://g-71c9e9.10bac.8443.data.globus.org/project2/chenyuxin/MADE_PUBLIC_REPO/Thrust 3/Past Publications of Rui Ding/Design of proton exchange membranes with high durability for fuel cells.pdf",
+        "dc": {
+            "formats": [
+                "text/plain"
+            ],
+            "creators": [
+                {
+                    "creatorName": "Rui Ding"
+                }
+            ],
+            "contributors": [
+                {
+                    "contributorName": "Rui Ding"
+                }
+            ],
+            "subjects": [
+                {
+                    "subject": "Literatures"
+                }
+            ],
+            "publicationYear": 2024,
+            "publisher": "Organization",
+            "dates": [
+                {
+                    "date": "2024-09-03T21:32:00",
+                    "dateType": "Created"
+                }
+            ],
+            "titles": [
+                {
+                    "title": "Design of proton exchange membranes with high durability for fuel cells.pdf"
+                }
+            ],
+            "version": "1",
+            "resourceType": {
+                "resourceTypeGeneral": "Dataset",
+                "resourceType": "Dataset"
+            }
+        },
+        "document_format": "pdf",
+        "related_topic": [
+            "Machine Learning"
+        ],
+        "data_type": [
+            "Publication"
+        ],
+        "abstract_description": "Rui Ding 2023 JMS",
+        "outer_link": "https://www.sciencedirect.com/science/article/pii/S0376738823004878"
+    },
+    {
+        "subject": "globus%3A%2F%2Faf7bda53-6d04-11e5-ba46-22000b92c6ec%2Fproject2%2Fchenyuxin%2FMADE_PUBLIC_REPO%2FThrust%25203%2FPast%2520Publications%2520of%2520Rui%2520Ding%2FDesigning%2520AI%25E2%2580%2590Aided%2520Analysis%2520and%2520Prediction%2520Models%2520for%2520Nonprecious%2520Metal%2520Electrocatalyst%25E2%2580%2590Based%2520Proton%25E2%2580%2590Exchange%2520Membrane%2520Fuel%2520Cells.pdf",
+        "all": [
+            {
+                "Title": "Designing AI\u9225\u6009ided Analysis and Prediction Models for Nonprecious Metal Electrocatalyst\u9225\u600based Proton\u9225\u6011xchange Membrane Fuel Cells.pdf",
+                "Document Format": "pdf",
+                "Abstract Description": "Rui Ding 2020 angew",
+                "Data Type": [
+                    "Publication"
+                ],
+                "Outer Link": "https://onlinelibrary.wiley.com/doi/full/10.1002/ange.202006928",
+                "url": "globus://af7bda53-6d04-11e5-ba46-22000b92c6ec/project2/chenyuxin/MADE_PUBLIC_REPO/Thrust 3/Past Publications of Rui Ding/Designing AI\u9225\u6009ided Analysis and Prediction Models for Nonprecious Metal Electrocatalyst\u9225\u600based Proton\u9225\u6011xchange Membrane Fuel Cells.pdf",
+                "creator": "Rui Ding",
+                "Related Topic": [
+                    "Machine Learning"
+                ],
+                "PI Affiliated": [
+                    "Junhong Chen",
+                    "Yuxin Chen"
+                ],
+                "Data Tags": [
+                    "Literatures"
+                ],
+                "Thrust": "Thrust 3",
+                "date": "2024-09-03T21:32",
+                "original_collection_name": "UChicago RCC Midway"
+            }
+        ],
+        "title": "Designing AI\u9225\u6009ided Analysis and Prediction Models for Nonprecious Metal Electrocatalyst\u9225\u600based Proton\u9225\u6011xchange Membrane Fuel Cells.pdf",
+        "globus_app_link": "https://app.globus.org/file-manager?origin_id=af7bda53-6d04-11e5-ba46-22000b92c6ec&origin_path=%2Fproject2%2Fchenyuxin%2FMADE_PUBLIC_REPO%2FThrust+3%2FPast+Publications+of+Rui+Ding",
+        "search_highlights": [
+            {
+                "name": "creator",
+                "title": "Creator",
+                "value": "Rui Ding",
+                "type": "str"
+            },
+            {
+                "name": "Data Tags",
+                "title": "Data tags",
+                "value": "Literatures",
+                "type": "str"
+            },
+            {
+                "name": "PI Affiliated",
+                "title": "Pi affiliated",
+                "value": [
+                    "Junhong Chen",
+                    "Yuxin Chen"
+                ],
+                "type": "str"
+            },
+            {
+                "name": "date",
+                "title": "Date",
+                "value": "2024-09-03T21:32:00",
+                "type": "date"
+            },
+            {
+                "name": "Thrust",
+                "title": "Thrust",
+                "value": "Thrust 3",
+                "type": "str"
+            }
+        ],
+        "https_url": "https://g-71c9e9.10bac.8443.data.globus.org/project2/chenyuxin/MADE_PUBLIC_REPO/Thrust 3/Past Publications of Rui Ding/Designing AI\u9225\u6009ided Analysis and Prediction Models for Nonprecious Metal Electrocatalyst\u9225\u600based Proton\u9225\u6011xchange Membrane Fuel Cells.pdf",
+        "dc": {
+            "formats": [
+                "text/plain"
+            ],
+            "creators": [
+                {
+                    "creatorName": "Rui Ding"
+                }
+            ],
+            "contributors": [
+                {
+                    "contributorName": "Rui Ding"
+                }
+            ],
+            "subjects": [
+                {
+                    "subject": "Literatures"
+                }
+            ],
+            "publicationYear": 2024,
+            "publisher": "Organization",
+            "dates": [
+                {
+                    "date": "2024-09-03T21:32:00",
+                    "dateType": "Created"
+                }
+            ],
+            "titles": [
+                {
+                    "title": "Designing AI\u9225\u6009ided Analysis and Prediction Models for Nonprecious Metal Electrocatalyst\u9225\u600based Proton\u9225\u6011xchange Membrane Fuel Cells.pdf"
+                }
+            ],
+            "version": "1",
+            "resourceType": {
+                "resourceTypeGeneral": "Dataset",
+                "resourceType": "Dataset"
+            }
+        },
+        "document_format": "pdf",
+        "related_topic": [
+            "Machine Learning"
+        ],
+        "data_type": [
+            "Publication"
+        ],
+        "abstract_description": "Rui Ding 2020 angew",
+        "outer_link": "https://onlinelibrary.wiley.com/doi/full/10.1002/ange.202006928"
+    },
+    {
+        "subject": "globus%3A%2F%2Faf7bda53-6d04-11e5-ba46-22000b92c6ec%2Fproject2%2Fchenyuxin%2FMADE_PUBLIC_REPO%2FThrust%25203%2FPast%2520Publications%2520of%2520Rui%2520Ding%2FGuiding%2520the%2520optimization%2520of%2520membrane%2520electrode%2520assembly%2520in%2520a%2520proton%2520exchange%2520membrane%2520water%2520electrolyzer%2520by%2520machine%2520learning%2520modeling%2520and%2520black-box%2520interpretation.pdf",
+        "all": [
+            {
+                "Title": "Guiding the optimization of membrane electrode assembly in a proton exchange membrane water electrolyzer by machine learning modeling and black-box interpretation.pdf",
+                "Document Format": "pdf",
+                "Abstract Description": "Rui Ding 2021 energy and AI",
+                "Data Type": [
+                    "Publication"
+                ],
+                "Outer Link": "https://www.sciencedirect.com/science/article/pii/S2666546821000513",
+                "url": "globus://af7bda53-6d04-11e5-ba46-22000b92c6ec/project2/chenyuxin/MADE_PUBLIC_REPO/Thrust 3/Past Publications of Rui Ding/Guiding the optimization of membrane electrode assembly in a proton exchange membrane water electrolyzer by machine learning modeling and black-box interpretation.pdf",
+                "creator": "Rui Ding",
+                "Related Topic": [
+                    "Machine Learning"
+                ],
+                "PI Affiliated": [
+                    "Junhong Chen",
+                    "Yuxin Chen"
+                ],
+                "Data Tags": [
+                    "Literatures"
+                ],
+                "Thrust": "Thrust 3",
+                "date": "2024-09-03T21:32",
+                "original_collection_name": "UChicago RCC Midway"
+            }
+        ],
+        "title": "Guiding the optimization of membrane electrode assembly in a proton exchange membrane water electrolyzer by machine learning modeling and black-box interpretation.pdf",
+        "globus_app_link": "https://app.globus.org/file-manager?origin_id=af7bda53-6d04-11e5-ba46-22000b92c6ec&origin_path=%2Fproject2%2Fchenyuxin%2FMADE_PUBLIC_REPO%2FThrust+3%2FPast+Publications+of+Rui+Ding",
+        "search_highlights": [
+            {
+                "name": "creator",
+                "title": "Creator",
+                "value": "Rui Ding",
+                "type": "str"
+            },
+            {
+                "name": "Data Tags",
+                "title": "Data tags",
+                "value": "Literatures",
+                "type": "str"
+            },
+            {
+                "name": "PI Affiliated",
+                "title": "Pi affiliated",
+                "value": [
+                    "Junhong Chen",
+                    "Yuxin Chen"
+                ],
+                "type": "str"
+            },
+            {
+                "name": "date",
+                "title": "Date",
+                "value": "2024-09-03T21:32:00",
+                "type": "date"
+            },
+            {
+                "name": "Thrust",
+                "title": "Thrust",
+                "value": "Thrust 3",
+                "type": "str"
+            }
+        ],
+        "https_url": "https://g-71c9e9.10bac.8443.data.globus.org/project2/chenyuxin/MADE_PUBLIC_REPO/Thrust 3/Past Publications of Rui Ding/Guiding the optimization of membrane electrode assembly in a proton exchange membrane water electrolyzer by machine learning modeling and black-box interpretation.pdf",
+        "dc": {
+            "formats": [
+                "text/plain"
+            ],
+            "creators": [
+                {
+                    "creatorName": "Rui Ding"
+                }
+            ],
+            "contributors": [
+                {
+                    "contributorName": "Rui Ding"
+                }
+            ],
+            "subjects": [
+                {
+                    "subject": "Literatures"
+                }
+            ],
+            "publicationYear": 2024,
+            "publisher": "Organization",
+            "dates": [
+                {
+                    "date": "2024-09-03T21:32:00",
+                    "dateType": "Created"
+                }
+            ],
+            "titles": [
+                {
+                    "title": "Guiding the optimization of membrane electrode assembly in a proton exchange membrane water electrolyzer by machine learning modeling and black-box interpretation.pdf"
+                }
+            ],
+            "version": "1",
+            "resourceType": {
+                "resourceTypeGeneral": "Dataset",
+                "resourceType": "Dataset"
+            }
+        },
+        "document_format": "pdf",
+        "related_topic": [
+            "Machine Learning"
+        ],
+        "data_type": [
+            "Publication"
+        ],
+        "abstract_description": "Rui Ding 2021 energy and AI",
+        "outer_link": "https://www.sciencedirect.com/science/article/pii/S2666546821000513"
+    },
+    {
+        "subject": "globus%3A%2F%2Faf7bda53-6d04-11e5-ba46-22000b92c6ec%2Fproject2%2Fchenyuxin%2FMADE_PUBLIC_REPO%2FThrust%25203%2FPast%2520Publications%2520of%2520Rui%2520Ding%2FInspecting%2520design%2520rules%2520of%2520metal-nitrogen-carbon%2520catalysts%2520for%2520electrochemical%2520CO2%2520reduction%2520reaction%2520From%2520a%2520data%2520science%2520perspective.pdf",
+        "all": [
+            {
+                "Title": "Inspecting design rules of metal-nitrogen-carbon catalysts for electrochemical CO2 reduction reaction From a data science perspective.pdf",
+                "Document Format": "pdf",
+                "Abstract Description": "Rui Ding 2023 Nano Res",
+                "Data Type": [
+                    "Publication"
+                ],
+                "Outer Link": "https://link.springer.com/article/10.1007/s12274-022-4763-y",
+                "url": "globus://af7bda53-6d04-11e5-ba46-22000b92c6ec/project2/chenyuxin/MADE_PUBLIC_REPO/Thrust 3/Past Publications of Rui Ding/Inspecting design rules of metal-nitrogen-carbon catalysts for electrochemical CO2 reduction reaction From a data science perspective.pdf",
+                "creator": "Rui Ding",
+                "Related Topic": [
+                    "Machine Learning"
+                ],
+                "PI Affiliated": [
+                    "Junhong Chen",
+                    "Yuxin Chen"
+                ],
+                "Data Tags": [
+                    "Literatures"
+                ],
+                "Thrust": "Thrust 3",
+                "date": "2024-09-03T21:32",
+                "original_collection_name": "UChicago RCC Midway"
+            }
+        ],
+        "title": "Inspecting design rules of metal-nitrogen-carbon catalysts for electrochemical CO2 reduction reaction From a data science perspective.pdf",
+        "globus_app_link": "https://app.globus.org/file-manager?origin_id=af7bda53-6d04-11e5-ba46-22000b92c6ec&origin_path=%2Fproject2%2Fchenyuxin%2FMADE_PUBLIC_REPO%2FThrust+3%2FPast+Publications+of+Rui+Ding",
+        "search_highlights": [
+            {
+                "name": "creator",
+                "title": "Creator",
+                "value": "Rui Ding",
+                "type": "str"
+            },
+            {
+                "name": "Data Tags",
+                "title": "Data tags",
+                "value": "Literatures",
+                "type": "str"
+            },
+            {
+                "name": "PI Affiliated",
+                "title": "Pi affiliated",
+                "value": [
+                    "Junhong Chen",
+                    "Yuxin Chen"
+                ],
+                "type": "str"
+            },
+            {
+                "name": "date",
+                "title": "Date",
+                "value": "2024-09-03T21:32:00",
+                "type": "date"
+            },
+            {
+                "name": "Thrust",
+                "title": "Thrust",
+                "value": "Thrust 3",
+                "type": "str"
+            }
+        ],
+        "https_url": "https://g-71c9e9.10bac.8443.data.globus.org/project2/chenyuxin/MADE_PUBLIC_REPO/Thrust 3/Past Publications of Rui Ding/Inspecting design rules of metal-nitrogen-carbon catalysts for electrochemical CO2 reduction reaction From a data science perspective.pdf",
+        "dc": {
+            "formats": [
+                "text/plain"
+            ],
+            "creators": [
+                {
+                    "creatorName": "Rui Ding"
+                }
+            ],
+            "contributors": [
+                {
+                    "contributorName": "Rui Ding"
+                }
+            ],
+            "subjects": [
+                {
+                    "subject": "Literatures"
+                }
+            ],
+            "publicationYear": 2024,
+            "publisher": "Organization",
+            "dates": [
+                {
+                    "date": "2024-09-03T21:32:00",
+                    "dateType": "Created"
+                }
+            ],
+            "titles": [
+                {
+                    "title": "Inspecting design rules of metal-nitrogen-carbon catalysts for electrochemical CO2 reduction reaction From a data science perspective.pdf"
+                }
+            ],
+            "version": "1",
+            "resourceType": {
+                "resourceTypeGeneral": "Dataset",
+                "resourceType": "Dataset"
+            }
+        },
+        "document_format": "pdf",
+        "related_topic": [
+            "Machine Learning"
+        ],
+        "data_type": [
+            "Publication"
+        ],
+        "abstract_description": "Rui Ding 2023 Nano Res",
+        "outer_link": "https://link.springer.com/article/10.1007/s12274-022-4763-y"
+    }
+]

@@ -1,0 +1,323 @@
+{% extends "globus-portal-framework/v2/base.html" %}
+{% load static %}
+
+<style>
+.btn-disabled {
+  background-color: #6c757d !important; /* Bootstrap's default for disabled state */
+  border-color: #6c757d !important;
+  pointer-events: none; /* Prevents clicking on the button */
+  opacity: 0.65; /* Makes it visually appear disabled */
+}
+</style>
+
+{% block body %}
+    <div style="position:fixed; top:0; left:0; width:100%; height:100%; background-image: url('{% static 'pics/upload.png' %}'); background-size: cover; opacity: 0.25; z-index: -1;"></div>
+
+    <!-- Bootstrap CSS and JS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <!-- Your main content for page -->
+    <div class="container-fluid">
+        <!-- Background -->
+        <!-- Button to 'Upload_Tutorial' -->
+        <button type="button" class="btn btn-primary" onclick="location.href='{% url 'Upload_Tutorial' %}'">Upload Tutorial</button>
+        <!-- Form for user input -->
+        <form id="uploadForm"  method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="creatorName">Creator Name:</label>
+                <input type="text" class="form-control" id="creatorName" name="creator_name" required>
+            </div>
+            <div class="form-group">
+                <label for="fileTitle">File Title (Please copy the full name of the file, including the format suffix such as csv, txt, dat etc.):</label>
+                <input type="text" class="form-control" id="fileTitle" name="file_title" required>
+            </div>
+            <!-- Group PI checkboxes -->
+            <div class="form-group">
+                <label>Group PI:</label>
+                <div class="checkbox">
+                    <label><input type="checkbox" name="group_pi[]" value="Junhong Chen"> Junhong Chen</label>
+                </div>
+                <div class="checkbox">
+                    <label><input type="checkbox" name="group_pi[]" value="Yuxin Chen"> Yuxin Chen</label>
+                </div>
+                <!-- Add more checkboxes as needed -->
+            </div>
+            <!-- document type checkboxes -->
+            <div class="form-group">
+                <label for="documentFormat">Document Format:</label>
+                <select class="form-control" id="documentFormat" name="document_format">
+                    <option value="excel">Excel (csv, xls, etc.)</option>
+                    <option value="word">Word (doc, docx, etc.)</option>
+                    <option value="pdf">PDF</option>
+                    <option value="plaintext">Plain Text (txt etc.)</option>
+                    <option value="binary">Binary (bin etc.)</option>
+                    <option value="image">Image (jpg, png, tif, etc.)</option>
+                    <option value="script">Script (python, matlab, R, etc.)</option>
+                    <option value="model">Model (h5, pkl, etc.)</option>
+                    <option value="others">Others</option>
+                    <!-- 在此处添加更多类型 -->
+                </select>
+            </div>
+            <!-- abstrcat checkboxes -->
+            <div class="form-group">
+                <label for="abstractDescription">Abstract Description (up to 200 characters):</label>
+                <textarea class="form-control" id="abstractDescription" name="abstract_description" rows="3" maxlength="200"></textarea>
+            </div>
+            <!-- outer link checkboxes -->
+            <div class="form-group">
+                <label for="outerlink">Outer Link</label>
+                <textarea class="form-control" id="outerlink" name="outer_link" rows="1"></textarea>
+            </div>
+            <!-- data type checkboxes -->
+            <div class="form-group">
+                <label for="dataType">Data Type:</label>
+                <select class="form-control" id="dataType" name="data_type">
+                    <option value="publication">Publication</option>
+                    <option value="dataset">Dataset</option>
+                    <option value="script">Script</option>
+                    <option value="records">Records</option>
+                    <option value="computationresults">Computation Results</option>
+                    <option value="images">Images</option>
+                    <option value="others">Others</option>
+                    <!-- 在此处添加更多类型 -->
+                </select>
+            </div>           
+
+            <div class="form-group">
+                <label for="thrustType">Thrust Type:</label>
+                <select class="form-control" id="thrustType" name="thrust_type">
+                    <option>Thrust 1</option>
+                    <option>Thrust 2</option>
+                    <option>Thrust 3</option>
+                    <option>Thrust 4</option>
+                    <option>Thrust 5</option>
+                </select>
+            </div>
+            <!-- Tags checkboxes -->
+            <div class="form-group">
+                <label>Select Tags:</label>
+                <div class="checkbox">
+                    <label><input type="checkbox" name="tags[]" value="Dummy"> Dummy</label>
+                </div>
+                <div class="checkbox">
+                    <label><input type="checkbox" name="tags[]" value="Experimental"> Experimental</label>
+                </div>
+                <div class="checkbox">
+                    <label><input type="checkbox" name="tags[]" value="Simulation"> Simulation</label>
+                </div>
+                <div class="checkbox">
+                    <label><input type="checkbox" name="tags[]" value="Publication"> Publication</label>
+                </div>
+                <div class="checkbox">
+                    <label><input type="checkbox" name="tags[]" value="Dataset"> Dataset</label>
+                </div>
+                <div class="checkbox">
+                    <label><input type="checkbox" name="tags[]" value="MLmodel"> ML model</label>
+                </div>
+                <div class="checkbox">
+                    <label><input type="checkbox" name="tags[]" value="Image"> Image</label>
+                </div>
+                <div class="checkbox">
+                    <label><input type="checkbox" name="tags[]" value="Script"> Script</label>
+                </div>
+                <div class="checkbox">
+                    <label><input type="checkbox" name="tags[]" value="Records"> Records</label>
+                </div>
+                <div class="checkbox">
+                    <label><input type="checkbox" name="tags[]" value="Results"> Results</label>
+                </div>
+                <!-- Add more checkboxes as needed -->
+            </div>
+            <button type="button" id="clearForm" class="btn btn-secondary">Clear</button>
+            <button type="button" id="generateJson" class="btn btn-primary">1. Generate JSON</button>    
+            <button type="button" id="goToGlobus" class="btn btn-primary">2. Upload Your Generated JSON</button>
+            <button type="button" id="uploadToGlobus" class="btn btn-success btn-disabled" data-enabled="false">3. Upload Your File in Corresponding Thrust Repository</button>
+
+        </form>
+    </div>
+    <div id="uploadLog" class="container mt-4">
+        <!-- Uploaded files will be logged here -->
+    </div>
+    <div class="container-fluid">
+        <!-- Background -->
+        
+        
+    </div>
+
+
+
+
+
+    <!-- Custom script for toggling -->
+    <script>
+
+
+        document.getElementById('clearForm').addEventListener('click', clearForm);
+
+        // Event listener for the 'Go to Globus File Manager' button
+
+
+        function clearForm() {
+        // Reset checkboxes
+        var checkboxes = document.querySelectorAll('#uploadForm input[type="checkbox"]');
+        checkboxes.forEach(function(checkbox) {
+            checkbox.checked = false;
+        });
+        // Reset text inputs
+        var inputs = document.querySelectorAll('#uploadForm input[type="text"], #uploadForm textarea');
+        inputs.forEach(function(input) {
+            input.value = '';
+        });
+        // Reset all select elements
+        var selects = document.querySelectorAll('#uploadForm select');
+        selects.forEach(function(select) {
+            select.selectedIndex = -1;
+        });
+        }
+
+
+        function finalizeUpload(generatedFileName) {
+        clearForm();
+        disableButton('goToGlobus');
+        disableButton('uploadToGlobus');
+
+        // Log the upload
+        var uploadLog = document.getElementById('uploadLog');
+        var logEntry = document.createElement('div');
+        logEntry.textContent = `Uploaded: ${generatedFileName}`;
+        uploadLog.appendChild(logEntry);
+        }
+
+        document.getElementById('goToGlobus').addEventListener('click', function() {
+            window.open(
+                'https://app.globus.org/file-manager?origin_id=af7bda53-6d04-11e5-ba46-22000b92c6ec&origin_path=%2F%7E%2FMADE_PUBLIC_DATA%2FJSON_Upload%2F',
+                '_blank' // <- This is what opens the link in a new tab.
+            );
+            enableButton('uploadToGlobus');
+        });
+
+        document.getElementById('uploadToGlobus').addEventListener('click', function() {
+        var isEnabled = !this.classList.contains('btn-disabled');
+        if (isEnabled) {
+            var uploadUrl = this.getAttribute('href');
+            var generatedFileName = this.getAttribute('data-filename');
+            window.open(uploadUrl, '_blank');
+            finalizeUpload(generatedFileName);
+        } else {
+            alert('Please generate and upload a JSON file first.');
+        }
+        });
+
+
+        document.addEventListener('DOMContentLoaded', (event) => {
+        // Initially disable both upload buttons when the document is fully loaded
+        disableButton('goToGlobus');
+        disableButton('uploadToGlobus');
+        });
+
+        // Function to disable a button
+        function disableButton(buttonId) {
+        var button = document.getElementById(buttonId);
+        button.classList.add('btn-disabled');
+        button.setAttribute('disabled', 'disabled');
+        }
+
+        // Function to enable a button
+        function enableButton(buttonId) {
+        var button = document.getElementById(buttonId);
+        button.classList.remove('btn-disabled');
+        button.removeAttribute('disabled');
+        }
+
+
+
+        document.getElementById('generateJson').addEventListener('click', function() {
+            var creatorName = document.getElementById('creatorName').value;
+            var fileTitle = document.getElementById('fileTitle').value;
+            var encodedFileTitle = encodeURIComponent(fileTitle);
+            var groupPICheckboxes = document.querySelectorAll('input[name="group_pi[]"]:checked');
+            var groupPI = Array.from(groupPICheckboxes).map(checkbox => checkbox.value);
+            var tagsCheckboxes = document.querySelectorAll('input[name="tags[]"]:checked');
+            var tags = Array.from(tagsCheckboxes).map(checkbox => checkbox.value);
+            var thrustTypeSelect = document.getElementById('thrustType');
+            var thrustType = thrustTypeSelect.options[thrustTypeSelect.selectedIndex].text; // Fetch the selected text
+            var encodedThrustType = encodeURIComponent(thrustType);
+            var currentDate = new Date().toISOString().slice(0, -8);
+            
+            // Construct the ID format as specified
+            var idFormat = `${fileTitle}-${thrustType}-${creatorName}-${groupPI.join(',')}-${currentDate}`;
+            var generatedFileName = `${idFormat}.json`;
+
+            // Dynamically create the subject and url paths
+            var basePath = "globus://af7bda53-6d04-11e5-ba46-22000b92c6ec/~/MADE_PUBLIC_DATA";
+            var fullPath = `${basePath}/${thrustType}/${fileTitle}`;
+            var fullPath_encoded = `${basePath}/${encodedThrustType}/${encodedFileTitle}`;
+
+
+            // 2024 jan added
+            var documentFormatSelect = document.getElementById('documentFormat');
+            var documentFormat = documentFormatSelect.options[documentFormatSelect.selectedIndex].value;
+
+            var abstractDescription = document.getElementById('abstractDescription').value;
+            var outerlink = document.getElementById('outerlink').value;
+
+            var dataTypeSelect = document.getElementById('dataType');
+            var dataType = dataTypeSelect.options[dataTypeSelect.selectedIndex].value;
+
+
+            // Create JSON object
+            var jsonData = {
+                "ingest_type": "GMetaList",
+                "ingest_data": {
+                    "gmeta": [{
+                        "id": idFormat.replace(/:/g, '_'), // Replace colons in date to make it a valid file name
+                        "subject": fullPath_encoded,
+                        "visible_to": ["urn:globus:groups:id:bb420e57-7835-11ee-b0db-d9a5237cb2e9"],
+                        "content": {
+                            "title": fileTitle,
+                            // new elements 2024 jan
+                            "document format": documentFormat,
+                            "abstract description": abstractDescription,
+                            "data type": dataType,
+                            "outer link": outerlink,
+                            //end 2024
+                            "url": fullPath,
+                            "creator": creatorName,
+                            "group PI": groupPI,
+                            "tags": tags,
+                            "thrust": thrustType,
+                            "date": currentDate,
+                            "original_collection_name": "UChicago RCC Midway"
+                        }
+                    }]
+                }
+            };
+
+            // Convert JSON object to string and encode it as a data URI
+            var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(jsonData));
+            var downloadAnchorNode = document.createElement('a');
+            downloadAnchorNode.setAttribute("href", dataStr);
+            downloadAnchorNode.setAttribute("download", generatedFileName); // Use the file name as the download attribute
+            document.body.appendChild(downloadAnchorNode); // Required for Firefox
+            downloadAnchorNode.click();
+            downloadAnchorNode.remove();
+
+
+            // Encode the thrust type for the URL and set the href attribute for the 'uploadToGlobus' button
+            var encodedThrustType = encodeURIComponent(thrustType);
+            var globusUploadUrl = `https://app.globus.org/file-manager?origin_id=af7bda53-6d04-11e5-ba46-22000b92c6ec&origin_path=%2F%7E%2FMADE_PUBLIC_DATA%2F${encodedThrustType}%2F`;
+            var uploadToGlobusButton = document.getElementById('uploadToGlobus');
+            uploadToGlobusButton.setAttribute('href', globusUploadUrl);
+            uploadToGlobusButton.setAttribute('data-filename', generatedFileName); // Store the generated file name for logging
+            // Enable the 'Upload Your Generated JSON' button by removing the disabled attribute
+            enableButton('goToGlobus');
+
+
+        });
+    
+    </script>
+{% endblock %}

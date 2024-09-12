@@ -1,0 +1,469 @@
+    {% extends "globus-portal-framework/v2/base.html" %}
+    {% load static %}
+
+
+    {% block body %}
+        <div style="position:fixed; top:0; left:0; width:100%; height:100%; background-image: url('{% static 'pics/TEAM.png' %}'); background-size: cover; opacity: 0.25; z-index: -1;"></div>
+        <!-- Bootstrap CSS and JS -->
+        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+        <div class="container-fluid">
+            <!-- Background -->
+            <!-- Thrust 1 Section -->
+            <div class="row">
+                <div class="col">
+                    <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseTwo">
+                        <h2>Thrust 1: Biomaterials Extraction and Precision Hydroponic Growth of Plants ▼</h2>
+                    </button>
+                    <div id="collapseTwo" class="collapse"  >
+                        <!-- Thrust 1 Professor 1: Elizabeth Ainsworth -->
+                        <div class="col-sm-4 float-left bg-dark text-white text-center mb-4">
+                            <a href="https://www.ars.usda.gov/midwest-area/urbana-il/global-change-and-photosynthesis-research/people/elizabeth-ainsworth/" target="_blank">
+                                <img src="{% static 'pics/Elizabeth Ainsworth.jpg' %}" alt="Elizabeth Ainsworth">
+                            </a>
+                            <h4><strong>Elizabeth Ainsworth</strong></h4>
+                            <p><strong>University of Illinois at Urbana–Champaign</strong></p>
+                            <p>USDA ARS Global Change and Photosynthesis Research Unit; lisa.ainsworth@usda.gov</p>
+                            <button type="button" class="btn btn-light" data-toggle="modal" data-target="#members1-1">Members in Project</button>
+                        </div>
+
+                        <!-- Members Modal -->
+                        <div class="modal fade" id="members1-1">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-body">
+                                        <a href="https://ruiding-uchicago.github.io/" target="_blank">
+                                            <img src="{% static 'pics/submembers/dummy.jpg' %}" alt="dummy1-1">
+                                        </a>
+                                        <h5>"Dummy Name 1-1"; "Degree" </h5>
+                                        <p>"Position"; "Email"</p>
+                                        <p>"Institution"</p>
+                                        <p>"Identity in the project"</p>
+                                        <p>"Thrust area and research field"</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Thrust 1 Professor 2: Stuart Rowan -->
+                        <div class="col-sm-4 float-left bg-dark text-white text-center mb-4">
+                            <a href="https://chemistry.uchicago.edu/faculty/stuart-rowan" target="_blank">
+                                <img src="{% static 'pics/Stuart Rowan.jpg' %}" alt="Stuart Rowan">
+                            </a>
+                            <h4><strong>Stuart Rowan</strong></h4>
+                            <p><strong>University of Chicago</strong></p>
+                            <p>Professor, Pritzker School of Molecular Engineering; stuartrowan@uchicago.edu</p>
+                            <button type="button" class="btn btn-light" data-toggle="modal" data-target="#members1-2">Members in Project</button>
+                        </div>
+                        <!-- Members Modal -->
+                        <div class="modal fade" id="members1-2">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-body">
+                                        <a href="https://ruiding-uchicago.github.io/" target="_blank">
+                                            <img src="{% static 'pics/submembers/dummy.jpg' %}" alt="dummy1-1">
+                                        </a>
+                                        <h5>"Dummy Name 1-1"; "Degree" </h5>
+                                        <p>"Position"; "Email"</p>
+                                        <p>"Institution"</p>
+                                        <p>"Identity in the project"</p>
+                                        <p>"Thrust area and research field"</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Thrust 1 Professor 3: DoKyoung Lee -->
+                        <div class="col-sm-4 float-left bg-dark text-white text-center mb-4">
+                            <a href="https://cropsciences.illinois.edu/directory/leedk" target="_blank">
+                                <img src="{% static 'pics/DoKyoung Lee.jpg' %}" alt="DoKyoung Lee">
+                            </a>
+                            <h4><strong>DoKyoung Lee</strong></h4>
+                            <p><strong>University of Illinois at Urbana–Champaign</strong></p>
+                            <p>Professor, Crop Sciences; leedk@illinois.edu</p>
+                            <button type="button" class="btn btn-light" data-toggle="modal" data-target="#members1-3">Members in Project</button>
+                        </div>
+                        <!-- Members Modal -->
+                        <div class="modal fade" id="members1-3">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-body">
+                                        <a href="https://ruiding-uchicago.github.io/" target="_blank">
+                                            <img src="{% static 'pics/submembers/dummy.jpg' %}" alt="dummy1-1">
+                                        </a>
+                                        <h5>"Dummy Name 1-1"; "Degree" </h5>
+                                        <p>"Position"; "Email"</p>
+                                        <p>"Institution"</p>
+                                        <p>"Identity in the project"</p>
+                                        <p>"Thrust area and research field"</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <button type="button" class="btn btn-dark float-right close-button" data-target="#collapseTwo">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container-fluid">
+            <!-- Background -->
+            <!-- Thrust 2 Section -->
+            <div class="row">
+                <div class="col">
+                    <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseThree">
+                        <h2>Thrust 2: Nanomaterials Ink Manufacturing ▼</h2>
+                    </button>
+                    <div id="collapseThree" class="collapse"  >
+                        <!-- Thrust 2 Professor 1: Mark Hersam -->
+                        <div class="col-sm-6 float-left bg-dark text-white text-center mb-4">
+                            <a href="https://www.mccormick.northwestern.edu/research-faculty/directory/profiles/hersam-mark.html" target="_blank">
+                                <img src="{% static 'pics/Mark Hersam.jpg' %}" alt="Mark Hersam">
+                            </a>
+                            <h4><strong>Mark Hersam</strong></h4>
+                            <p><strong>Northwestern University</strong></p>
+                            <p>Professor, Materials Science and Engineering; m-hersam@northwestern.edu</p>
+                            <button type="button" class="btn btn-light" data-toggle="modal" data-target="#members2-1">Members in Project</button>
+                        </div>
+
+                        <!-- Members Modal -->
+                        <div class="modal fade" id="members2-1">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-body">
+                                        <a href="https://ruiding-uchicago.github.io/" target="_blank">
+                                            <img src="{% static 'pics/submembers/dummy.jpg' %}" alt="dummy1-1">
+                                        </a>
+                                        <h5>"Dummy Name 1-1"; "Degree" </h5>
+                                        <p>"Position"; "Email"</p>
+                                        <p>"Institution"</p>
+                                        <p>"Identity in the project"</p>
+                                        <p>"Thrust area and research field"</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Thrust 2 Professor 2: Zhiyong Cai -->
+                        <div class="col-sm-6 float-left bg-dark text-white text-center mb-4">
+                            <a href="https://www.fs.usda.gov/research/about/people/zcai" target="_blank">
+                                <img src="{% static 'pics/Zhiyong Cai.jpg' %}" alt="Zhiyong Cai">
+                            </a>
+                            <h4><strong>Zhiyong Cai</strong></h4>
+                            <p><strong>USDA Forest Service</strong></p>
+                            <p>Supervisory Materials Research Engineer; zhiyong.cai@usda.gov</p>
+                            <button type="button" class="btn btn-light" data-toggle="modal" data-target="#members2-2">Members in Project</button>
+                        </div>
+                        <!-- Members Modal -->
+                        <div class="modal fade" id="members2-2">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-body">
+                                        <a href="https://ruiding-uchicago.github.io/" target="_blank">
+                                            <img src="{% static 'pics/submembers/dummy.jpg' %}" alt="dummy1-1">
+                                        </a>
+                                        <h5>"Dummy Name 1-1"; "Degree" </h5>
+                                        <p>"Position"; "Email"</p>
+                                        <p>"Institution"</p>
+                                        <p>"Identity in the project"</p>
+                                        <p>"Thrust area and research field"</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        
+                        <button type="button" class="btn btn-dark float-right close-button" data-target="#collapseThree">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container-fluid">
+            <!-- Background -->
+            <!-- Thrust 3 Section -->
+            <div class="row">
+                <div class="col">
+                    <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseFour">
+                        <h2>Thrust 3: Electronics Printing ▼</h2>
+                    </button>
+                    <div id="collapseFour" class="collapse"  >
+                        <!-- Thrust 3 Professor 1: Junhong Chen -->
+                        <div class="col-sm-6 float-left bg-dark text-white text-center mb-4">
+                            <a href="https://www.junhongchengroup.pme.uchicago.edu/" target="_blank">
+                                <img src="{% static 'pics/Junhong Chen.jpg' %}" alt="Junhong Chen">
+                            </a>
+                            <h4><strong>Junhong Chen</strong></h4>
+                            <p><strong>University of Chicago</strong></p>
+                            <p>Professor, Pritzker School of Molecular Engineering; junhongchen@uchicago.edu</p>
+                            <button type="button" class="btn btn-light" data-toggle="modal" data-target="#members3-1">Members in Project</button>
+                        </div>
+
+                        <!-- Members Modal -->
+                        <div class="modal fade" id="members3-1">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-body">
+                                        <a href="https://ruiding-uchicago.github.io/" target="_blank">
+                                            <img src="{% static 'pics/Rui Ding.jpg' %}" alt="Rui Ding">
+                                        </a>
+                                        <h5>Rui Ding; Ph. D. </h5>
+                                        <p>Postdoctoral Associate; ruiding@uchicago.edu</p>
+                                        <p>University of Chicago</p>
+                                        <p>Wendy and Schmidt AI in Science Postdoctoral research fellow at Uchicago</p>
+                                        <p>Data Science (AI/ML) & Sustainable Electrochemical System; Data Portal Administrator</p>
+
+                                        <!-- New member: Rapti Gosh -->
+                                        <hr> <!-- Separator line -->
+                                        <a href="https://sites.google.com/view/raptighosh/home?authuser=0" target="_blank">
+                                            <img src="{% static 'pics/Rapti Gosh.jpg' %}" alt="Rapti Gosh.jpg">
+                                        </a>
+                                        <h5>Rapti Ghosh; Ph. D.</h5>
+                                        <p>Postdoctoral Associate; rapti@uchicago.edu</p>
+                                        <p>University of Chicago</p>
+                                        <p>2D Materials, FET designing, Heavy metal ion sensing, Gas sensing, Photosensing, Electrochemistry</p>
+                                        <p>FET-component designing via diverse techniques (Ink-jet printing, CVD, etc.) </p>
+                                        
+                                        <!-- New member: Hyun-June Jang -->
+                                        <hr> <!-- Separator line -->
+                                        <a href="https://www.junhongchengroup.pme.uchicago.edu/hyun-junejang" target="_blank">
+                                            <img src="{% static 'pics/Hyun-June Jang.jpg' %}" alt="Hyun-June Jang">
+                                        </a>
+                                        <h5>Hyun-June Jang; Ph. D.</h5>
+                                        <p>Postdoctoral Associate; hyunjune@uchicago.edu</p>
+                                        <p>University of Chicago</p>
+                                        <p>Materials Systems for Sustainability and Health</p>
+                                        <p>Diverse types of inorganic- and organic-FET based electronics for biosensing applications.</p>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Thrust 3 Professor 2: Jonathan Claussen -->
+                        <div class="col-sm-6 float-left bg-dark text-white text-center mb-4">
+                            <a href="https://web.me.iastate.edu/claussen/" target="_blank">
+                                <img src="{% static 'pics/Jonathan Claussen.jpg' %}" alt="Jonathan Claussen">
+                            </a>
+                            <h4><strong>Jonathan Claussen</strong></h4>
+                            <p><strong>Iowa State University</strong></p>
+                            <p>Associate Professor, Mechanical Engineering; jcclauss@iastate.edu</p>
+                            <button type="button" class="btn btn-light" data-toggle="modal" data-target="#members3-2">Members in Project</button>
+                        </div>
+                        <!-- Members Modal -->
+                        <div class="modal fade" id="members3-2">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-body">
+                                        <a href="https://ruiding-uchicago.github.io/" target="_blank">
+                                            <img src="{% static 'pics/submembers/dummy.jpg' %}" alt="dummy1-1">
+                                        </a>
+                                        <h5>"Dummy Name 1-1"; "Degree" </h5>
+                                        <p>"Position"; "Email"</p>
+                                        <p>"Institution"</p>
+                                        <p>"Identity in the project"</p>
+                                        <p>"Thrust area and research field"</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        
+                        <button type="button" class="btn btn-dark float-right close-button" data-target="#collapseFour">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container-fluid">
+            <!-- Background -->
+            <!-- Thrust 4 Section -->
+            <div class="row">
+                <div class="col">
+                    <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseFive">
+                        <h2>Thrust 4: Data, Simulations and AI/ML Algorithms ▼</h2>
+                    </button>
+                    <div id="collapseFive" class="collapse"  >
+                        <!-- Thrust 4 Professor 1: Santanu Chaudhuri -->
+                        <div class="col-sm-3 float-left bg-dark text-white text-center mb-4">
+                            <a href="https://www.anl.gov/profile/santanu-chaudhuri" target="_blank">
+                                <img src="{% static 'pics/Santanu Chaudhuri.jpg' %}" alt="Santanu Chaudhuri">
+                            </a>
+                            <h4><strong>Santanu Chaudhuri</strong></h4>
+                            <p><strong>Argonne National Laboratory</strong></p>
+                            <p>Director, Manufacturing Science and Engineering; schaudhuri@anl.gov</p>
+                            <button type="button" class="btn btn-light" data-toggle="modal" data-target="#members4-1">Members in Project</button>
+                        </div>
+
+                        <!-- Members Modal -->
+                        <div class="modal fade" id="members4-1">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-body">
+                                        <a href="https://ruiding-uchicago.github.io/" target="_blank">
+                                            <img src="{% static 'pics/submembers/dummy.jpg' %}" alt="dummy1-1">
+                                        </a>
+                                        <h5>"Dummy Name 1-1"; "Degree" </h5>
+                                        <p>"Position"; "Email"</p>
+                                        <p>"Institution"</p>
+                                        <p>"Identity in the project"</p>
+                                        <p>"Thrust area and research field"</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Thrust 4 Professor 2: Wei Chen -->
+                        <div class="col-sm-3 float-left bg-dark text-white text-center mb-4">
+                            <a href="https://www.mccormick.northwestern.edu/research-faculty/directory/profiles/chen-wei.html" target="_blank">
+                                <img src="{% static 'pics/Wei Chen.jpg' %}" alt="Wei Chen">
+                            </a>
+                            <h4><strong>Wei Chen</strong></h4>
+                            <p><strong>Northwestern University</strong></p>
+                            <p>Professor, Mechanical Engineering; weichen@northwestern.edu</p>
+                            <button type="button" class="btn btn-light" data-toggle="modal" data-target="#members4-2">Members in Project</button>
+                        </div>
+                        <!-- Members Modal -->
+                        <div class="modal fade" id="members4-2">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-body">
+                                        <a href="https://ruiding-uchicago.github.io/" target="_blank">
+                                            <img src="{% static 'pics/submembers/dummy.jpg' %}" alt="dummy1-1">
+                                        </a>
+                                        <h5>"Dummy Name 1-1"; "Degree" </h5>
+                                        <p>"Position"; "Email"</p>
+                                        <p>"Institution"</p>
+                                        <p>"Identity in the project"</p>
+                                        <p>"Thrust area and research field"</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Thrust 4 Professor 3: Yuxin Chen -->
+                        <div class="col-sm-3 float-left bg-dark text-white text-center mb-4">
+                            <a href="https://yuxinchen.org/" target="_blank">
+                                <img src="{% static 'pics/Yuxin Chen.jpg' %}" alt="Yuxin Chen">
+                            </a>
+                            <h4><strong>Yuxin Chen</strong></h4>
+                            <p><strong>University of Chicago</strong></p>
+                            <p>Assistant Professor, Department of Computer Science; chenyuxin@uchicago.edu</p>
+                            <button type="button" class="btn btn-light" data-toggle="modal" data-target="#members4-3">Members in Project</button>
+                        </div>
+                        <!-- Members Modal -->
+                        <div class="modal fade" id="members4-3">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-body">
+                                        <a href="https://ruiding-uchicago.github.io/" target="_blank">
+                                            <img src="{% static 'pics/submembers/dummy.jpg' %}" alt="dummy1-1">
+                                        </a>
+                                        <h5>"Dummy Name 1-1"; "Degree" </h5>
+                                        <p>"Position"; "Email"</p>
+                                        <p>"Institution"</p>
+                                        <p>"Identity in the project"</p>
+                                        <p>"Thrust area and research field"</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Thrust 4 Professor 4: Rebecca Willett -->
+                        <div class="col-sm-3 float-left bg-dark text-white text-center mb-4">
+                            <a href="https://yuxinchen.org/" target="_blank">
+                                <img src="{% static 'pics/Rebecca Willett.jpg' %}" alt="Rebecca Willett">
+                            </a>
+                            <h4><strong>Rebecca Willett</strong></h4>
+                            <p><strong>University of Chicago</strong></p>
+                            <p>Professor, Statistics and Computer Science; willett@g.uchicago.edu.</p>
+                            <button type="button" class="btn btn-light" data-toggle="modal" data-target="#members4-4">Members in Project</button>
+                        </div>
+                        <!-- Members Modal -->
+                        <div class="modal fade" id="members4-4">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-body">
+                                        <a href="https://ruiding-uchicago.github.io/" target="_blank">
+                                            <img src="{% static 'pics/submembers/dummy.jpg' %}" alt="dummy1-1">
+                                        </a>
+                                        <h5>"Dummy Name 1-1"; "Degree" </h5>
+                                        <p>"Position"; "Email"</p>
+                                        <p>"Institution"</p>
+                                        <p>"Identity in the project"</p>
+                                        <p>"Thrust area and research field"</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        
+                        <button type="button" class="btn btn-dark float-right close-button" data-target="#collapseFive">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid">
+            <!-- Background -->
+            <!-- Thrust 5 Section -->
+            <div class="row">
+                <div class="col">
+                    <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseSix">
+                        <h2>Thrust 5: Techno-socio-environmental-economic Analysis▼</h2>
+                    </button>
+                    <div id="collapseSix" class="collapse">
+                        <!-- Professor 1: Jennifer Dunn -->
+                        <div class="col-sm-12 bg-dark text-white text-center mb-4">
+                            <a href="https://www.mccormick.northwestern.edu/research-faculty/directory/profiles/dunn-jennifer.html" target="_blank">
+                                <img src="{% static 'pics/Jennifer Dunn.jpg' %}" alt="Jennifer Dunn">
+                            </a>
+                            <h4><strong>Jennifer Dunn</strong></h4>
+                            <p><strong>Northwestern University</strong></p>
+                            <p>Research Associate Professor, Northwestern Argonne Institute of Science and Engineering; jennifer.dunn1@northwestern.edu</p>
+                            <button type="button" class="btn btn-light" data-toggle="modal" data-target="#members5-1">Members in Project</button>
+                        </div>
+
+                        <!-- Members Modal -->
+                        <div class="modal fade" id="members5-1">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-body">
+                                        <a href="https://ruiding-uchicago.github.io/" target="_blank">
+                                            <img src="{% static 'pics/submembers/dummy.jpg' %}" alt="dummy1-1">
+                                        </a>
+                                        <h5>"Dummy Name 1-1"; "Degree" </h5>
+                                        <p>"Position"; "Email"</p>
+                                        <p>"Institution"</p>
+                                        <p>"Identity in the project"</p>
+                                        <p>"Thrust area and research field"</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <button type="button" class="btn btn-dark float-right close-button" data-target="#collapseSix">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+
+
+
+
+        <!-- Custom script for toggling -->
+        <script>
+            $(document).ready(function(){
+                $(".close-button").click(function(){
+                    // Using 'data-target' attribute to specify which section to toggle
+                    var target = $(this).data('target');
+                    $(target).toggleClass('show');
+                });
+            });
+        </script>
+    {% endblock %}

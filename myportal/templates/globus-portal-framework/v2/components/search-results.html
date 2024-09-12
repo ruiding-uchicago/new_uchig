@@ -1,0 +1,346 @@
+{# myportal/templates/globus-portal-framework/v2/components/search-results.html #}
+
+<style>
+  .document-format {
+    background-color: lightgreen;
+    /* 浅绿色背景 */
+    padding: 2px 5px;
+    border-radius: 5px;
+  }
+
+  .data-type {
+    background-color: lightblue;
+    /* 浅蓝色背景 */
+    padding: 2px 5px;
+    border-radius: 5px;
+  }
+
+  .abstract-btn {
+    /* 添加所需的按钮样式 */
+  }
+
+  .abstract-content {
+    position: absolute;
+    background-color: white;
+    border: 1px solid #ddd;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    /* 其他所需样式 */
+
+  }
+
+  .link-btn {
+    background-color: lightyellow;
+    /* 浅黄色背景 */
+    padding: 2px 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    text-decoration: none;
+    /* 去掉下划线 */
+    color: black;
+    /* 文本颜色 */
+    cursor: pointer;
+    /* 鼠标样式 */
+    margin-left: 10px;
+    /* 与其他元素的间距 */
+  }
+
+  /* 您还可以在这里添加其他 CSS 样式 */
+  .preview-box {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    max-height: 90%;
+    background-color: white;
+    border: 1px solid #ddd;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    overflow-y: auto;
+    z-index: 1000;
+  }
+
+  .preview-box li {
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+  }
+
+  .preview-box .metadata {
+    display: inline;
+    font-size: 0.9em;
+  }
+
+  .preview-box .metadata-item {
+    display: inline-block;
+    margin-right: 10px;
+  }
+
+  .preview-box .document-format,
+  .preview-box .data-type {
+    display: inline-block;
+    padding: 2px 5px;
+    border-radius: 3px;
+    margin-right: 10px;
+  }
+
+  .preview-box .document-format {
+    background-color: lightgreen;
+  }
+
+  .preview-box .data-type {
+    background-color: lightblue;
+  }
+</style>
+
+
+<button id="add-to-list-btn" class="link-btn">Add Current Page Results to List</button>
+<button id="save-search-btn" class="link-btn">Download All Added Metadata JSON File</button>
+<button id="clear-all-btn" class="link-btn">Clear All Added</button>
+<button id="preview-list-btn" class="link-btn">Preview List</button>
+<button id="graph-visualization-btn" class="link-btn">Graph Visualization</button>
+<p>(Note: For optimal performance, suggested selection to <span style="color: blue; font-weight: bold;">30 entries (=nodes) or fewer</span>  for graph visualization. Larger datasets may <span style="color: red; font-weight: bold;">SIGNIFICANTLY INCREASE</span> processing time.)</p>
+
+<p>Current number of items in total list: <span id="total-items">0</span></p>
+
+<div id="preview-box" class="preview-box">
+  <span class="close-preview">&times;</span>
+  <h2>Preview of Added Items</h2>
+  <ul id="preview-list"></ul>
+</div>
+
+<div>
+  {% for result in search.search_results %}
+  <div class="card my-3">
+    <div class="card-header d-flex justify-content-between">
+      <h3 class="search-title">
+        <a href="{% url 'detail' globus_portal_framework.index result.subject %}">{{result.title|default:'Result'}}</a>
+      </h3>
+      <div>
+        <strong>Document Format:</strong> <span class="document-format">{{ result.document_format }}</span>
+        <strong>Data Type:</strong> <span class="data-type">{{ result.data_type }}</span>
+      </div>
+      <button class="add-entry-btn">Add this Entry to List</button>
+      <button class="abstract-btn">Abstract</button>
+      <div class="abstract-content" style="display: none;">
+        {{ result.abstract_description }}
+      </div>
+      {% if result.outer_link %}
+      <a href="{{ result.outer_link }}" class="link-btn">External Link here</a>
+      {% endif %}
+    </div>
+    <div class="card-body">
+      <table class="table table-sm borderless">
+        <tbody>
+          <tr>
+            {% for item in result.search_highlights %}
+            <th>{{item.title}}</th>
+            {% endfor %}
+          </tr>
+          <tr>
+            {% for item in result.search_highlights %}
+            {% if item.type == "date" %}
+            <th>{{item.value | date:"DATETIME_FORMAT"}}</th>
+            {% else %}
+            <th>{{item.value}}</th>
+            {% endif %}
+            {% endfor %}
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+
+
+{# 在 HTML 中使用 Django 的 json_script 标签将 search 对象注入页面 #}
+{{ search.search_results|json_script:"search-data" }}
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    // Initialize or retrieve totalList from sessionStorage
+    let totalList = JSON.parse(sessionStorage.getItem('totalList')) || [];
+    const searchData = JSON.parse(document.getElementById('search-data').textContent);
+    const totalItemsCount = document.getElementById('total-items');
+
+    // Function to update the displayed total count
+    function updateTotalCount() {
+      totalItemsCount.textContent = totalList.length;
+    }
+
+    // Function to check for duplicate entries in the list
+    function isDuplicate(entry) {
+      return totalList.some(item => JSON.stringify(item) === JSON.stringify(entry));
+    }
+
+    // Add to List functionality
+    document.getElementById('add-to-list-btn').addEventListener('click', function () {
+      searchData.forEach(entry => {
+        if (!isDuplicate(entry)) {
+          totalList.push(entry);
+        }
+      });
+      sessionStorage.setItem('totalList', JSON.stringify(totalList)); // Store list in sessionStorage
+      updateTotalCount(); // Update the count on the page
+    });
+
+    // Add single entry to the list when "Add this Entry to List" is clicked
+    document.querySelectorAll('.add-entry-btn').forEach((button, index) => {
+      button.addEventListener('click', function () {
+        const entry = searchData[index];
+        if (!isDuplicate(entry)) {
+          totalList.push(entry);
+          sessionStorage.setItem('totalList', JSON.stringify(totalList));
+          updateTotalCount();
+        } else {
+          alert('This entry is already in the list.');
+        }
+      });
+    });
+
+    // Clear All Added functionality
+    document.getElementById('clear-all-btn').addEventListener('click', function () {
+      totalList = [];
+      sessionStorage.setItem('totalList', JSON.stringify(totalList)); // Update sessionStorage
+      updateTotalCount(); // Reset the count to 0
+    });
+
+    // Download All functionality
+    document.getElementById('save-search-btn').addEventListener('click', function () {
+        const totalList = JSON.parse(sessionStorage.getItem('totalList')) || [];
+
+        // Process the data using the same function as graph-visualization-btn
+        fetch('/process_graph_data/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrftoken')
+            },
+            body: JSON.stringify(totalList)
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Create a Blob with the processed data
+            const blob = new Blob([JSON.stringify(data)], { type: 'application/json' });
+            const link = document.createElement('a');
+            link.href = window.URL.createObjectURL(blob);
+            link.download = 'processed_search_results.json';
+            link.click();
+            window.URL.revokeObjectURL(link.href);
+        })
+        .catch(error => console.error('Error:', error));
+    });
+
+    // Abstract button functionality
+    document.querySelectorAll('.abstract-btn').forEach(function (button) {
+      button.addEventListener('mouseover', function () {
+        this.nextElementSibling.style.display = 'block';
+      });
+      button.addEventListener('mouseout', function () {
+        this.nextElementSibling.style.display = 'none';
+      });
+    });
+
+
+    document.getElementById('graph-visualization-btn').addEventListener('click', function () {
+      const totalList = JSON.parse(sessionStorage.getItem('totalList')) || [];
+
+      fetch('/process_graph_data/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': getCookie('csrftoken')
+        },
+        body: JSON.stringify(totalList)
+      })
+        .then(response => response.json())
+        .then(data => {
+          // Instead of redirecting with URL parameters, store the data in sessionStorage
+          sessionStorage.setItem('graphVisualizationData', JSON.stringify(data));
+          window.location.href = '/graph_visualization/';
+        })
+        .catch(error => console.error('Error:', error));
+    });
+
+    // Function to get CSRF token
+    function getCookie(name) {
+      let cookieValue = null;
+      if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+          const cookie = cookies[i].trim();
+          if (cookie.substring(0, name.length + 1) === (name + '=')) {
+            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+            break;
+          }
+        }
+      }
+      return cookieValue;
+    }
+
+
+
+    // Preview List functionality
+    const previewListBtn = document.getElementById('preview-list-btn');
+    const previewBox = document.getElementById('preview-box');
+    const previewList = document.getElementById('preview-list');
+    const closePreview = document.querySelector('.close-preview');
+
+    previewListBtn.addEventListener('click', function () {
+      if (previewBox.style.display === 'none' || previewBox.style.display === '') {
+        // Show preview box
+        previewBox.style.display = 'block';
+        // Populate the preview list with detailed information
+        previewList.innerHTML = '';
+        totalList.forEach((item, index) => {
+          const li = document.createElement('li');
+          let content = `<strong>${index + 1}. ${item.title || 'Untitled'}</strong>`;
+
+          // Add document format and data type
+          content += '<div class="metadata">';
+          if (item.document_format) {
+            content += `<span class="document-format">Document Format: ${item.document_format}</span>`;
+          }
+          if (item.data_type) {
+            content += `<span class="data-type">Data Type: ${item.data_type}</span>`;
+          }
+          content += '</div>';
+
+          // Add search highlights
+          if (item.search_highlights && item.search_highlights.length > 0) {
+            content += '<div class="metadata">';
+            item.search_highlights.forEach(highlight => {
+              content += `<div class="metadata-item"><strong>${highlight.title}:</strong> `;
+              if (highlight.type === "date") {
+                // Format date if needed
+                content += new Date(highlight.value).toLocaleString();
+              } else {
+                content += highlight.value;
+              }
+              content += '</div>';
+            });
+            content += '</div>';
+          }
+
+          li.innerHTML = content;
+          previewList.appendChild(li);
+        });
+      } else {
+        // Hide preview box
+        previewBox.style.display = 'none';
+      }
+    });
+
+    closePreview.addEventListener('click', function () {
+      previewBox.style.display = 'none';
+    });
+    // Initialize the count on page load
+    updateTotalCount();
+  });
+</script>

@@ -1,0 +1,88 @@
+{% extends "globus-portal-framework/v2/base.html" %}
+{% load static %}
+
+
+{% block body %}
+    <div style="position:fixed; top:0; left:0; width:100%; height:100%; background-image: url('{% static 'pics/upload.png' %}'); background-size: cover; opacity: 0.25; z-index: -1;"></div>
+
+    <!-- Bootstrap CSS and JS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <!-- Your main content for Teams page -->
+    <div class="container-fluid">
+        <!-- Background -->
+        <!-- Button to 'Upload_Data' -->
+        <button type="button" class="btn btn-primary" onclick="location.href='{% url 'Upload_Data' %}'">Back to Upload Data</button>
+        
+    </div>
+
+    <div class="container-fluid">
+        <!-- Section 1 -->
+        <div class="row">
+            <div class="col-12">
+                <h2>Data Upload/Download Flowchart</h2>
+                <img src="{% static 'pics/flowchart.png' %}" class="img-fluid">
+                <p>Our data management in this portal is supported by the Uchicago Globus system, only group member of MADE-PUBLIC is allowed, please click <a href="https://app.globus.org/groups/bb420e57-7835-11ee-b0db-d9a5237cb2e9/about" target="_blank">here</a> for requesting access group. Unless logged in, otherwise the users would not have the access to the data in the project, or allowed to access the upload data page</p>
+                <p>The globus official has provided a very user-friendly and detailed tutorial for setting up personal devices with globus software to transfer data.</p>
+                <p>If you have not yet had experience using globus before, please refer to the links below and make sure to install globus and read the basic tutorial before continuing:</p>
+                <p><a href="https://docs.globus.org/globus-connect-personal/install/" target="_blank">Globus Connect Personal Installation</a>; <a href="https://docs.globus.org/guides/tutorials/manage-files/transfer-files/" target="_blank">How To Log In and Transfer Files with Globus</a></p>
+                
+            </div>
+        </div>
+
+        <!-- Section 2 -->
+        <div class="row">
+            <div class="col-12">
+                <h2>1. Generate metadata JSON file</h2>
+                <img src="{% static 'pics/tutorial1.jpg' %}" class="img-fluid">
+                <p>Please fill in the blanks and select the tags and click "Generate JSON", a corresponding formatted JSON file for metadata would be created and automatically downloaded by the browser.</p>
+            </div>
+        </div>
+
+        <!-- Section 3 -->
+        <div class="row">
+            <div class="col-12">
+                <h2>2. Upload JSON file</h2>
+                <img src="{% static 'pics/tutorial2.jpg' %}" class="img-fluid">
+                <p>After clicking "Generate JSON", we can see that the "Upload JSON file" has been unlocked.</p>
+                <img src="{% static 'pics/tutorial3.jpg' %}" class="img-fluid">
+                <p>By clicking "Upload JSON file", we will be direct to the globus system in a new page, we can see that the left endpoint is the project endpoint folder, and if you have successfully installed globus in your device and logged in, you should be able to browse your local files, find the previously automatically generated JSON file and click the "start" button to transfer selected local file to the project endpoint folder.</p>
+                <img src="{% static 'pics/tutorial4.jpg' %}" class="img-fluid">
+                <p>The page would hint you succeed and if we click refresh list, we can check and find that the JSON file has been uploaded to the project folder successfully.</p>
+
+            </div>
+        </div>
+        <!-- Section 4 -->
+        <div class="row">
+            <div class="col-12">
+                <h2>3. Upload data file</h2>
+                <img src="{% static 'pics/tutorial5.jpg' %}" class="img-fluid">
+                <p>When we come back to the portal page, we can find that the final green button of "Upload your file in corresponding thrust repository" has been unlocked.</p>
+                <img src="{% static 'pics/tutorial6.jpg' %}" class="img-fluid">
+                <p>Similarly we would be directly redirect to the corresponding thrust folder we have previously selected, we can then choose to upload the file from our local devices. The JSON file and data file would be reviewed by administrator and lately update in the data repository.</p>
+                <img src="{% static 'pics/tutorial7.jpg' %}" class="img-fluid">
+                <p>After finishing this process, when we come back to the upload page, we can see that everybutton has been reset. And the previous upload behavior is logged.</p>
+            </div>
+        </div>
+
+        <!-- Add more sections as needed -->
+    </div>
+
+
+
+
+
+    <!-- Custom script for toggling -->
+    <script>
+        $(document).ready(function(){
+            $(".close-button").click(function(){
+                // Using 'data-target' attribute to specify which section to toggle
+                var target = $(this).data('target');
+                $(target).toggleClass('show');
+            });
+        });
+    </script>
+{% endblock %}

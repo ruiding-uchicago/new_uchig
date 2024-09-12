@@ -1,0 +1,108 @@
+<!-- this file contains the content of the first page visited. -->
+
+<!-- UNUSED CODE ABOUT TO BE REIMPLEMENTED
+ -->      
+
+{%extends "globus-portal-framework/v2/base.html"%}
+{% load static %}
+
+{% block headextras %}
+  <link rel="stylesheet" type="text/css" href="{% static 'css/search.css' %}" />
+  <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+  <style>
+    .mixed-case {
+      color: black;
+    }
+    .mixed-case span {
+      color: blue;
+    }
+  </style>
+{% endblock %}
+
+
+{% block body %}
+
+
+{% block list_indexes %}
+{% for index, index_data in search_indexes.items %}
+<div class="row">
+  <div class="col"></div>
+  <div class="col-10">
+
+    {% block allowed_groups %}
+    {% if forloop.first and allowed_groups %}
+    <div class="alert alert-warning border" role="alert">
+      <h3 class="text-center">Resources restricted to select users</h3>
+
+      <p class="text-center">You must be a group member before logging in. You can view groups and request access below.</p>
+      <p class="text-center">
+        <a class="btn btn-primary" href="{% url 'allowed-groups' %}">View Groups and Request Access</a>
+      </p>
+    </div>
+    {% endif %}
+    {% endblock %}
+
+    {% block index %}
+    <h2 class="text-center card card-body">
+      <a href="{% url 'search' index %}?q=*">{{index_data.name|default:index}}</a>
+    </h2>
+    {% endblock %}
+  </div>
+  <div class="col"></div>
+</div>
+{% endfor %}
+{% endblock %}
+
+
+<!-- This section contains the title and chart of the project. -->
+<div style="display: flex; align-items: center">
+  <div class="container-fluid xs-cozy margin-between">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <div class="row">
+      <div class="col" style="display: flex; flex-direction: column; justify-content: center; height: 100%;">
+        <h1 class="text-center mt-3 mb-5" style="font-size: 72px; font-weight: bold;">MADE-PUBLIC</h1>
+        <h2 class="text-center mixed-case" style="font-size: 24px;"> 
+          <span>M</span>anufacturing <span>AD</span>vanced <span>E</span>lectronics through
+          <span>P</span>rinting<span> U</span>sing <span>B</span>io-based and <span>L</span>ocally <span>I</span>dentifiable <span>C</span>ompounds
+        </h2>
+      </div>
+    </div>
+  </div>
+
+  <!-- The section with your specified background and text -->
+  <div class="container-fluid xs-cozy" style="display: flex; flex-direction:row; align-items: flex-start;">
+    <!-- Image container -->
+    <img src="{% static 'pics/FLOW.png' %}" alt="Flow" style="width:100%; max-width: 600px; height:auto;">
+  </div>
+</div>
+
+<div class="container-fluid xs-cozy margin-between">
+  <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+  <div class="alert alert-secondary" role="alert">
+    <p style="font-weight: bold; font-size: 18px;">
+      The vision of MADE-PUBLIC is a future intelligent, scalable, and democratized manufacturing paradigm to enable distributed manufacturing of low-cost printable electronic devices using locally identifiable resources such as bio-based materials derived from plants.
+    </p>
+    <ul style="font-size: 15px;">
+      <li>Eco manufacturing (less carbon footprint): plants to electronics</li>
+      <li>Cyber manufacturing: AI/ML and data enabled</li>
+      <li>Bio-based, biodegradable, recyclable electronics</li>
+      <li>Potentially complicated, integrated/multiplexed electronics</li>
+      <li>Distributed, democratized electronics manufacturing</li>
+      <li>Integrated education and workforce development plan</li>
+    </ul>
+    <p class="text-center">The Data Transfer Functions are for Current Researchers in MADE-PUBLIC Project only</p>
+  </div>
+</div>
+
+<div class="container-fluid xs-cozy margin-between">
+  <div style="display: flex; align-items: center; justify-content: center;">
+    <h2 class="text-center mixed-case" style="font-size: 24px; margin-right:30px"> Sponsored by  </h2>
+    <a href="https://www.nsf.gov/" target="_blank">
+      <img src="{% static 'pics/NSF.png' %}" alt="NSF" style="height: 60%; width: 60%">
+    </a>
+    <h3 style="color: black; font-size: 20px;">NSF Future Manufacturing Program</h3>
+  </div>
+</div>
+
+
+{% endblock %}

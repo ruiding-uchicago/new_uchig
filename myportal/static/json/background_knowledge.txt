@@ -1,0 +1,383 @@
+Please learn the background knowledge about our project
+Manufacturing ADvanced Electronics through Printing Using Bio-based and Locally Identifiable Compounds
+these are the basic background information of this project:
+I (NSF page):
+ABSTRACT
+
+This Future EcoManufacturing research grant will enable a future intelligent, scalable, and democratized manufacturing paradigm that allows for distributed printing of low-cost, biodegradable, and recyclable electronic devices using locally identifiable resources, such as bio-based materials derived from plants. These electronic devices are critical components in the rapidly evolving Internet of Things (IoT). The distributed manufacturing can lower overall device costs (by saving transportation costs) and make the supply chain more resilient during disruptions (e.g., during a pandemic). This project will demonstrate as a prototype the distributed printing of a lithium-ion battery (LIB) - powered chemical sensors using plant-derived inks. The printed devices will be used for monitoring growth conditions of hydronic plants that are used to derive the inks. The same platform can be used to print many other sophisticated, biodegradable/recyclable electronic devices using bio-based materials through customization and active learning. Through partnership with community colleges, Manufacturing USA Institutes, and manufacturing incubators, the project aims to educate, train, engage, and excite diverse student audiences and the public on the future sustainable manufacturing through several new, tailored initiatives, such as a cross-institutional certificate program, printable electronics hackathon and DIY initiative, and citizen science competition.
+
+The goal of the project is to enable a manufacturing supply chain from precision agriculture/hydroponics to advanced biodegradable and recyclable electronics. The project will lead to major science advances in three domains: precision growth of plants, manufacturing of tailored bio-based inks, and sustainable production of printable electronics. As a convergent research program, the project will further lead to value-added transferrable and scalable scientific advancements, including novel artificial intelligence/machine learning (AI/ML) algorithms for manufacturing, a framework for designing sustainable and systematically optimized manufacturing processes, and techniques for incorporating heterogeneous data into manufacturing data systems while automatically refining the models. Learned models will correlate plant phenotypes and growth conditions with cellulose and lignin extraction, connect ink formulation with desired ink properties, and associate printing parameters with electronic device performance and quality. The project will lead to an open-source biomaterials-based electronics manufacturing data infrastructure (BEMDI) that fosters innovation through building a community of innovators, educators, and industry partners interested in manufacturing bio-based printable electronics. This Future Manufacturing research is supported by the Divisions of Civil, Mechanical and Manufacturing Innovation (CMMI), Biological Sciences (BIO), Emerging Frontiers and Multidisciplinary Activities (EFMA), Materials Research (DMR), Electrical Communications and Cyber Systems (ECCS), Engineering Education and Centers (EEC), and Mathematical Sciences (DMS).
+
+This award reflects NSF's statutory mission and has been deemed worthy of support through evaluation using the Foundation's intellectual merit and broader impacts review criteria.
+II(brief overview)
+Investigators
+
+Junhong Chen (Principal Investigator)
+Stuart Rowan (Co-Principal Investigator)
+Mark Hersam (Co-Principal Investigator)
+Santanu Chaudhuri (Co-Principal Investigator)
+Elizabeth Ainsworth (Co-Principal Investigator)
+Abstract
+
+This Future EcoManufacturing research grant will enable a future intelligent, scalable, and democratized manufacturing paradigm that allows for distributed printing of low-cost, biodegradable, and recyclable electronic devices using locally identifiable resources, such as bio-based materials derived from plants. These electronic devices are critical components in the rapidly evolving Internet of Things (IoT). The distributed manufacturing can lower overall device costs (by saving transportation costs) and make the supply chain more resilient during disruptions (e.g., during a pandemic). This project will demonstrate as a prototype the distributed printing of a lithium-ion battery (LIB) - powered chemical sensors using plant-derived inks. The printed devices will be used for monitoring growth conditions of hydronic plants that are used to derive the inks. The same platform can be used to print many other sophisticated, biodegradable/recyclable electronic devices using bio-based materials through customization and active learning. Through partnership with community colleges, Manufacturing USA Institutes, and manufacturing incubators, the project aims to educate, train, engage, and excite diverse student audiences and the public on the future sustainable manufacturing through several new, tailored initiatives, such as a cross-institutional certificate program, printable electronics hackathon and DIY initiative, and citizen science competition.
+
+
+
+The goal of the project is to enable a manufacturing supply chain from precision agriculture/hydroponics to advanced biodegradable and recyclable electronics. The project will lead to major science advances in three domains: precision growth of plants, manufacturing of tailored bio-based inks, and sustainable production of printable electronics. As a convergent research program, the project will further lead to value-added transferrable and scalable scientific advancements, including novel artificial intelligence/machine learning (AI/ML) algorithms for manufacturing, a framework for designing sustainable and systematically optimized manufacturing processes, and techniques for incorporating heterogeneous data into manufacturing data systems while automatically refining the models. Learned models will correlate plant phenotypes and growth conditions with cellulose and lignin extraction, connect ink formulation with desired ink properties, and associate printing parameters with electronic device performance and quality. The project will lead to an open-source biomaterials-based electronics manufacturing data infrastructure (BEMDI) that fosters innovation through building a community of innovators, educators, and industry partners interested in manufacturing bio-based printable electronics. This Future Manufacturing research is supported by the Divisions of Civil, Mechanical and Manufacturing Innovation (CMMI), Biological Sciences (BIO), Emerging Frontiers and Multidisciplinary Activities (EFMA), Materials Research (DMR), Electrical Communications and Cyber Systems (ECCS), Engineering Education and Centers (EEC), and Mathematical Sciences (DMS).
+
+III(MADE-PUBLIC official page):
+M​ADE-PUBLIC
+Manufacturing ADvanced Electronics through
+
+PrintingUsing Bio-based and Locally Identifiable Compounds
+
+NSF Future Manufacturing Program
+
+Our Vision
+Let's print !
+Prototype
+The vision of MADE-PUBLIC is a future intelligent, scalable, and democratized manufacturing paradigmto enable distributed manufacturing of low-cost printable electronic devices using locally identifiable resources such as bio-based materials derived from plants.
+
+Eco manufacturing (less carbon footprint): plants to electronics
+
+Cyber manufacturing: AI/ML and data enabled
+
+Bio-based, biodegradable, recyclable electronics
+
+Potentially complicated, integrated/multiplexed electronics
+
+Distributed, democratized electronics manufacturing
+
+Integrated education and workforce development plan
+
+​
+​
+Research
+Name
+
+Research Expertise
+
+Role
+
+Junhong Chen (Chen J)
+
+Printing, field-effect transistor (FET) sensors, LIBs
+
+PI: T1, T2, T3
+
+Elizabeth Ainsworth
+
+Plant growth and molecular plant biochemistry
+
+Co-PI: T1, T3
+
+Santanu Chaudhuri
+
+integrated computational materials and mesoscale models
+
+Co-PI: T3, CT4
+
+Mark Hersam
+
+Functional nanomaterial exfoliation and ink formulation
+
+Co-PI: T2, T3
+
+Stuart Rowan
+
+Cellulose/lignin extraction from plant-based feedstocks
+
+Co-PI: T1, T2
+
+Wei Chen (Chen W)
+
+Design and manufacturing
+
+SP: T2, T3, CT4
+
+Yuxin Chen (Chen Y)
+
+Ml for metrology-driven modification to mesoscale DoE
+
+SP: T1, T3, CT4
+
+Jonathan Claussen
+
+Electrochemical sensors and printing
+
+SP: T1, T2, T3
+
+Jennifer Dunn
+
+TEA, LCA, material flow analysis (MFA), policy
+
+SP: CT5
+
+Dokyoung Lee
+
+Hydroponic palnt growth and bioenergy grasses, crop science
+
+SP: T1, T3
+
+Rebecca Willett
+
+Data analytics and ML
+
+SP: T3, CT4
+
+Zhiyong Cai
+
+Conversion of plant-derived lignin to graphene
+
+Collaborator, T1, T2
+
+Expected Outcomes 
+Precision growth recipes for plants/grasses with desired cellulose to lignin composition.
+
+Methods for efficient extraction and conversion of cellulose and lignin for ink materials and additives.
+
+A scalable manufacturing process to produce bio-based and nanomaterials-based inks.
+
+A future manufacturing platform to print sensors, LIBs, and other electronic devices.
+
+Life-cycle (LCA) and techno-economic analysis (TEA) tools and data to guide design and implementation of a cost-effective and environmentally responsible printing platform.
+
+An open source, public manufacturing data infrastructure (BEMDI) empowered by AI/ML algorithms to democratizeon-demand printing of customizable, biodegradable/recyclable electronic devices.
+
+An array of inclusiveeducation and workforce development (EWD) programs that will educate, train, engage, and excite all-age audiences.
+
+Translation through
+Strategic Collaborations
+MADE-PUBLIC centers around Chicago regional strengths in agriculture, materials and manufacturing, and AI/ML.
+
+Our goal is to facilitate translation of MADE-PUBLIC outcomes by establishing a vibrant cyber manufacturing innovation ecosystem,assisted by critical stakeholders that span the entire value chain of agriculture–electronics.
+
+These stakeholders include Domtar (paper, pulp processing); USDA Forest Products Laboratory (FPL, lignin-derived graphene); Ernst Seeds (seeds); NanoIntegris (nanomaterials ink); MilliporeSigma (printable ink); IDS (printer); Corteva (data); Molex (electronics); NanoAffix (nanosensor); Argonne’s Manufacturing Engineering Research Facility (MERF, scale-up manufacturing) and DLHub (data infrastructure); NIST (materials genome); NUCESR (sustainability); NIMSI (manufacturing); Manufacturing USA Institute MxD (digital manufacturing); mHUB (manufacturing incubator); DPI (skilled workforce development); and the general public (general users).
+
+Data produced from the project will be deposited into existing materials data platforms: MDF; LCA data platform; NanoHUB; nanoMFG; and Argonne’s manufacturing data platform, MDML, which is supported by ML tools, DLHub, and MDF connections.
+
+Stakeholders will work with the project team to ensure the alignment of project results toward translation.
+
+Research and EWD are synchronized to educate, train, engage, and excite diverse, all-age audiences.
+IV(more detail of each thrust):
+Thrust 1 (T1)
+T1: Efficient production of plant-based compounds for inks (Ainsworth, Rowan)
+• Optimizing the biofeedstock for compound extraction (Ainsworth, Lee, Rowan, Chen J., Claussen, Chen Y.)
+• Tuning cellulose extraction (Rowan, Ainsworth, Lee)
+• Tuning lignin extraction (Rowan, Ainsworth, Lee, Cai, Dixon)
+• Partners: University of North Texas (Brachypodium growth and biochemical analysis), Ernst Seeds (plant seeds), USDA FPL
+(lignin to graphene), Domtar (lignin extraction and recovery)
+Gaps/Challenges Success Metrics Risks Strategies & Risk
+Mitigation
+Precision monitoring
+and control of
+hydroponic plant
+growth
+Accurate monitoring of
+growth conditions
+(<10% error)
+Interference
+from other
+water
+components
+Improve sensor selectivity
+through optimizing probes
+and sensor calibration
+Efficient extraction of
+CNC and lignin from
+the plants
+Optimized isolation to
+maximize yield of
+CNCs (>50 %)/lignin
+(>25 %)
+Low yield of
+compound
+extraction
+Explore different
+extraction methods;
+understand the molecular
+basis for extraction
+Elucidation of how
+growing conditions
+affect isolation of target
+compounds
+Understanding
+relationship of growing
+conditions to product
+isolation
+Variation of
+composition
+within a plant
+Examine extraction
+process on specific part of
+the plant (leaves vs. stalk)
+6
+Thrust 2 (T2)
+T2: Manufacturing plant-derived functional nanomaterial inks (Hersam)
+• Maximize plant-derived components of functional nanomaterial inks (Hersam, Rowan, Cai)
+• Continuous flow processing of functional nanomaterial inks (Hersam, Chen J., Claussen )
+• Partners: MilliporeSigma (printable inks), NanoIntegris (nanomaterials ink), Domtar (waste lignin recovery from paper and
+pulping processing), USDA FPL (lignin-derived graphene)
+Gaps/Challenges Success Metrics Risks Strategies & Risk Mitigation
+Maximize the plant-
+derived components of
+inks
+>80 wt.% plant-
+derived
+components
+Limited choice of
+bio-components
+Use lignin-derived graphene,
+CNCs, and plant-derived
+solvents
+Scalable nanomaterial
+exfoliation and
+purification
+>90% exfoliation/
+purification yield
+Low yields for
+batch processing
+methods
+Use continuous flow methods
+for exfoliation and purification
+Minimize waste during
+ink production and
+processing
+<10 wt.% waste
+Mixed waste
+streams complicate
+recycling
+Use inline separation of waste
+streams to enable efficient
+recycling
+8
+Thrust 3 (T3)
+T3: Integrating electronic device printing process with monitoring & control (Chen)
+• Controllable printed feature dimensions (Chen, Claussen, Hersam)
+• Tunable device performance with minimized device-to-device variations (Chaudhuri, Chen Y, Chen W., Chen, Claussen)
+• Scalable printing (Chen, Claussen, Hersam)
+• Characterization of sensors and LIBs for precision growth of plants (Chen, Claussen, Hersam, Ainsworth, Lee)
+• Partners: IDS (printer), NanoAffix (nanosensor), mHUB (manufacturing entrepreneurs as pilot users), Corteva (sensor data
+analysis), AquaCheck (sensor data analysis), the general public (general users)
+Gaps/Challenges Success Metrics Risks Strategies & Risk Mitigation
+Highly conductive
+electrode
+Sheet resistance <
+10 Ohm/sq.
+Reduction of
+conductivity by ink
+additives
+Tune ink properties, printing
+parameters, post-print annealing
+Controllable
+printed features
+Spatial resolution
+<5 μm
+Coffee-ring effect Tune ink/printing parameters; in
+situ monitoring of feature sizes
+Minimized device-
+to-device
+variations
+Variation < ±10% Non-uniform inks and
+process
+Use real-time metrology, quality
+/process control and modeling;
+multi-objective optimization
+10
+Cross-cutting Thrust 4 (CT4)
+CT4: Data, Simulations, and Machine Learning (Chaudhuri and Chen W.)
+• ICME data infrastructure (Chaudhuri, Foster)
+• Mesoscale simulations and data integration (Chaudhuri)
+• Novel ML/AI and optimization algorithms (Willett, Chen W., Chen Y., Chaudhuri)
+• Partners: NIST (materials genome, CHiMaD), Argonne (MDF, DLHub), and Molex (electronics)
+Gaps/Challenges Success Metrics Risks Strategies & Risk
+Mitigation
+ICME data
+infrastructure for printed
+electronics
+Open-source, cloud-
+based ICME
+framework; Data-
+driven surrogate
+models for printing
+Costly labeling
+and training
+process
+Create a cloud-based
+dashboard with back-end
+scalable big data
+Mesoscale modeling of
+ink, printing, and printed
+electronics
+Validated closed-loop
+SPPP data connection
+Coarse-graining
+all the physics
+links in complex
+formulations
+Strongly emphasize
+validation through
+experimental measurements
+and in situ characterization
+ML for process
+optimization and quality
+control
+Assessment and uncer-
+tainty quantification
+(UQ) of predicted
+improvements to
+printed devices using
+AI-optimized process
+Massive
+configuration
+space to optimize
+Interleave simulation with
+real data for integrated “on-
+line” and “off-line”
+optimization and control; Use
+mixed-variable Gaussian
+Process (GP) Modeling
+Cross-cutting Thrust 5 (CT5)
+CT5: Techno-socio-environmental-economic analysis (Dunn and All)
+• Materials flow analysis (MFA)
+• Techno-economic analysis (TEA)
+• Life cycle analysis (LCA)
+• Societal implications
+• Partners: Chalmers University, Sweden, with expertise in batteries, biobased materials, and sustainability assessments,
+will host CT5 students (sustainability analysis)
+Gaps/Challenges Success Metrics Risks Strategies & Risk
+Mitigation
+Benefits of distributed
+manufacturing are
+uncertain
+Release CT5 models
+(TEA, LCA, MFA)
+Cost and
+environmental
+data are
+incomplete
+Develop models to
+characterize costs and
+environmental effects
+No device-specific
+sustainability information
+for consumers
+Demonstrate
+electronic device
+sustainability
+dashboard
+Inadequate data
+from T1-3
+Pilot a new
+sustainability metric
+dashboard, embedding
+sus. info
+Limited device recycling Incorporate
+recycling into CT5
+models
+Limited data Characterize sensor/LIB
+recycling and quantify
+environ. and cost
+benefits
+
+These are all background info. If you are ready to proceed with helping me analyze certain data in the project, Please say "Ready to provide analysis consultation."

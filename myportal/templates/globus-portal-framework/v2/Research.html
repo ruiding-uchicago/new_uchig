@@ -1,0 +1,163 @@
+    {% extends "globus-portal-framework/v2/base.html" %}
+    {% load static %}
+
+
+    {% block body %}
+        <div style="position:fixed; top:0; left:0; width:100%; height:100%; background-image: url('{% static 'pics/research.png' %}'); background-size: cover; opacity: 0.25; z-index: -1;"></div>
+
+        <!-- Bootstrap CSS and JS -->
+        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+        <div class="container-fluid mt-5"> <!-- Added margin-top (mt-5) for some spacing -->
+            <div class="row">
+                <div class="col">
+                    <table class="table table-responsive-sm table-dark table-hover"> <!-- Responsive table with dark styling and hover effect -->
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Research Expertise</th>
+                                <th>Role</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Add rows here -->
+                            <tr>
+                                <td>Junhong Chen (Chen J)</td>
+                                <td><strong>Printing, field-effect transistor (FET) sensors, LIBs</strong></td>
+                                <td>PI: T1, T2, <strong>T3</strong></td>
+                            </tr>
+                            <!-- Repeat for each person -->
+                            <tr>
+                                <td>Elizabeth Ainsworth</td>
+                                <td><strong>Plant growth and molecular plant biochemistry</strong></td>
+                                <td>Co-PI:  <strong>T1</strong>,T3</td>
+                            </tr>
+
+                            <tr>
+                                <td>Santanu Chaudhuri</td>
+                                <td><strong>Integrated computational materials and mesoscale models</strong></td>
+                                <td>Co-PI: T3, <strong>CT4</strong></td>
+                            </tr>
+
+                            <tr>
+                                <td>Mark Hersam</td>
+                                <td><strong>Functional nanomaterial exfoliation and ink formulation</strong></td>
+                                <td>Co-PI: <strong>T2</strong>, T3</td>
+                            </tr>
+
+                            <tr>
+                                <td>Stuart Rowan</td>
+                                <td><strong>Cellulose/lignin extraction from plant-based feedstocks</strong></td>
+                                <td>Co-PI: <strong>T1</strong>, T2</td>
+                            </tr>
+
+                            <tr>
+                                <td>Wei Chen (Chen W)</td>
+                                <td><strong>Design and manufacturing</strong></td>
+                                <td>SP: T2, T3, <strong>CT4</strong></td>
+                            </tr>
+
+                            <tr>
+                                <td>Yuxin Chen (Chen Y)</td>
+                                <td><strong>ML for metrology-driven modification to mesoscale DoE</strong></td>
+                                <td>SP: T1, T3, CT4</td>
+                            </tr>
+
+                            <tr>
+                                <td>Jonathan Claussen</td>
+                                <td><strong>Electrochemical sensors and printing</strong></td>
+                                <td>SP: T1, T2, T3</td>
+                            </tr>
+
+                            <tr>
+                                <td>Jennifer Dunn</td>
+                                <td><strong>TEA, LCA, material flow analysis (MFA), policy</strong></td>
+                                <td>SP: <strong>CT5</strong></td>
+                            </tr>
+
+                            <tr>
+                                <td>Dokyoung Lee</td>
+                                <td><strong>Hydroponic palnt growth and bioenergy grasses, crop science</strong></td>
+                                <td>SP: T1, T3</td>
+                            </tr>
+
+                            <tr>
+                                <td>Rebecca Willett</td>
+                                <td><strong>Data analytics and ML</strong></td>
+                                <td>SP: T3, CT4</td>
+                            </tr>
+
+                            <tr>
+                                <td>Zhiyong Cai</td>
+                                <td><strong>Conversion of plant-derived lignin to graphene</strong></td>
+                                <td>Collaborator, T1, T2</td>
+                            </tr>
+                            <!-- ... other rows ... -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!-- Expected Outcomes Section -->
+        <div class="container-fluid mt-5">
+            <div class="row">
+                <div class="col">
+                    <h2>Expected Outcomes</h2>
+                    <ul>
+                        <li>Precision growth recipes for plants/grasses with desired cellulose to lignin composition.</li>
+                        <li>Methods for efficient extraction and conversion of cellulose and lignin for ink materials and additives.</li>
+                        <li>A scalable manufacturing process to produce bio-based and nanomaterials-based inks.</li>
+                        <li>A future manufacturing platform to print sensors, LIBs, and other electronic devices.</li>
+                        <li>Life-cycle (LCA) and techno-economic analysis (TEA) tools and data to guide design and implementation of a cost-effective and environmentally responsible printing platform.</li>
+                        <li>An open source, public manufacturing data infrastructure (BEMDI) empowered by AI/ML algorithms to democratize on-demand printing of customizable, biodegradable/recyclable electronic devices.</li>
+                        <li>An array of inclusive education and workforce development (EWD) programs that will educate, train, engage, and excite all-age audiences.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Image Section -->
+        <div class="container-fluid mt-5">
+            <div class="row">
+                <div class="col text-center">
+                    <!-- Image with circular crop -->
+                    <img src="{% static 'pics/graphene.jpg' %}" alt="Graphene" class="rounded-circle" style="width: 512px; height: 512px; object-fit: cover;">
+                </div>
+            </div>
+        </div>
+
+        <!-- Translation through Strategic Collaborations Section -->
+        <div class="container-fluid mt-5">
+            <div class="row">
+                <div class="col">
+                    <h2>Translation through Strategic Collaborations</h2>
+                    <ul>
+                        <li>MADE-PUBLIC centers around Chicago regional strengths in agriculture, materials and manufacturing, and AI/ML.</li>
+                        <li>Our goal is to facilitate translation of MADE-PUBLIC outcomes by establishing a vibrant cyber manufacturing innovation ecosystem,assisted by critical stakeholders that span the entire value chain of agriculture–electronics.</li>
+                        <li>These stakeholders include Domtar (paper, pulp processing); USDA Forest Products Laboratory (FPL, lignin-derived graphene); Ernst Seeds (seeds); NanoIntegris (nanomaterials ink); MilliporeSigma (printable ink); IDS (printer); Corteva (data); Molex (electronics); NanoAffix (nanosensor); Argonne’s Manufacturing Engineering Research Facility (MERF, scale-up manufacturing) and DLHub (data infrastructure); NIST (materials genome); NUCESR (sustainability); NIMSI (manufacturing); <strong> <a href="https://mxdusa.org/" target="_blank">Manufacturing USA Institute MxD</a></strong> (digital manufacturing); <strong><a href="https://mhubchicago.com/" target="_blank">mHUB</a></strong> (manufacturing incubator); <strong><a href="https://dpi.uillinois.edu/" target="_blank">DPI</a></strong> (skilled workforce development); and the general public (general users).</li>
+                        <li>Data produced from the project will be deposited into existing materials data platforms: <strong><a href="https://materialsdatafacility.org/" target="_blank">MDF</a></strong>; <strong><a href="https://www.lcacommons.gov/" target="_blank">LCA data platform</a></strong>; <strong><a href="https://nanohub.org/" target="_blank">NanoHUB</a></strong>; <strong><a href="https://nanohub.org/groups/nanomfg" target="_blank">nanoMFG</a></strong>; and Argonne’s manufacturing data platform, <strong><a href="https://arxiv.org/abs/2005.13669" target="_blank">MDML</a></strong>, which is supported by ML tools, DLHub, and MDF connections.</li>
+                        <li>Stakeholders will work with the project team to ensure the alignment of project results toward translation.</li>
+                        <li>Research and EWD are synchronized to educate, train, engage, and excite diverse, all-age audiences.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+        <!-- Custom script for toggling -->
+        <script>
+            $(document).ready(function(){
+                $(".close-button").click(function(){
+                    // Using 'data-target' attribute to specify which section to toggle
+                    var target = $(this).data('target');
+                    $(target).toggleClass('show');
+                });
+            });
+        </script>
+    {% endblock %}
