@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Upload Blueprint</title>
+    <!-- Material UI CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <style>
+        body {
+            font-family: 'Helvetica Neue', sans-serif;
+        }
+        .container {
+            margin-top: 50px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="center-align">Upload Blueprint</h1>
+        <form action="{% url 'Upload_Blueprint_Module' %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="input-field">
+                {{ form.file }}
+            </div>
+            <div class="input-field">
+                <label for="blueprint_type">Blueprint Type</label>
+                <select name="blueprint_type" id="blueprint_type">
+                    <option value="" disabled selected>Select your option</option>
+                    <option value="mechanical">Mechanical</option>
+                    <option value="electrical">Electrical</option>
+                    <option value="software">Software</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+            <div class="input-field">
+                {{ form.print_speed.label_tag }}
+                {{ form.print_speed }}
+            </div>
+            <div class="input-field">
+                {{ form.layer_height.label_tag }}
+                {{ form.layer_height }}
+            </div>
+            <div class="input-field">
+                {{ form.material_type.label_tag }}
+                {{ form.material_type }}
+            </div>
+            <div class="center-align">
+                <button type="submit" class="btn waves-effect waves-light">Upload</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Material UI JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var elems = document.querySelectorAll('select');
+            var instances = M.FormSelect.init(elems);
+        });
+    </script>
+</body>
+</html>

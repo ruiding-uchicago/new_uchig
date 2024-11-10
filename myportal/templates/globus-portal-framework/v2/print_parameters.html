@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Print Parameters</title>
+    <!-- Material UI CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <style>
+        body {
+            font-family: 'Helvetica Neue', sans-serif;
+        }
+        .container {
+            margin-top: 50px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="center-align">Print Parameters</h1>
+        <p><strong>File Name:</strong> {{ file_name }}</p>
+        <p><strong>Blueprint Type:</strong> {{ blueprint_type }}</p>
+        <p><strong>Layer Height (mm):</strong> {{ layer_height }}</p>
+        <p><strong>Infill Density (%):</strong> {{ infill_density }}</p>
+        <p><strong>Print Speed (mm/s):</strong> {{ print_speed }}</p>
+    </div>
+
+    <!-- Material UI JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+</body>
+</html>

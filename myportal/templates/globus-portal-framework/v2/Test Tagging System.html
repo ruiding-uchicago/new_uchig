@@ -396,6 +396,31 @@
             width: 0;
             transition: width 0.5s ease-in-out;
         }
+
+        /* Responsive styles */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+
+            .tagging-section {
+                flex: 1;
+                /* Take up full width */
+                height: auto;
+                /* Remove fixed height */
+                border-right: none;
+                /* Remove right border */
+                margin-bottom: 20px;
+                /* Add some space below */
+            }
+
+            .file-tree-container {
+                flex: 1;
+                /* Take up full width */
+                height: auto;
+                /* Remove fixed height */
+            }
+        }
     </style>
 </head>
 

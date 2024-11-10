@@ -1,0 +1,35 @@
+Metadata-Version: 2.1
+Name: globus-compute-common
+Version: 0.4.1
+Summary: Common tools for Globus Compute projects
+Home-page: https://github.com/funcX-faas/funcx-common
+Author: Globus Team
+Author-email: support@globus.org
+Classifier: Development Status :: 3 - Alpha
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: Apache Software License
+Classifier: Programming Language :: Python :: 3
+Requires-Python: >=3.7
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: pydantic <3,>=1
+Provides-Extra: boto3
+Requires-Dist: boto3 >=1.19.0 ; extra == 'boto3'
+Provides-Extra: dev
+Requires-Dist: pytest <9 ; extra == 'dev'
+Requires-Dist: pytest-cov <6 ; extra == 'dev'
+Requires-Dist: pytest-xdist <4 ; extra == 'dev'
+Requires-Dist: types-redis ; extra == 'dev'
+Provides-Extra: moto
+Requires-Dist: moto[s3] <6 ; extra == 'moto'
+Provides-Extra: redis
+Requires-Dist: redis <6,>=3.5.3 ; extra == 'redis'
+
+[![pre-commit.ci status](https://results.pre-commit.ci/badge/github/funcx-faas/funcx-common/main.svg)](https://results.pre-commit.ci/latest/github/funcx-faas/funcx-common/main)
+
+# globus-compute-common
+
+This package contains common utilities for use across various Globus Compute projects.
+
+For example, constants shared between the Globus Compute Web Service and the SDK are
+defined here (and may be re-exported by the SDK).

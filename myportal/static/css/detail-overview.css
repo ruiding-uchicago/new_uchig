@@ -4,4 +4,9 @@
     /* Rounded corners */
     border-radius: 20px; /* Adjust the radius as needed */
     background: rgb(193, 193, 199); /* Semi-transparent white background */
+    transition: transform 0.2s; /* Smooth scaling on hover */
+}
+
+.card:hover {
+    transform: scale(1.05); /* Scale up on hover */
 }

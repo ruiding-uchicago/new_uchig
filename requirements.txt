@@ -1,0 +1,6 @@
+globus-portal-framework
+sslserver
+pandas
+scikit-learn
+scikit-optimize
+globus-compute-sdk

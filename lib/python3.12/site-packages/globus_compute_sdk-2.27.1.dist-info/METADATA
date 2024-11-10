@@ -1,0 +1,57 @@
+Metadata-Version: 2.1
+Name: globus-compute-sdk
+Version: 2.27.1
+Summary: Globus Compute: High Performance Function Serving for Science
+Home-page: https://github.com/globus/globus-compute
+Author: Globus Compute Team
+Author-email: support@globus.org
+License: Apache License, Version 2.0
+Project-URL: Changelog, https://globus-compute.readthedocs.io/en/latest/changelog.html
+Project-URL: Upgrade to Globus Compute, https://globus-compute.readthedocs.io/en/latest/funcx_upgrade.html
+Keywords: Globus Compute,FaaS,Function Serving
+Classifier: Development Status :: 3 - Alpha
+Classifier: Intended Audience :: Science/Research
+Classifier: License :: OSI Approved :: Apache Software License
+Classifier: Natural Language :: English
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3
+Classifier: Topic :: Scientific/Engineering
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: requests <3,>=2.31.0
+Requires-Dist: globus-sdk <4,>=3.35.0
+Requires-Dist: globus-compute-common ==0.4.1
+Requires-Dist: packaging >=21.1
+Requires-Dist: pika >=1.2
+Requires-Dist: tblib ==1.7.0
+Requires-Dist: texttable >=1.6.7
+Requires-Dist: dill ==0.3.5.1 ; python_version < "3.11"
+Requires-Dist: typing-extensions >=4.0 ; python_version < "3.8"
+Requires-Dist: dill ==0.3.6 ; python_version >= "3.11"
+Provides-Extra: dev
+Requires-Dist: flake8 ==3.8.0 ; extra == 'dev'
+Requires-Dist: pytest >=7.2 ; extra == 'dev'
+Requires-Dist: pytest-mock ; extra == 'dev'
+Requires-Dist: pyfakefs ; extra == 'dev'
+Requires-Dist: coverage ; extra == 'dev'
+Requires-Dist: responses ; extra == 'dev'
+Requires-Dist: pre-commit ; extra == 'dev'
+Provides-Extra: docs
+Requires-Dist: sphinx >=7.3.2 ; extra == 'docs'
+Requires-Dist: furo ==2023.9.10 ; extra == 'docs'
+Provides-Extra: test
+Requires-Dist: flake8 ==3.8.0 ; extra == 'test'
+Requires-Dist: pytest >=7.2 ; extra == 'test'
+Requires-Dist: pytest-mock ; extra == 'test'
+Requires-Dist: pyfakefs ; extra == 'test'
+Requires-Dist: coverage ; extra == 'test'
+Requires-Dist: responses ; extra == 'test'
+
+# Globus Compute SDK
+
+[Globus Compute](https://globus-compute.readthedocs.io/en/latest/) is a distributed Function as a Service (FaaS) platform that enables flexible, scalable, and high performance remote function execution. Unlike centralized FaaS platforms, Globus Compute allows users to execute functions on heterogeneous remote computers, from laptops to campus clusters, clouds, and supercomputers.
+
+This package contains the Python SDK for interacting with Globus Compute. Notable functionality includes submitting functions to remote compute endpoints via the [executor](https://globus-compute.readthedocs.io/en/latest/executor.html), and querying endpoint status.
+
+To manage your own compute endpoints, use the companion [Globus Compute Endpoint](https://pypi.org/project/globus-compute-endpoint/) package.

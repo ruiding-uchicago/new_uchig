@@ -18,8 +18,11 @@ from django.contrib import admin
 from django.urls import path, include
 from . import views 
 from myportal import views
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
+    path('admin/', admin.site.urls),
     path('Team/', views.Team, name='Team'),
     path('Research/', views.Research, name='Research'),
     path('News/', views.News, name='News'),
@@ -31,6 +34,8 @@ urlpatterns = [
     path('Upload_Tutorial/', views.Upload_Tutorial, name='Upload_Tutorial'),
     path('Test_Tagging_System/', views.Test_Tagging_System, name='Test_Tagging_System'),
     path('Cybermanufacturing_Demo/', views.Cybermanufacturing_Demo, name='Cybermanufacturing_Demo'),
+    path('Upload_Blueprint_Module/', views.Upload_Blueprint_Module, name='Upload_Blueprint_Module'),
+
     path('run_bayesian_optimization/', views.run_bayesian_optimization, name='run_bayesian_optimization'),
     # ... other paths
     path('search/<str:index>/', views.my_advanced_search, name='adv_search'),
@@ -41,5 +46,4 @@ urlpatterns = [
     path('test-globus-compute/', views.test_globus_compute, name='test_globus_compute'),
     path('run_ollama_interactive/', views.run_ollama_interactive, name='run_ollama_interactive'),
 path('extract_metadata_summary/', views.extract_metadata_summary_view, name='extract_metadata_summary'),
-
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

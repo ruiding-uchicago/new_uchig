@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 import logging
+import os
 from pathlib import Path
 from myportal import fields
 log = logging.getLogger(__name__)
@@ -244,8 +245,12 @@ STATIC_ROOT = BASE_DIR / "static_root"
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# Add these settings to handle media files
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
 try:
-    from .local_settings import *
+    from .local_settings import * # type: ignore
 except ImportError:
     expected_path = Path(__file__).resolve().parent / 'local_settings.py'
     log.warning(f'You should create a file for your secrets at {expected_path}')
