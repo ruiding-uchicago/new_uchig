@@ -1,3 +1,56 @@
+
+<style>
+    body,
+    html {
+        height: 100%;
+        margin: 0;
+    }
+
+    .container {
+        display: flex;
+        height: 100vh;
+        margin: 0 auto;
+        padding: 0;
+        width: 100%;
+        max-width: 1200px; /* Set a max-width for the container */
+    }
+
+    .tagging-section {
+        flex: 0 0 45%; /* Adjust the flex basis */
+        background-color: #f4f4f4;
+        padding: 20px;
+        overflow-y: auto;
+        border-right: 2px solid #ccc;
+        margin: 0;
+    }
+
+    .file-tree-container {
+        flex: 1; /* Adjust the flex basis */
+        padding: 20px;
+        margin: 0;
+        overflow-y: auto;
+    }
+
+    /* Responsive styles */
+    @media (max-width: 768px) {
+        .container {
+            flex-direction: column;
+        }
+
+        .tagging-section {
+            flex: 1;
+            height: auto;
+            border-right: none;
+            margin-bottom: 20px;
+        }
+
+        .file-tree-container {
+            flex: 1;
+            height: auto;
+        }
+    }
+</style>
+
 <!DOCTYPE html>
 <html lang="en">
 
