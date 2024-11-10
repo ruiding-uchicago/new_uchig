@@ -1,5 +1,5 @@
 django-globus-portal-framework
-sslserver
+django-sslserver-v2 1.0
 pandas
 scikit-learn
 scikit-optimize
