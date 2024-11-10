@@ -1,4 +1,4 @@
-globus-portal-framework
+django-globus-portal-framework
 sslserver
 pandas
 scikit-learn
