@@ -1,29 +1,55 @@
 <!-- this file contains the content of the first page visited. -->
 
-<!-- UNUSED CODE ABOUT TO BE REIMPLEMENTED
- -->      
-
-{%extends "globus-portal-framework/v2/base.html"%}
+{% extends "globus-portal-framework/v2/base.html" %}
 {% load static %}
 
 {% block headextras %}
   <link rel="stylesheet" type="text/css" href="{% static 'css/search.css' %}" />
   <link rel="stylesheet" href="{% static 'css/styles.css' %}">
   <style>
+    body {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    }
     .mixed-case {
       color: black;
     }
     .mixed-case span {
-      color: blue;
+      color: maroon;
+    }
+    .academic-title {
+      font-size: 72px;
+      font-weight: bold;
+      color: maroon;
+    }
+    .academic-subtitle {
+      font-size: 24px;
+      color: black;
+    }
+    .academic-card-title {
+      color: maroon;
+    }
+    .academic-card-text {
+      color: black;
+    }
+    .academic-alert {
+      background-color: white;
+      border: 1px solid maroon;
+      color: black;
+    }
+    .academic-link {
+      color: maroon;
+    }
+    .card {
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
   </style>
 {% endblock %}
 
-
 {% block body %}
 
+<!-- THIS IS THE DATA ACCESS PORTAL: MOVE IT SOMEPLACE ELSE -->
 
-{% block list_indexes %}
+<!-- {% block list_indexes %}
 {% for index, index_data in search_indexes.items %}
 <div class="row">
   <div class="col"></div>
@@ -31,37 +57,35 @@
 
     {% block allowed_groups %}
     {% if forloop.first and allowed_groups %}
-    <div class="alert alert-warning border" role="alert">
+    <div class="alert alert-warning border academic-alert" role="alert">
       <h3 class="text-center">Resources restricted to select users</h3>
-
       <p class="text-center">You must be a group member before logging in. You can view groups and request access below.</p>
       <p class="text-center">
-        <a class="btn btn-primary" href="{% url 'allowed-groups' %}">View Groups and Request Access</a>
+        <a class="btn btn-primary academic-link" href="{% url 'allowed-groups' %}">View Groups and Request Access</a>
       </p>
     </div>
     {% endif %}
     {% endblock %}
 
     {% block index %}
-    <h2 class="text-center card card-body">
-      <a href="{% url 'search' index %}?q=*">{{index_data.name|default:index}}</a>
+    <h2 class="text-center card card-body academic-title">
+      <a class="academic-link" href="{% url 'search' index %}?q=*">{{index_data.name|default:index}}</a>
     </h2>
     {% endblock %}
   </div>
   <div class="col"></div>
 </div>
 {% endfor %}
-{% endblock %}
-
+{% endblock %} -->
 
 <!-- This section contains the title and chart of the project. -->
-<div style="display: flex; align-items: center; padding-bottom: 2em;">
+<div style="display: flex; align-items: center; padding-bottom: 2em; padding-top: 2em;">
   <div class="container-fluid xs-cozy margin-between">
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
     <div class="row">
       <div class="col" style="display: flex; flex-direction: column; justify-content: center; height: 100%;">
-        <h1 class="text-center mt-3 mb-5" style="font-size: 72px; font-weight: bold;">MADE-PUBLIC</h1>
-        <h2 class="text-center mixed-case" style="font-size: 24px;"> 
+        <h1 class="text-center mt-3 mb-5 academic-title">MADE-PUBLIC</h1>
+        <h2 class="text-center mixed-case academic-subtitle"> 
           <span>M</span>anufacturing <span>AD</span>vanced <span>E</span>lectronics through
           <span>P</span>rinting<span> U</span>sing <span>B</span>io-based and <span>L</span>ocally <span>I</span>dentifiable <span>C</span>ompounds
         </h2>
@@ -76,77 +100,59 @@
   </div>
 </div>
 
-<!-- <div class="container-fluid xs-cozy margin-between">
-  <link rel="stylesheet" href="{% static 'css/styles.css' %}">
-  <div class="alert alert-secondary" role="alert">
-    <p style="font-weight: bold; font-size: 18px;">
-      The vision of MADE-PUBLIC is a future intelligent, scalable, and democratized manufacturing paradigm to enable distributed manufacturing of low-cost printable electronic devices using locally identifiable resources such as bio-based materials derived from plants.
-    </p>
-    <ul style="font-size: 15px;">
-      <li>Eco manufacturing (less carbon footprint): plants to electronics</li>
-      <li>Cyber manufacturing: AI/ML and data enabled</li>
-      <li>Bio-based, biodegradable, recyclable electronics</li>
-      <li>Potentially complicated, integrated/multiplexed electronics</li>
-      <li>Distributed, democratized electronics manufacturing</li>
-      <li>Integrated education and workforce development plan</li>
-    </ul>
-    <p class="text-center">The Data Transfer Functions are for Current Researchers in MADE-PUBLIC Project only</p>
-  </div>
-</div> -->
-
-<div class="container-fluid xs-cozy margin-between" style="color:orange">
+<div class="container-fluid xs-cozy margin-between" style="color:maroon">
   <link rel="stylesheet" href="{% static 'css/styles.css' %}">
   
-  <div class="alert alert-secondary" role="alert" style="color: rgb(95, 95, 184);">
-    <p style="font-weight: bold; font-size: 18px; color: rgb(95, 95, 184);">
+  <div class="alert alert-secondary academic-alert" role="alert">
+    <p style="font-size: 18px;">
       The vision of MADE-PUBLIC is a future intelligent, scalable, and democratized manufacturing paradigm to enable distributed manufacturing of low-cost printable electronic devices using locally identifiable resources such as bio-based materials derived from plants.
     </p>
     <div class="row">
       <div class="col-md-4 mb-4">
         <div class="card shadow-sm">
           <div class="card-body">
-            <h5 class="card-title">Eco manufacturing</h5>
-            <p class="card-text">Less carbon footprint: plants to electronics</p>
+            <h5 class="card-title academic-card-title">Eco manufacturing</h5>
+            <p class="card-text academic-card-text">Less carbon footprint: plants to electronics</p>
           </div>
         </div>
       </div>
       <div class="col-md-4 mb-4">
         <div class="card shadow-sm">
           <div class="card-body">
-            <h5 class="card-title">Cyber manufacturing</h5>
-            <p class="card-text">AI/ML and data enabled</p>
+            <h5 class="card-title academic-card-title">Cyber manufacturing</h5>
+            <p class="card-text academic-card-text">AI/ML and data enabled</p>
           </div>
         </div>
       </div>
       <div class="col-md-4 mb-4">
         <div class="card shadow-sm">
           <div class="card-body">
-            <h5 class="card-title">Bio-based, biodegradable, recyclable electronics</h5>
-            <p class="card-text">Promoting sustainability in electronics</p>
+            <h5 class="card-title academic-card-title">Bio-based, biodegradable, recyclable electronics</h5>
+            <p class="card-text academic-card-text">Promoting sustainability in electronics</p>
           </div>
         </div>
       </div>
       <div class="col-md-4 mb-4">
         <div class="card shadow-sm">
           <div class="card-body">
-            <h5 class="card-title">Integrated electronics</h5>
-            <p class="card-text">Potentially complicated, integrated/multiplexed electronics</p>
+            <h5 class="card-title academic-card-title">Integrated electronics</h5>
+            <p class="card-text academic-card-text">Potentially complicated, integrated/multiplexed electronics</p>
           </div>
         </div>
       </div>
       <div class="col-md-4 mb-4">
         <div class="card shadow-sm">
           <div class="card-body">
-            <h5 class="card-title">Distributed manufacturing</h5>
-            <p class="card-text">Democratized electronics manufacturing</p>
+            <h5 class="card-title academic-card-title">Distributed manufacturing</h5>
+            <p class="card-text academic-card-text">Democratized electronics manufacturing</p>
           </div>
         </div>
       </div>
       <div class="col-md-4 mb-4">
         <div class="card shadow-sm">
           <div class="card-body">
-            <h5 class="card-title">Education and workforce development</h5>
-            <p class="card-text">Integrated education and workforce development plan</p>
+            <h5 class="card-title academic-card-title">Education and workforce development</h5>
+            <p class="card-text academic-card-text">Integrated education and workforce development plan</p>
           </div>
         </div>
       </div>
@@ -155,16 +161,14 @@
   </div>
 </div>
 
-
 <div class="container-fluid xs-cozy margin-between">
   <div style="display: flex; align-items: center; justify-content: center;">
-    <h2 class="text-center mixed-case" style="font-size: 24px; margin-right:30px"> Sponsored by  </h2>
+    <h2 class="text-center mixed-case academic-subtitle" style="margin-right:30px"> Sponsored by  </h2>
     <a href="https://www.nsf.gov/" target="_blank">
       <img src="{% static 'pics/NSF.png' %}" alt="NSF" style="height: 60%; width: 60%">
     </a>
     <h3 style="color: black; font-size: 20px;">NSF Future Manufacturing Program</h3>
   </div>
 </div>
-
 
 {% endblock %}

@@ -1,7 +1,7 @@
 {% load static %}
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark navbar-base-nav">
+<nav class="navbar navbar-expand-lg navbar-dark" style="background-color: maroon; font-family: Helvetica, sans-serif;">
   <link rel="stylesheet" href="{% static 'css/styles.css' %}">
-  <a class="navbar-brand" href="{% block project_url %}{{ project_url|default:'/' }}{% endblock %}">
+  <a class="navbar-brand" href="{% block project_url %}{{ project_url|default:'/' }}{% endblock %}" style="color: white;"></a>
     {% block project_title %}
     {% if globus_portal_framework.index_data.tagline %}
     {{globus_portal_framework.index_data.name|default:'globus_portal_framework.index'}}:
@@ -17,28 +17,30 @@
   </button>
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
-
       <li class="nav-item">
-        <a class="nav-link" href="{% url 'Test_Tagging_System' %}">Tagging System</a>
+        <a class="nav-link" href="{% url 'Home' %}" style="color: white;">Home</a>
+      </li>
+      <li class="nav-item"></li>
+        <a class="nav-link" href="{% url 'Test_Tagging_System' %}" style="color: white;">Tagging System</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="{% url 'Cybermanufacturing_Demo' %}">Cybermanufacturing Demo</a>
+        <a class="nav-link" href="{% url 'Cybermanufacturing_Demo' %}" style="color: white;">Cybermanufacturing Demo</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="{% url 'Upload_Blueprint_Module' %}">Upload Blueprint Module</a>
+        <a class="nav-link" href="{% url 'Upload_Blueprint_Module' %}" style="color: white;">Upload Blueprint Module</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="https://ruiding-uchicago.github.io/" target="_blank">Contact Administrator</a>
+        <a class="nav-link" href="https://ruiding-uchicago.github.io/" target="_blank" style="color: white;">Contact Administrator</a>
       </li>
       <!-- ...other links -->
     </ul>
     <ul class="navbar-nav my-lg-0">
-      {%if globus_portal_framework.auth_enabled and request.user.is_authenticated %}
+      {% if globus_portal_framework.auth_enabled and request.user.is_authenticated %}
       <li>
-        <a class="nav-link nav-link-base-nav" href="{% url 'logout' %}?next=/">Logout</a>
+        <a class="nav-link nav-link-base-nav" href="{% url 'logout' %}?next=/" style="color: white;">Logout</a>
       </li>
       <li>
-        <a class="nav-link nav-link-base-nav" href="/">{{request.user.username }}</a>
+        <a class="nav-link nav-link-base-nav" href="/" style="color: white;">{{request.user.username }}</a>
       </li>
       {% elif globus_portal_framework.auth_enabled %}
       <li>

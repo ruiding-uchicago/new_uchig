@@ -6,25 +6,80 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <style>
         body {
-            font-family: 'Helvetica Neue', sans-serif;
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
         }
+
+        .mixed-case {
+            color: black;
+        }
+
+        .mixed-case span {
+            color: maroon;
+        }
+
+        .academic-title {
+            font-size: 72px;
+            font-weight: bold;
+            color: maroon;
+        }
+
+        .academic-subtitle {
+            font-size: 24px;
+            color: black;
+        }
+
+        .academic-card-title {
+            color: maroon;
+        }
+
+        .academic-card-text {
+            color: black;
+        }
+
+        .academic-alert {
+            background-color: white;
+            border: 1px solid maroon;
+            color: black;
+        }
+
+        .academic-link {
+            color: maroon;
+        }
+
+        .card {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
         .container {
             margin-top: 50px;
+        }
+
+        .center-align {
+            text-align: center;
+        }
+
+        .input-field label {
+            color: maroon;
+        }
+
+        .btn {
+            background-color: maroon;
+            color: white;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1 class="center-align">Upload Blueprint</h1>
+        <h1 class="center-align academic-title">Upload Blueprint</h1>
         <form action="{% url 'Upload_Blueprint_Module' %}" method="post" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="input-field">
                 {{ form.file }}
             </div>
             <div class="input-field">
-                <label for="blueprint_type">Blueprint Type</label>
+                <label for="blueprint_type" class="active">Blueprint Type</label>
                 <select name="blueprint_type" id="blueprint_type">
-                    <option value="" disabled selected>Select your option</option>
+                    <o</select>ption value="" disabled selected>Select your option</option>
                     <option value="mechanical">Mechanical</option>
                     <option value="electrical">Electrical</option>
                     <option value="software">Software</option>
@@ -44,7 +99,7 @@
                 {{ form.material_type }}
             </div>
             <div class="center-align">
-                <button type="submit" class="btn waves-effect waves-light">Upload</button>
+                <button type="submit" class="btn waves-effect waves-light" style="background-color: maroon;">Upload</button>
             </div>
         </form>
     </div>

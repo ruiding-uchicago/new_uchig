@@ -18,6 +18,8 @@ from django.views.decorators.csrf import csrf_exempt
 from .graph_utils import generate_graph_data
 from .forms import BlueprintForm
 
+def Home(request):
+    return render(request, 'globus-portal-framework/v2/index-selection.html')
 
 def Team(request):
     return render(request, 'globus-portal-framework/v2/Team.html')
@@ -50,16 +52,12 @@ def Cybermanufacturing_Demo(request):
     return render(request, 'globus-portal-framework/v2/Cybermanufacturing_Demo.html')
 
 def Upload_Blueprint_Module(request):
-    if not request.user.is_authenticated:
-        messages.add_message(request, messages.INFO, 'Please log in to upload blueprints.')
-        login_url = reverse('social:begin', args=['globus']) + '?next=' + reverse('Upload_Blueprint_Module')
-        return redirect(login_url)
-
     if request.method == 'POST':
         form = BlueprintForm(request.POST, request.FILES)
         if form.is_valid():
             blueprint = form.save(commit=False)
-            blueprint.user = request.user  # Set the user field
+            if request.user.is_authenticated:
+                blueprint.user = request.user  # Set the user field if authenticated
             blueprint.save()
             messages.success(request, 'Blueprint uploaded successfully.')
             return redirect('Upload_Blueprint_Module')
