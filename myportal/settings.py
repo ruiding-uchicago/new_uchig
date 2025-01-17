@@ -42,7 +42,7 @@ SOCIAL_AUTH_GLOBUS_SCOPE = [
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['clownfish-app-3wxq3.ondigitalocean.app', '127.0.0.1']
+ALLOWED_HOSTS = ['clownfish-app-3wxq3.ondigitalocean.app', '127.0.0.1', 'localhost']
 
 
 # Application definition

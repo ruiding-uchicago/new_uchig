@@ -55,9 +55,9 @@ def Upload_Blueprint_Module(request):
     if request.method == 'POST':
         form = BlueprintForm(request.POST, request.FILES)
         if form.is_valid():
-            blueprint = form.save(commit=False)
-            if request.user.is_authenticated:
-                blueprint.user = request.user  # Set the user field if authenticated
+            blueprint = form.save()
+            # if request.user.is_authenticated:
+            #     blueprint.user = request.user  # Set the user field if authenticated
             blueprint.save()
             messages.success(request, 'Blueprint uploaded successfully.')
             return redirect('Upload_Blueprint_Module')
