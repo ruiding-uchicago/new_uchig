@@ -1,14 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-{% extends "globus-portal-framework/v2/base.html" %}
-{% load static %}
 
-{% block headextras %}
-    <link rel="stylesheet" type="text/css" href="{% static 'css/search.css' %}" />
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
-{% endblock %}
-   
-{% block body %}
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -178,7 +170,6 @@
             font-size: 20px;
             cursor: pointer;
             padding: 0;
-            line-height: 1;
         }
 
         .close-x:hover {
@@ -292,7 +283,13 @@
 .btn:hover {
     background-color: #0056b3;
 }
-    </style>
+
+.home-back-button, .inference-button, .clear-prediction-button {
+    position: relative; /* or absolute if you need specific positioning */
+    z-index: 1; /* Adjust the z-index as needed */
+}
+
+</style>
 </head>
 
 <body>
@@ -1446,10 +1443,8 @@
 function hideLoadingIndicator() {
     document.getElementById('graph-loading-indicator').style.display = 'none';
 }
-    </script>
+</script>
 
 </body>
 
 </html>
-
-{% endblock %}

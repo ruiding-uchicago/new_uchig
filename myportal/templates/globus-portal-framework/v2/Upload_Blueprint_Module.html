@@ -1,5 +1,14 @@
 <!DOCTYPE html>
 <html>
+{% extends "globus-portal-framework/v2/base.html" %}
+{% load static %}
+
+{% block headextras %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/search.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+{% endblock %}
+
+{% block body %}
 <head>
     <title>Upload Blueprint</title>
     <!-- Material UI CSS -->
@@ -48,10 +57,6 @@
 
         .card {
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        .container {
-            margin-top: 50px;
         }
 
         .center-align {
@@ -117,4 +122,6 @@
         });
     </script>
 </body>
+{% endblock %}
 </html>
+

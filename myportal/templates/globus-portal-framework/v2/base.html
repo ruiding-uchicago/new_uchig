@@ -26,6 +26,7 @@
     <title>{%block title%}{%endblock%}</title>
 
   </head>
+
   <body>
 
     {% block base_nav %}
@@ -34,7 +35,7 @@
     {% endblock %}
 
     {% block breadcrumbs %}
-    <nav aria-label="breadcrumb">
+    <nav aria-label="breadcrumb" style="display: none">
       <ol class="breadcrumb">
         {% block breadcrumb_items %}
         <li class="breadcrumb-item {% is_active request 'index-selection' %}">
