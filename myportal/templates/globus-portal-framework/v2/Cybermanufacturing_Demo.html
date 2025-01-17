@@ -1,6 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
+{% extends "globus-portal-framework/v2/base.html" %}
+{% load static %}
 
+{% block headextras %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/search.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+{% endblock %}
+   
+{% block body %}
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -1443,3 +1451,5 @@ function hideLoadingIndicator() {
 </body>
 
 </html>
+
+{% endblock %}
