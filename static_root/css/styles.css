@@ -1,0 +1,13 @@
+/* Include this line if you're using a Google Font */
+@import url('https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap');
+
+
+body {
+    font-family: 'Rubik', sans-serif;
+}
+
+
+.margin-between {
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }

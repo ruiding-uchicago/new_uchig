@@ -1,0 +1,126 @@
+{
+    "ingest_type": "GMetaList",
+    "ingest_data": {
+
+      "edges": [
+        {
+          "source": "Thrust 3-Thrust 3/--undefined-Data from Rapti-Thrust 3-Rapti Gosh-Junhong Chen2024-03-22T22:03",
+          "target": "Thrust 3-Thrust 3/--Data from Rapti-stabilization data-Thrust 3-Rapti Gosh-Junhong Chen2024-03-22T22:03",
+          "relationship": "Same Creator"
+        },
+        {
+          "source": "Thrust 3-Thrust 3/--undefined-Data from Rapti-Thrust 3-Rapti Gosh-Junhong Chen2024-03-22T22:03",
+          "target": "Thrust 3-Thrust 3/-Data from Rapti-stabilization data-Device 8-Thrust 3-Rapti Gosh-Junhong Chen2024-03-22T22:03",
+          "relationship": "Same Thrust"
+        }
+      ],
+
+      "gmeta": [
+        {
+          "id": "Thrust 3-Thrust 3/--undefined-Data from Rapti-Thrust 3-Rapti Gosh-Junhong Chen2024-03-22T22:03",
+          "subject": "globus://af7bda53-6d04-11e5-ba46-22000b92c6ec/~/MADE_PUBLIC_DATA/Thrust%203/Data%20from%20Rapti",
+          "visible_to": [
+            "urn:globus:groups:id:bb420e57-7835-11ee-b0db-d9a5237cb2e9"
+          ],
+          "content": {
+            "Title": "Data from Rapti",
+            "Document Format": "Folder",
+            "Abstract Description": "Created by Rui Ding, 2024/03/22",
+            "Data Type": [
+              "Dataset",
+              "Experiment Results"
+            ],
+            "Outer Link": "",
+            "url": "globus://af7bda53-6d04-11e5-ba46-22000b92c6ec/~/MADE_PUBLIC_DATA/Thrust 3/Data from Rapti",
+            "creator": "Rapti Gosh",
+            "Related Topic": [
+              "Electrochemistry",
+              "FET sensors",
+              "Manufacturing",
+              "Printing"
+            ],
+            "PI Affiliated": [
+              "Junhong Chen"
+            ],
+            "Data Tags": [
+              "Experimental Exploration",
+              "Exploration Results"
+            ],
+            "Thrust": "Thrust 3",
+            "date": "2024-03-22T22:03",
+            "original_collection_name": "UChicago RCC Midway"
+          }
+        },
+        {
+          "id": "Thrust 3-Thrust 3/--Data from Rapti-stabilization data-Thrust 3-Rapti Gosh-Junhong Chen2024-03-22T22:03",
+          "subject": "globus://af7bda53-6d04-11e5-ba46-22000b92c6ec/~/MADE_PUBLIC_DATA/Thrust%203/Data%20from%20Rapti/stabilization%20data",
+          "visible_to": [
+            "urn:globus:groups:id:bb420e57-7835-11ee-b0db-d9a5237cb2e9"
+          ],
+          "content": {
+            "Title": "stabilization data",
+            "Document Format": "Folder",
+            "Abstract Description": "",
+            "Data Type": [
+              "Dataset",
+              "Experiment Results"
+            ],
+            "Outer Link": "",
+            "url": "globus://af7bda53-6d04-11e5-ba46-22000b92c6ec/~/MADE_PUBLIC_DATA/Thrust 3/Data from Rapti/stabilization data",
+            "creator": "Rapti Gosh",
+            "Related Topic": [
+              "Electrochemistry",
+              "FET sensors",
+              "Manufacturing",
+              "Printing"
+            ],
+            "PI Affiliated": [
+              "Junhong Chen"
+            ],
+            "Data Tags": [
+              "Experimental Exploration",
+              "Exploration Results"
+            ],
+            "Thrust": "Thrust 3",
+            "date": "2024-03-22T22:03",
+            "original_collection_name": "UChicago RCC Midway"
+          }
+        },
+        {
+          "id": "Thrust 3-Thrust 3/-Data from Rapti-stabilization data-Device 8-Thrust 3-Rapti Gosh-Junhong Chen2024-03-22T22:03",
+          "subject": "globus://af7bda53-6d04-11e5-ba46-22000b92c6ec/~/MADE_PUBLIC_DATA/Thrust%203/Data%20from%20Rapti/stabilization%20data/Device%208",
+          "visible_to": [
+            "urn:globus:groups:id:bb420e57-7835-11ee-b0db-d9a5237cb2e9"
+          ],
+          "content": {
+            "Title": "Device 8",
+            "Document Format": "Folder",
+            "Abstract Description": "",
+            "Data Type": [
+              "Dataset",
+              "Experiment Results"
+            ],
+            "Outer Link": "",
+            "url": "globus://af7bda53-6d04-11e5-ba46-22000b92c6ec/~/MADE_PUBLIC_DATA/Thrust 3/Data from Rapti/stabilization data/Device 8",
+            "creator": "Rapti Gosh",
+            "Related Topic": [
+              "Electrochemistry",
+              "FET sensors",
+              "Manufacturing",
+              "Printing"
+            ],
+            "PI Affiliated": [
+              "Junhong Chen"
+            ],
+            "Data Tags": [
+              "Experimental Exploration",
+              "Exploration Results"
+            ],
+            "Thrust": "Thrust 3",
+            "date": "2024-03-22T22:03",
+            "original_collection_name": "UChicago RCC Midway"
+          }
+        }
+      ]
+    }
+  }

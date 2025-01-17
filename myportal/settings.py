@@ -80,6 +80,13 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
 ]
 
+# CSRF token backend thats authorized
+CSRF_TRUSTED_ORIGINS = [
+    'https://clownfish-app-3wxq3.ondigitalocean.app',
+]
+
+CSRF_COOKIE_SECURE = True
+
 ROOT_URLCONF = 'myportal.urls'
 
 TEMPLATES = [
