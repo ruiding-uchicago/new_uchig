@@ -1,6 +1,7 @@
 django-globus-portal-framework
 django-sslserver-v2
 pandas
+numpy
 scikit-learn
 scikit-optimize
 globus-compute-sdk
