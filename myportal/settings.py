@@ -29,6 +29,7 @@ SECRET_KEY = 'a5fbdafa867f7c92f1293664a8e3c12e8c5bc9ffc8f1fdeaacb2d4899a81d1e7'
 # Your portal credentials for enabling user login via Globus Auth
 SOCIAL_AUTH_GLOBUS_KEY = 'c572c13a-397a-44a5-b744-90a22a8e3b84'
 ## try to change this line for learning
+# learn again
 SOCIAL_AUTH_GLOBUS_SECRET = 'g2D/UibXFmzARPKJGnNAHx1TzubrmpDqynXxek7jVbs='
 
 # This is a general Django setting if views need to redirect to login
