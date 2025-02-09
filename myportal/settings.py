@@ -24,6 +24,8 @@ PROJECT_TITLE = 'MADE-PUBLIC Data Portal'
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 SOCIAL_AUTH_REDIRECT_IS_HTTPS = True
+SESSION_COOKIE_SECURE = True
+SESSION_COOKIE_SAMESITE = None
 
 # SECURITY WARNING: keep all secret keys used in production secret!
 # You can generate a secure secret key with `openssl rand -hex 32`
