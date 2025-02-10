@@ -346,23 +346,15 @@ from django.conf import settings
 @csrf_exempt
 def run_ollama_interactive(request):
     if request.method == 'POST':
-        # Check for Globus token data in the session.
-        globus_data_raw = request.session.get("GLOBUS_DATA")
-        if not globus_data_raw:
-            # Redirect to a web-based Globus login view.
-            # (Make sure you have a view configured to handle Globus login.)
-            login_url = reverse('social:begin', args=['globus']) + '?next=' + request.get_full_path()
-            messages.error(request, "Globus authentication required. Please log in.")
-            return redirect(login_url)
-
-        # Continue with your existing logic.
         data = json.loads(request.body)
         prompt = data.get('prompt', '')
         conversation_history = data.get('conversation_history', [])
         is_initial_message = data.get('is_initial_message', False)
 
         if is_initial_message:
+            # Construct the correct path to the background knowledge file
             file_path = os.path.join(settings.BASE_DIR, 'myportal', 'static', 'json', 'background_knowledge.txt')
+            
             try:
                 with open(file_path, 'r', encoding='utf-8') as file:
                     background_knowledge = file.read()
@@ -381,39 +373,30 @@ def run_ollama_interactive(request):
         if not prompt:
             return JsonResponse({'error': 'No prompt provided'}, status=400)
 
-        # Append the prompt if not already the last Human message.
-        if not (conversation_history and conversation_history[-1]['role'] == 'Human' and conversation_history[-1]['content'] == prompt):
+        # Check if the last message is the same as the new prompt
+        if conversation_history and conversation_history[-1]['role'] == 'Human' and conversation_history[-1]['content'] == prompt:
+            # If it's the same, don't add it again
+            pass
+        else:
+            # If it's different, add the new prompt
             conversation_history.append({'role': 'Human', 'content': prompt})
 
-        # Load token data from session.
-        tokens = pickle.loads(base64.b64decode(globus_data_raw))['tokens']
-        ComputeScopes = ComputeScopeBuilder()
-        compute_auth = globus_sdk.AccessTokenAuthorizer(tokens[ComputeScopes.resource_server]['access_token'])
-        openid_auth = globus_sdk.AccessTokenAuthorizer(tokens['auth.globus.org']['access_token'])
-        compute_login_manager = AuthorizerLoginManager(
-            authorizers={
-                ComputeScopes.resource_server: compute_auth,
-                AuthScopes.resource_server: openid_auth
-            }
-        )
-        # Ensure the user is logged in via Globus (this should be a no-op if tokens are valid).
-        compute_login_manager.ensure_logged_in()
-        gc = Client(login_manager=compute_login_manager, code_serialization_strategy=CombinedCode())
         tutorial_endpoint = '7db36379-95ad-4892-aee2-43f3a825d275'
+        gc = Client(code_serialization_strategy=CombinedCode())
         gce = Executor(endpoint_id=tutorial_endpoint, client=gc)
 
-        # Define the function to run ollama.
         def run_ollama(prompt, conversation_history):
-            import subprocess, time
+            import subprocess
+            import time
+
             start_time = time.time()
+            
             # Prepare the full conversation context
             full_prompt = "\n".join([f"{msg['role']}: {msg['content']}" for msg in conversation_history])
             full_prompt += "\nAI:"
+
             try:
-                result = subprocess.run(
-                    ['ollama', 'run', 'llama3.1', full_prompt],
-                    capture_output=True, text=True, timeout=60
-                )
+                result = subprocess.run(['ollama', 'run', 'llama3.1', full_prompt], capture_output=True, text=True, timeout=60)
                 output = result.stdout.strip()
             except subprocess.TimeoutExpired:
                 output = "Ollama command timed out after 60 seconds"
@@ -421,7 +404,10 @@ def run_ollama_interactive(request):
                 output = f"Ollama command failed: {e}"
             except Exception as e:
                 output = f"An error occurred: {str(e)}"
-            execution_time = time.time() - start_time
+
+            end_time = time.time()
+            execution_time = end_time - start_time
+
             return {
                 'output': output,
                 'execution_time': execution_time
@@ -429,8 +415,11 @@ def run_ollama_interactive(request):
 
         future = gce.submit(run_ollama, prompt, conversation_history)
         result = future.result()
-        # Append AI response to conversation history.
+        
+        # Update conversation history with AI response
         conversation_history.append({'role': 'AI', 'content': result['output']})
+
+        # print("Updated conversation history:", conversation_history)
 
         return JsonResponse({
             'output': result['output'],
