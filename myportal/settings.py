@@ -23,11 +23,17 @@ PROJECT_TITLE = 'MADE-PUBLIC Data Portal'
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 # Session and Security Settings
+# Trust the proxy and enforce HTTPS
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 SOCIAL_AUTH_REDIRECT_IS_HTTPS = True
+
+# Session cookie configuration for production
 SESSION_COOKIE_SECURE = True
-SESSION_COOKIE_SAMESITE = 'Lax'
+SESSION_COOKIE_SAMESITE = None  # Allows cookie to be sent on OAuth redirects
 SESSION_COOKIE_DOMAIN = 'clownfish-app-3wxq3.ondigitalocean.app'
+
+# Use a shared session backend (example using cached_db)
+SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
 
 # Login Configuration
 LOGIN_URL = '/login/globus'
