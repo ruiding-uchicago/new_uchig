@@ -25,7 +25,9 @@ PROJECT_TITLE = 'MADE-PUBLIC Data Portal'
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 SOCIAL_AUTH_REDIRECT_IS_HTTPS = True
 SESSION_COOKIE_SECURE = True
-SESSION_COOKIE_SAMESITE = 'Lax'
+SESSION_COOKIE_SAMESITE = "Lax"  # change from None to "Lax"
+SESSION_COOKIE_DOMAIN = ".clownfish-app-3wxq3.ondigitalocean.app"  # add this line
+
 
 # SECURITY WARNING: keep all secret keys used in production secret!
 # You can generate a secure secret key with `openssl rand -hex 32`
