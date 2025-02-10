@@ -329,19 +329,17 @@ def test_globus_compute(request):
         })
     
     return JsonResponse({"error": "Invalid request method"}, status=400)
-
-from django.shortcuts import redirect
-from django.urls import reverse
-from django.contrib import messages
-import base64, pickle, json, os
+import os
+import json
+import pickle
+import base64
+from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from globus_compute_sdk import Client, Executor
-from globus_compute_sdk.serialize import CombinedCode
+from globus_compute_sdk import Client, Executor, CombinedCode
+from globus_sdk import AccessTokenAuthorizer
 from globus_compute_sdk.sdk.login_manager import AuthorizerLoginManager
 from globus_compute_sdk.sdk.login_manager.manager import ComputeScopeBuilder
-from globus_sdk.scopes import AuthScopes  # ensure AuthScopes is imported
-from django.http import JsonResponse
-from django.conf import settings
+from globus_sdk.scopes import AuthScopes  # needed for the openid token
 
 @csrf_exempt
 def run_ollama_interactive(request):
@@ -352,51 +350,77 @@ def run_ollama_interactive(request):
         is_initial_message = data.get('is_initial_message', False)
 
         if is_initial_message:
-            # Construct the correct path to the background knowledge file
+            # load background knowledge as before...
             file_path = os.path.join(settings.BASE_DIR, 'myportal', 'static', 'json', 'background_knowledge.txt')
-            
             try:
                 with open(file_path, 'r', encoding='utf-8') as file:
                     background_knowledge = file.read()
-                # Add background knowledge to conversation history
                 conversation_history = [{'role': 'System', 'content': background_knowledge}]
                 prompt = "Acknowledge that you've received the background knowledge."
             except FileNotFoundError:
-                print(f"Background knowledge file not found at {file_path}")
                 conversation_history = []
                 prompt = "Unable to load background knowledge. Please proceed with the conversation."
             except UnicodeDecodeError:
-                print(f"Error decoding the background knowledge file. Please ensure it's saved in UTF-8 encoding.")
                 conversation_history = []
                 prompt = "Unable to load background knowledge due to encoding issues. Please proceed with the conversation."
 
         if not prompt:
             return JsonResponse({'error': 'No prompt provided'}, status=400)
 
-        # Check if the last message is the same as the new prompt
-        if conversation_history and conversation_history[-1]['role'] == 'Human' and conversation_history[-1]['content'] == prompt:
-            # If it's the same, don't add it again
-            pass
-        else:
-            # If it's different, add the new prompt
+        # Append the new prompt if not already the last message.
+        if not (conversation_history and conversation_history[-1]['role'] == 'Human' and conversation_history[-1]['content'] == prompt):
             conversation_history.append({'role': 'Human', 'content': prompt})
 
         tutorial_endpoint = '7db36379-95ad-4892-aee2-43f3a825d275'
-        gc = Client(code_serialization_strategy=CombinedCode())
+        
+        # Here is the key modification: instead of blindly instantiating Client (which would try to prompt interactively),
+        # we first check for existing tokens in the session.
+        globus_data_raw = request.session.get("GLOBUS_DATA")
+        if globus_data_raw:
+            try:
+                tokens = pickle.loads(base64.b64decode(globus_data_raw))['tokens']
+            except Exception as e:
+                return JsonResponse({'error': 'Error decoding authentication tokens: ' + str(e)}, status=401)
+
+            # Build authorizers using the tokens we expect to have been stored.
+            compute_scopes = ComputeScopeBuilder()
+            try:
+                compute_auth = AccessTokenAuthorizer(tokens[compute_scopes.resource_server]['access_token'])
+                openid_auth = AccessTokenAuthorizer(tokens['auth.globus.org']['access_token'])
+            except KeyError as e:
+                return JsonResponse({'error': 'Missing expected token data: ' + str(e)}, status=401)
+
+            # Create a login manager that simply returns these tokens.
+            login_manager = AuthorizerLoginManager(
+                authorizers={
+                    compute_scopes.resource_server: compute_auth,
+                    AuthScopes.resource_server: openid_auth,
+                }
+            )
+            # In production, if tokens are invalid, we do not want interactive login.
+            try:
+                login_manager.ensure_logged_in()
+            except Exception as e:
+                return JsonResponse({'error': 'Authentication error: ' + str(e)}, status=401)
+
+            gc = Client(login_manager=login_manager, code_serialization_strategy=CombinedCode())
+        else:
+            # In production, if there are no tokens available, immediately return an error.
+            return JsonResponse({'error': 'Authentication tokens missing in session. Please log in first.'}, status=401)
+
+        # Create the Executor as before.
         gce = Executor(endpoint_id=tutorial_endpoint, client=gc)
 
+        # Define the function to run Ollama.
         def run_ollama(prompt, conversation_history):
             import subprocess
             import time
-
             start_time = time.time()
-            
-            # Prepare the full conversation context
             full_prompt = "\n".join([f"{msg['role']}: {msg['content']}" for msg in conversation_history])
             full_prompt += "\nAI:"
-
             try:
-                result = subprocess.run(['ollama', 'run', 'llama3.1', full_prompt], capture_output=True, text=True, timeout=60)
+                result = subprocess.run(['ollama', 'run', 'llama3.1', full_prompt],
+                                        capture_output=True, text=True, timeout=60)
                 output = result.stdout.strip()
             except subprocess.TimeoutExpired:
                 output = "Ollama command timed out after 60 seconds"
@@ -404,10 +428,8 @@ def run_ollama_interactive(request):
                 output = f"Ollama command failed: {e}"
             except Exception as e:
                 output = f"An error occurred: {str(e)}"
-
             end_time = time.time()
             execution_time = end_time - start_time
-
             return {
                 'output': output,
                 'execution_time': execution_time
@@ -415,12 +437,8 @@ def run_ollama_interactive(request):
 
         future = gce.submit(run_ollama, prompt, conversation_history)
         result = future.result()
-        
-        # Update conversation history with AI response
+
         conversation_history.append({'role': 'AI', 'content': result['output']})
-
-        # print("Updated conversation history:", conversation_history)
-
         return JsonResponse({
             'output': result['output'],
             'execution_time': result['execution_time'],
