@@ -22,12 +22,30 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 PROJECT_TITLE = 'MADE-PUBLIC Data Portal'
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-SOCIAL_AUTH_REDIRECT_IS_HTTPS = True
-SESSION_COOKIE_SECURE = True
-SESSION_COOKIE_SAMESITE = "Lax"  # change from None to "Lax"
-SESSION_COOKIE_DOMAIN = ".clownfish-app-3wxq3.ondigitalocean.app"  # add this line
+# Session and Security Settings
+SESSION_SAVE_EVERY_REQUEST = True
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 
+# Cookie Settings
+SESSION_COOKIE_SECURE = True
+SESSION_COOKIE_SAMESITE = 'Lax'
+CSRF_COOKIE_SECURE = True
+CSRF_USE_SESSIONS = True
+
+# Security Headers
+SECURE_SSL_REDIRECT = True
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SECURE_SSL_HOST = 'clownfish-app-3wxq3.ondigitalocean.app'
+SECURE_HSTS_SECONDS = 86400  # 1 day (86400 seconds)
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_PRELOAD = True
+
+# Login Configuration
+LOGIN_URL = '/login/globus'
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
+SOCIAL_AUTH_LOGIN_ERROR_URL = '/'
 
 # SECURITY WARNING: keep all secret keys used in production secret!
 # You can generate a secure secret key with `openssl rand -hex 32`
