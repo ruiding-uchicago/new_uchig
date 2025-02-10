@@ -329,17 +329,19 @@ def test_globus_compute(request):
         })
     
     return JsonResponse({"error": "Invalid request method"}, status=400)
-import os
-import json
-import pickle
-import base64
-from django.http import JsonResponse
+
+from django.shortcuts import redirect
+from django.urls import reverse
+from django.contrib import messages
+import base64, pickle, json, os
 from django.views.decorators.csrf import csrf_exempt
-from globus_compute_sdk import Client, Executor, CombinedCode
-from globus_sdk import AccessTokenAuthorizer
+from globus_compute_sdk import Client, Executor
+from globus_compute_sdk.serialize import CombinedCode
 from globus_compute_sdk.sdk.login_manager import AuthorizerLoginManager
 from globus_compute_sdk.sdk.login_manager.manager import ComputeScopeBuilder
-from globus_sdk.scopes import AuthScopes  # needed for the openid token
+from globus_sdk.scopes import AuthScopes  # ensure AuthScopes is imported
+from django.http import JsonResponse
+from django.conf import settings
 
 @csrf_exempt
 def run_ollama_interactive(request):
