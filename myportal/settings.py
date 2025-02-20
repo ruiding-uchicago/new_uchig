@@ -25,7 +25,7 @@ PROJECT_TITLE = 'MADE-PUBLIC Data Portal'
 # Session and Security Settings
 # Trust the proxy and enforce HTTPS
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-SOCIAL_AUTH_REDIRECT_IS_HTTPS = True
+SOCIAL_AUTH_REDIRECT_IS_HTTPS = False
 
 # Session cookie configuration for production
 SESSION_COOKIE_SECURE = True
