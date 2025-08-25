@@ -1,0 +1,28 @@
+{
+  "name": "MADE-PUBLIC Data Portal",
+  "description": "Django portal for MADE-PUBLIC research data",
+  "repository": "https://github.com/yourusername/new_uchig",
+  "formation": {
+    "web": {
+      "quantity": 1
+    }
+  },
+  "addons": [
+    "heroku-postgresql:mini"
+  ],
+  "buildpacks": [
+    {
+      "url": "heroku/python"
+    }
+  ],
+  "env": {
+    "DJANGO_SETTINGS_MODULE": {
+      "description": "Django settings module",
+      "value": "myportal.settings"
+    },
+    "DISABLE_COLLECTSTATIC": {
+      "description": "Disable static file collection",
+      "value": "0"
+    }
+  }
+}

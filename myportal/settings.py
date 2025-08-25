@@ -60,7 +60,7 @@ SOCIAL_AUTH_GLOBUS_SCOPE = [
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['clownfish-app-3wxq3.ondigitalocean.app', '127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ['clownfish-app-3wxq3.ondigitalocean.app', 'stingray-app-*.ondigitalocean.app', '.ondigitalocean.app', '127.0.0.1', 'localhost']
 
 
 # Application definition
@@ -78,6 +78,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # Add this for static files
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -260,6 +261,7 @@ SEARCH_INDEXES = {
 
 
 STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'  # For production
 
 # Add these lines
 STATICFILES_DIRS = [
