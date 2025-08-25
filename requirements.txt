@@ -5,3 +5,9 @@ numpy
 scikit-learn
 scikit-optimize
 globus-compute-sdk
+dj-database-url
+psycopg2-binary
+redis
+django-redis
+gunicorn
+whitenoise

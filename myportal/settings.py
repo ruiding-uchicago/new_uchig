@@ -25,15 +25,16 @@ PROJECT_TITLE = 'MADE-PUBLIC Data Portal'
 # Session and Security Settings
 # Trust the proxy and enforce HTTPS
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-SOCIAL_AUTH_REDIRECT_IS_HTTPS = False
+SOCIAL_AUTH_REDIRECT_IS_HTTPS = True  # CRITICAL FIX: Must be True for OAuth to work properly
 
 # Session cookie configuration for production
 SESSION_COOKIE_SECURE = True
-SESSION_COOKIE_SAMESITE = None  # Allows cookie to be sent on OAuth redirects
-SESSION_COOKIE_DOMAIN = 'clownfish-app-3wxq3.ondigitalocean.app'
+SESSION_COOKIE_SAMESITE = 'Lax'  # Better compatibility with OAuth flow
+SESSION_COOKIE_DOMAIN = None  # Let Django handle domain automatically
 
-# Use a shared session backend (example using cached_db)
-SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
+# Use database-only sessions for better persistence in containerized environment
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'
+SESSION_SAVE_EVERY_REQUEST = True  # Ensure session persists
 
 # Login Configuration
 LOGIN_URL = '/login/globus'
@@ -102,6 +103,9 @@ CSRF_TRUSTED_ORIGINS = [
 ]
 
 CSRF_COOKIE_SECURE = True
+CSRF_COOKIE_SAMESITE = 'Lax'  # Match session cookie setting
+USE_X_FORWARDED_HOST = True  # Trust proxy headers
+USE_X_FORWARDED_PORT = True  # Trust proxy port headers
 
 ROOT_URLCONF = 'myportal.urls'
 
