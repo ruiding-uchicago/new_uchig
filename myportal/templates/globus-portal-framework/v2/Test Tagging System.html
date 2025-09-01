@@ -452,7 +452,7 @@
                 
                 <h4>(Step 4) Input Path You Put in the Globus Folder:</h4>
                 <div class="globus-path-container">
-                    <label for="globus-path">Globus Path: (Please indicate where you have uploaded already in Globus system under the MADE_PUBLIC_DATA folder, for example, if you directly put your whole folder processed by this page (by "Select Files or Folders") under the "Thrust 3/" folder, then input here "Thrust 3/")</label>
+                    <label for="globus-path">Globus Path: (Please indicate where you have uploaded already in Globus system under the 2025MADEPUBLICsnapshot folder, for example, if you directly put your whole folder processed by this page (by "Select Files or Folders") under the "Thrust 3/" folder, then input here "Thrust 3/")</label>
                     <input type="text" id="globus-path" class="form-control" placeholder="Enter Globus path(eg. Thrust 3/)">
                 </div>
                 <button id="generate-metadata" class="btn btn-primary btn-block">(Step 5) Generate Metadata JSON File</button>
@@ -761,7 +761,7 @@
                 const globusPath = $('#globus-path').val();
                 const creatorName = $('#creator-name').val().trim();
                 const currentDate = new Date().toISOString().slice(0, 16).replace('T', ' ');
-                const baseGlobusPath = 'globus://af7bda53-6d04-11e5-ba46-22000b92c6ec/~/MADE_PUBLIC_DATA/';
+                const baseGlobusPath = 'globus://af7bda53-6d04-11e5-ba46-22000b92c6ec/project2/chenyuxin/2025MADEPUBLICsnapshot/';
                 const jsonData = {
                     ingest_type: "GMetaList",
                     ingest_data: {
@@ -788,8 +788,8 @@
 
                     const idDate = currentDate.replace(/ /g, 'T');
                     const gmetaId = `${thrustTag}-${globusPath}-${parentFolder}-${folderName}-${fileName}-${thrustTag}-${creatorName}-${piTags}${idDate}`;
-                    const encodedSubject = `${baseGlobusPath}${encodeURI(globusPath)}${encodeURI(path)}`;
-                    const rawUrl = `${baseGlobusPath}${globusPath}${path}`;
+                    const encodedSubject = `${baseGlobusPath}${encodeURI(path)}`;
+                    const rawUrl = `${baseGlobusPath}${path}`;
 
                     const gmetaEntry = {
                         id: gmetaId,
