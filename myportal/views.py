@@ -635,65 +635,81 @@ def auto_ingest_metadata(request):
     """
     Automatically ingest metadata JSON to Globus Search index
     Phase 1: Assumes files are already uploaded to Globus endpoint manually
-    Uses subprocess to call globus CLI since API requires special permissions
+    Try API first, fall back to CLI if available
     """
     if request.method == 'POST':
         try:
-            import subprocess
-            import tempfile
-            import os
-            
             # Get the JSON data from request
             json_data = json.loads(request.body)
             
             # Get the target index UUID - using the new September 2025 index
             target_index_uuid = '64565b2d-ac5b-480e-8669-1884f1573b53'
             
-            # Write JSON to temporary file
-            with tempfile.NamedTemporaryFile(mode='w', suffix='.json', delete=False) as tmp_file:
-                json.dump(json_data, tmp_file, indent=2)
-                tmp_filename = tmp_file.name
-            
+            # First, try using the API with user's token
             try:
-                # Call globus search ingest command
-                # This uses the CLI which should have the user's credentials
-                result = subprocess.run(
-                    ['globus', 'search', 'ingest', target_index_uuid, tmp_filename],
-                    capture_output=True,
-                    text=True,
-                    timeout=30
-                )
+                client = load_search_client(request.user)
+                result = client.ingest(target_index_uuid, json_data)
                 
-                # Clean up temp file
-                os.unlink(tmp_filename)
-                
-                if result.returncode == 0:
-                    # Parse task ID from output if available
-                    task_id = ''
-                    if 'Task ID:' in result.stdout:
-                        task_id = result.stdout.split('Task ID:')[1].strip().split('\n')[0]
-                    
+                if result.data.get('acknowledged'):
                     return JsonResponse({
                         'success': True,
-                        'message': 'Metadata successfully ingested to search index via CLI',
-                        'task_id': task_id,
-                        'index_uuid': target_index_uuid,
-                        'output': result.stdout
+                        'message': 'Metadata successfully ingested to search index',
+                        'task_id': result.data.get('task_id', ''),
+                        'index_uuid': target_index_uuid
                     })
-                else:
+            except Exception as api_error:
+                # If API fails, try CLI as fallback (for local dev)
+                import subprocess
+                import tempfile
+                import os
+                
+                try:
+                    # Check if globus CLI is available
+                    cli_check = subprocess.run(['which', 'globus'], capture_output=True)
+                    if cli_check.returncode != 0:
+                        # CLI not available, return API error
+                        raise api_error
+                    
+                    # Write JSON to temporary file
+                    with tempfile.NamedTemporaryFile(mode='w', suffix='.json', delete=False) as tmp_file:
+                        json.dump(json_data, tmp_file, indent=2)
+                        tmp_filename = tmp_file.name
+                    
+                    # Try CLI approach
+                    result = subprocess.run(
+                        ['globus', 'search', 'ingest', target_index_uuid, tmp_filename],
+                        capture_output=True,
+                        text=True,
+                        timeout=30
+                    )
+                    
+                    # Clean up temp file
+                    os.unlink(tmp_filename)
+                    
+                    if result.returncode == 0:
+                        return JsonResponse({
+                            'success': True,
+                            'message': 'Metadata successfully ingested to search index via CLI',
+                            'task_id': '',
+                            'index_uuid': target_index_uuid
+                        })
+                    else:
+                        # Both API and CLI failed
+                        return JsonResponse({
+                            'success': False,
+                            'message': f'Ingest failed. API error: {str(api_error)}. CLI error: {result.stderr}',
+                            'api_error': str(api_error),
+                            'cli_error': result.stderr
+                        }, status=400)
+                        
+                except Exception as cli_error:
+                    # Both methods failed
                     return JsonResponse({
                         'success': False,
-                        'message': 'Ingest command failed',
-                        'error': result.stderr,
-                        'output': result.stdout
+                        'message': f'Cannot ingest. API error: {str(api_error)}. CLI error: {str(cli_error)}',
+                        'api_error': str(api_error),
+                        'cli_error': str(cli_error)
                     }, status=400)
-                    
-            except subprocess.TimeoutExpired:
-                os.unlink(tmp_filename)
-                return JsonResponse({
-                    'success': False,
-                    'message': 'Ingest command timed out'
-                }, status=500)
                 
         except Exception as e:
             return JsonResponse({
