@@ -184,7 +184,10 @@ USE_TZ = True
 SEARCH_INDEXES = {
     'MADE-PUBLIC Data Transfer': {
         'name': 'MADE-PUBLIC Data Access',
-        'uuid': 'db97f8b2-cc05-4640-bae4-4715299f408d',
+        'uuid': [
+            'db97f8b2-cc05-4640-bae4-4715299f408d',  # MADEPUBLIC_2025AUG (frozen, pre-Sept 2025)
+            '64565b2d-ac5b-480e-8669-1884f1573b53'   # MADEPUBLIC_2025SEPT_AFTER (new, Sept 2025 onwards)
+        ],
         'facets': [
           {
             'name': 'Thrust',

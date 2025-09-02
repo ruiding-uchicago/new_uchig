@@ -149,13 +149,40 @@ def my_advanced_search(request, index):
     filters = get_search_filters(request)
     data = {'q': query,
             'filters': filters}
-    result = search_cli.post_search(index_data['uuid'], data)
-    search_data = {
-        'search_results': process_search_data(index_data.get('fields', []),
-                                              result.data['gmeta']),
-        'facets': get_facets(result, index_data.get('facets', []),
-                             filters, index_data.get('filter_match')),
-    }
+    
+    # Handle both single UUID and list of UUIDs
+    uuids = index_data['uuid']
+    if not isinstance(uuids, list):
+        uuids = [uuids]  # Convert single UUID to list for uniform handling
+    
+    # Search all indices and merge results
+    all_gmeta = []
+    merged_result = None
+    for uuid in uuids:
+        try:
+            result = search_cli.post_search(uuid, data)
+            all_gmeta.extend(result.data.get('gmeta', []))
+            if merged_result is None:
+                merged_result = result  # Keep first result for facets
+        except Exception as e:
+            print(f"Error searching index {uuid}: {e}")
+            continue
+    
+    # If no results from any index, create empty result
+    if merged_result is None:
+        search_data = {
+            'search_results': [],
+            'facets': [],
+        }
+    else:
+        # Use merged gmeta for search results, but facets from first successful result
+        merged_result.data['gmeta'] = all_gmeta
+        search_data = {
+            'search_results': process_search_data(index_data.get('fields', []),
+                                                  all_gmeta),
+            'facets': get_facets(merged_result, index_data.get('facets', []),
+                                 filters, index_data.get('filter_match')),
+        }
 
     # Save search results to a file
     with open('search_results.txt', 'w') as file:
