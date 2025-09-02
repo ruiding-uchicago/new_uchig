@@ -56,7 +56,8 @@ LOGIN_URL = '/login/globus'
 SOCIAL_AUTH_GLOBUS_SCOPE = [
     'urn:globus:auth:scope:search.api.globus.org:search',
     'urn:globus:auth:scope:search.api.globus.org:all',  # This includes ingest permissions
-    'urn:globus:auth:scope:index.search.api.globus.org:ingest:64565b2d-ac5b-480e-8669-1884f1573b53',  # Specific ingest scope for new index
+    'https://auth.globus.org/scopes/64565b2d-ac5b-480e-8669-1884f1573b53/ingest',  # MADEPUBLIC_2025SEPT_AFTER index
+    'https://auth.globus.org/scopes/db97f8b2-cc05-4640-bae4-4715299f408d/ingest',  # MADEPUBLIC_2025AUG index
 ]
 
 # SECURITY WARNING: don't run with debug turned on in production!
