@@ -1,0 +1,41 @@
+{
+  "ingest_type": "GMetaList",
+  "ingest_data": {
+    "gmeta": [
+      {
+        "id": "Thrust 3-Thrust 3/--undefined-MOF Design for PFOS Sensing.pdf-Thrust 3-Rui Ding-Junhong Chen,Yuxin Chen2025-09-02T19:10",
+        "subject": "globus://af7bda53-6d04-11e5-ba46-22000b92c6ec/project2/chenyuxin/2025MADEPUBLICsnapshot/MOF%20Design%20for%20PFOS%20Sensing.pdf",
+        "visible_to": [
+          "urn:globus:groups:id:bb420e57-7835-11ee-b0db-d9a5237cb2e9"
+        ],
+        "content": {
+          "Title": "MOF Design for PFOS Sensing.pdf",
+          "Document Format": "pdf",
+          "Abstract Description": "",
+          "Data Type": [
+            "Dataset",
+            "Records"
+          ],
+          "Outer Link": "",
+          "url": "globus://af7bda53-6d04-11e5-ba46-22000b92c6ec/project2/chenyuxin/2025MADEPUBLICsnapshot/MOF Design for PFOS Sensing.pdf",
+          "creator": "Rui Ding",
+          "Related Topic": [
+            "FET sensors",
+            "Printing"
+          ],
+          "PI Affiliated": [
+            "Junhong Chen",
+            "Yuxin Chen"
+          ],
+          "Data Tags": [
+            "Experimental Exploration",
+            "Theoretical Simulation"
+          ],
+          "Thrust": "Thrust 3",
+          "date": "2025-09-02T19:10",
+          "original_collection_name": "UChicago RCC Midway"
+        }
+      }
+    ]
+  }
+}

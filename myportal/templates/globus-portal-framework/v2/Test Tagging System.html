@@ -34,9 +34,9 @@
         }
 
         .tagging-section {
-            flex: 0 0 35%;
+            flex: 0 0 40%;
             background-color: #f4f4f4;
-            padding: 20px;
+            padding: 15px;
             overflow-y: auto;
             border-right: 2px solid #ccc;
             max-height: 90vh;
@@ -44,20 +44,61 @@
 
         .file-section {
             flex: 1;
-            padding: 20px;
+            padding: 15px;
+            overflow-x: hidden;
+            min-width: 0;
         }
 
         .section {
             background-color: #f9f9f9;
-            padding: 1rem;
             border: 1px solid #ddd;
             border-radius: 8px;
-            margin-bottom: 1rem;
+            margin-bottom: 0.75rem;
+            overflow: hidden;
+            transition: all 0.3s ease;
         }
 
         .section h4 {
-            margin-top: 0;
+            margin: 0;
+            padding: 12px 15px;
             font-weight: bold;
+            background-color: #e9ecef;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.95rem;
+            user-select: none;
+        }
+
+        .section h4:hover {
+            background-color: #dee2e6;
+        }
+
+        .section h4::after {
+            content: '▼';
+            font-size: 0.8em;
+            transition: transform 0.3s;
+        }
+
+        .section.collapsed h4::after {
+            transform: rotate(-90deg);
+        }
+
+        .section-content {
+            padding: 12px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .section.collapsed .section-content {
+            display: none;
+        }
+
+        .section label {
+            display: block;
+            padding: 3px 0;
+            font-size: 0.9rem;
         }
 
         .file-tree-container {
@@ -92,15 +133,21 @@
 
         .file-tree li {
             margin: 5px 0;
-            display: flex;
-            align-items: center;
-            white-space: nowrap;
+            display: block;
             background-color: #f8f9fa;
             cursor: pointer;
+            padding: 8px;
+            border-radius: 5px;
+            max-width: 100%;
+        }
+
+        .file-name {
+            flex: 0 1 auto;
+            min-width: 0;
             overflow: hidden;
             text-overflow: ellipsis;
-            padding: 5px;
-            border-radius: 5px;
+            white-space: nowrap;
+            max-width: 300px;
         }
 
         .file-tree li.selected {
@@ -308,134 +355,149 @@
     <div class="main-container">
         <div class="tagging-section">
             <div class="section">
-                <h4>(Step 1) Creator:</h4>
-                <input type="text" id="creator-name" class="form-control" placeholder="Enter creator name">
-                <button id="confirm-creator" class="btn btn-primary btn-block">Confirm</button>
-            </div>
-
-            <h3>(Step 3) Tagging</h3>
-            <div>
-                Subfolder & File Cover:
-                <input type="checkbox" id="subfolder-file-cover" />
-            </div>
-            
-            <div class="section">
-                <h4>Thrust: (select 1 only)</h4>
-                <div id="thrust-tags">
-                    <label><input type="checkbox" name="thrust-tag" value="Thrust 1"> Thrust 1</label><br>
-                    <label><input type="checkbox" name="thrust-tag" value="Thrust 2"> Thrust 2</label><br>
-                    <label><input type="checkbox" name="thrust-tag" value="Thrust 3"> Thrust 3</label><br>
-                    <label><input type="checkbox" name="thrust-tag" value="Thrust 4"> Thrust 4</label><br>
-                    <label><input type="checkbox" name="thrust-tag" value="Thrust 5"> Thrust 5</label><br>
-                    <label><input type="checkbox" name="thrust-tag" value="Others"> Others</label><br>
-                    <input type="text" id="thrust-other" class="form-control mt-2" style="display:none;" placeholder="Enter other thrust">
+                <h4>(Step 1) Creator</h4>
+                <div class="section-content">
+                    <input type="text" id="creator-name" class="form-control" placeholder="Enter creator name">
+                    <button id="confirm-creator" class="btn btn-primary btn-block mt-2">Confirm</button>
                 </div>
             </div>
 
+            <h3 style="font-size: 1.1rem; margin: 15px 0 10px 0;">(Step 3) Tagging</h3>
+            <div style="margin-bottom: 10px; padding: 10px; background: #fff; border-radius: 5px;">
+                <label style="cursor: pointer;">
+                    <input type="checkbox" id="subfolder-file-cover" />
+                    <strong>Apply to Subfolders & Files</strong>
+                </label>
+            </div>
+            
             <div class="section">
-                <h4>PI Affiliated:</h4>
-                <div id="pi-tags">
-                    <label><input type="checkbox" name="pi-tag" value="Junhong Chen"> Junhong Chen</label><br>
-                    <label><input type="checkbox" name="pi-tag" value="Yuxin Chen"> Yuxin Chen</label><br>
-                    <label><input type="checkbox" name="pi-tag" value="Elizabeth Ainsworth"> Elizabeth Ainsworth</label><br>
-                    <label><input type="checkbox" name="pi-tag" value="Santanu Chaudhuri"> Santanu Chaudhuri</label><br>
-                    <label><input type="checkbox" name="pi-tag" value="Mark Hersam"> Mark Hersam</label><br>
-                    <label><input type="checkbox" name="pi-tag" value="Stuart Rowan"> Stuart Rowan</label><br>
-                    <label><input type="checkbox" name="pi-tag" value="Wei Chen"> Wei Chen</label><br>
-                    <label><input type="checkbox" name="pi-tag" value="Jonathan Claussen"> Jonathan Claussen</label><br>
-                    <label><input type="checkbox" name="pi-tag" value="Jennifer Dunn"> Jennifer Dunn</label><br>
-                    <label><input type="checkbox" name="pi-tag" value="Dokyoung Lee"> Dokyoung Lee</label><br>
-                    <label><input type="checkbox" name="pi-tag" value="Zhiyong Cai"> Zhiyong Cai</label><br>
-                    <label><input type="checkbox" name="pi-tag" value="Others"> Others</label><br>
+                <h4>Thrust (select 1 only)</h4>
+                <div class="section-content" id="thrust-tags">
+                    <label><input type="checkbox" name="thrust-tag" value="Thrust 1"> Thrust 1</label>
+                    <label><input type="checkbox" name="thrust-tag" value="Thrust 2"> Thrust 2</label>
+                    <label><input type="checkbox" name="thrust-tag" value="Thrust 3"> Thrust 3</label>
+                    <label><input type="checkbox" name="thrust-tag" value="Thrust 4"> Thrust 4</label>
+                    <label><input type="checkbox" name="thrust-tag" value="Thrust 5"> Thrust 5</label>
+                    <label><input type="checkbox" name="thrust-tag" value="General"> General</label>
+                    <label><input type="checkbox" name="thrust-tag" value="Publication Records"> Publication Records</label>
+                </div>
+            </div>
+
+            <div class="section collapsed">
+                <h4>PI Affiliated</h4>
+                <div class="section-content" id="pi-tags">
+                    <label><input type="checkbox" name="pi-tag" value="Junhong Chen"> Junhong Chen</label>
+                    <label><input type="checkbox" name="pi-tag" value="Yuxin Chen"> Yuxin Chen</label>
+                    <label><input type="checkbox" name="pi-tag" value="Elizabeth Ainsworth"> Elizabeth Ainsworth</label>
+                    <label><input type="checkbox" name="pi-tag" value="Santanu Chaudhuri"> Santanu Chaudhuri</label>
+                    <label><input type="checkbox" name="pi-tag" value="Mark Hersam"> Mark Hersam</label>
+                    <label><input type="checkbox" name="pi-tag" value="Stuart Rowan"> Stuart Rowan</label>
+                    <label><input type="checkbox" name="pi-tag" value="Wei Chen"> Wei Chen</label>
+                    <label><input type="checkbox" name="pi-tag" value="Jonathan Claussen"> Jonathan Claussen</label>
+                    <label><input type="checkbox" name="pi-tag" value="Jennifer Dunn"> Jennifer Dunn</label>
+                    <label><input type="checkbox" name="pi-tag" value="Dokyoung Lee"> Dokyoung Lee</label>
+                    <label><input type="checkbox" name="pi-tag" value="Zhiyong Cai"> Zhiyong Cai</label>
+                    <label><input type="checkbox" name="pi-tag" value="Others"> Others</label>
                     <input type="text" id="pi-other" class="form-control mt-2" style="display:none;" placeholder="Enter other PI">
                 </div>
             </div>
 
-            <div class="section">
-                <h4>Related Topic:</h4>
-                <div id="topic-tags">
-                    <label><input type="checkbox" name="topic-tag" value="Printing"> Printing</label><br>
-                    <label><input type="checkbox" name="topic-tag" value="FET sensors"> FET sensors</label><br>
-                    <label><input type="checkbox" name="topic-tag" value="Lithium Ion Batteries"> Lithium Ion Batteries</label><br>
-                    <label><input type="checkbox" name="topic-tag" value="Plant Growth"> Plant Growth</label><br>
-                    <label><input type="checkbox" name="topic-tag" value="Crop Science"> Crop Science</label><br>
-                    <label><input type="checkbox" name="topic-tag" value="Biochemistry"> Biochemistry</label><br>
-                    <label><input type="checkbox" name="topic-tag" value="DFT Simulation"> DFT Simulation</label><br>
-                    <label><input type="checkbox" name="topic-tag" value="MD Simulation"> MD Simulation</label><br>
-                    <label><input type="checkbox" name="topic-tag" value="Functional Nanomaterial Synthesis"> Functional Nanomaterial Synthesis</label><br>
-                    <label><input type="checkbox" name="topic-tag" value="Ink Formulation"> Ink Formulation</label><br>
-                    <label><input type="checkbox" name="topic-tag" value="Cheimcal Engieerning"> Cheimcal Engieerning</label><br>
-                    <label><input type="checkbox" name="topic-tag" value="Machine Learning"> Machine Learning</label><br>
-                    <label><input type="checkbox" name="topic-tag" value="Manufacturing"> Manufacturing</label><br>
-                    <label><input type="checkbox" name="topic-tag" value="Policy"> Policy</label><br>
-                    <label><input type="checkbox" name="topic-tag" value="Data Analytics"> Data Analytics</label><br>
-                    <label><input type="checkbox" name="topic-tag" value="TEA/LCA/MFA"> TEA/LCA/MFA</label><br>
-                    <label><input type="checkbox" name="topic-tag" value="Others"> Others</label><br>
+            <div class="section collapsed">
+                <h4>Related Topic</h4>
+                <div class="section-content" id="topic-tags">
+                    <label><input type="checkbox" name="topic-tag" value="Printing"> Printing</label>
+                    <label><input type="checkbox" name="topic-tag" value="FET sensors"> FET sensors</label>
+                    <label><input type="checkbox" name="topic-tag" value="Lithium Ion Batteries"> Lithium Ion Batteries</label>
+                    <label><input type="checkbox" name="topic-tag" value="Plant Growth"> Plant Growth</label>
+                    <label><input type="checkbox" name="topic-tag" value="Crop Science"> Crop Science</label>
+                    <label><input type="checkbox" name="topic-tag" value="Biochemistry"> Biochemistry</label>
+                    <label><input type="checkbox" name="topic-tag" value="DFT Simulation"> DFT Simulation</label>
+                    <label><input type="checkbox" name="topic-tag" value="MD Simulation"> MD Simulation</label>
+                    <label><input type="checkbox" name="topic-tag" value="Functional Nanomaterial Synthesis"> Functional Nanomaterial Synthesis</label>
+                    <label><input type="checkbox" name="topic-tag" value="Ink Formulation"> Ink Formulation</label>
+                    <label><input type="checkbox" name="topic-tag" value="Cheimcal Engieerning"> Cheimcal Engieerning</label>
+                    <label><input type="checkbox" name="topic-tag" value="Machine Learning"> Machine Learning</label>
+                    <label><input type="checkbox" name="topic-tag" value="Manufacturing"> Manufacturing</label>
+                    <label><input type="checkbox" name="topic-tag" value="Policy"> Policy</label>
+                    <label><input type="checkbox" name="topic-tag" value="Data Analytics"> Data Analytics</label>
+                    <label><input type="checkbox" name="topic-tag" value="TEA/LCA/MFA"> TEA/LCA/MFA</label>
+                    <label><input type="checkbox" name="topic-tag" value="Others"> Others</label>
                     <input type="text" id="topic-other" class="form-control mt-2" style="display:none;" placeholder="Enter other topic">
                 </div>
             </div>
 
-            <div class="section">
-                <h4>Data Tags:</h4>
-                <div id="data-tags">
-                    <label><input type="checkbox" name="data-tag" value="Experimental Exploration"> Experimental</label><br>
-                    <label><input type="checkbox" name="data-tag" value="Theoretical Simulation"> Theoretical</label><br>
-                    <label><input type="checkbox" name="data-tag" value="Exploration Results"> Exploration Results</label><br>
-                    <label><input type="checkbox" name="data-tag" value="Code Repository"> Code Repository</label><br>
-                    <label><input type="checkbox" name="data-tag" value="Raw Experimental Data"> Raw Experimental Data</label><br>
-                    <label><input type="checkbox" name="data-tag" value="Meeting Records"> Meeting Records</label><br>
-                    <label><input type="checkbox" name="data-tag" value="Adminstrative Files"> Adminstrative Files</label><br>
-                    <label><input type="checkbox" name="data-tag" value="Material Characterization"> Material Characterization</label><br>
-                    <label><input type="checkbox" name="data-tag" value="Literatures"> Literatures</label><br>
-                    <label><input type="checkbox" name="data-tag" value="Others"> Others</label><br>
+            <div class="section collapsed">
+                <h4>Data Tags</h4>
+                <div class="section-content" id="data-tags">
+                    <label><input type="checkbox" name="data-tag" value="Experimental Exploration"> Experimental</label>
+                    <label><input type="checkbox" name="data-tag" value="Theoretical Simulation"> Theoretical</label>
+                    <label><input type="checkbox" name="data-tag" value="Exploration Results"> Exploration Results</label>
+                    <label><input type="checkbox" name="data-tag" value="Code Repository"> Code Repository</label>
+                    <label><input type="checkbox" name="data-tag" value="Raw Experimental Data"> Raw Experimental Data</label>
+                    <label><input type="checkbox" name="data-tag" value="Meeting Records"> Meeting Records</label>
+                    <label><input type="checkbox" name="data-tag" value="Adminstrative Files"> Adminstrative Files</label>
+                    <label><input type="checkbox" name="data-tag" value="Material Characterization"> Material Characterization</label>
+                    <label><input type="checkbox" name="data-tag" value="Literatures"> Literatures</label>
+                    <label><input type="checkbox" name="data-tag" value="Others"> Others</label>
                     <input type="text" id="data-tag-other" class="form-control mt-2" style="display:none;" placeholder="Enter other data tag">
                 </div>
             </div>
 
-            <div class="section">
-                <h4>Data Type:</h4>
-                <div id="data-type-tags">
-                    <label><input type="checkbox" name="data-type-tag" value="Dataset"> Dataset</label><br>
-                    <label><input type="checkbox" name="data-type-tag" value="Records"> Records</label><br>
-                    <label><input type="checkbox" name="data-type-tag" value="Publication"> Publication</label><br>
-                    <label><input type="checkbox" name="data-type-tag" value="Experiment Results"> Experiment Results</label><br>
-                    <label><input type="checkbox" name="data-type-tag" value="Images"> Images</label><br>
-                    <label><input type="checkbox" name="data-type-tag" value="Videos"> Videos</label><br>
-                    <label><input type="checkbox" name="data-type-tag" value="Code Scripts"> Code Scripts</label><br>
-                    <label><input type="checkbox" name="data-type-tag" value="Computation Results"> Computation Results</label><br>
-                    <label><input type="checkbox" name="data-type-tag" value="Machine Learning Model Files"> Machine Learning Model Files</label><br>
-                    <label><input type="checkbox" name="data-type-tag" value="Others"> Others</label><br>
+            <div class="section collapsed">
+                <h4>Data Type</h4>
+                <div class="section-content" id="data-type-tags">
+                    <label><input type="checkbox" name="data-type-tag" value="Dataset"> Dataset</label>
+                    <label><input type="checkbox" name="data-type-tag" value="Records"> Records</label>
+                    <label><input type="checkbox" name="data-type-tag" value="Publication"> Publication</label>
+                    <label><input type="checkbox" name="data-type-tag" value="Experiment Results"> Experiment Results</label>
+                    <label><input type="checkbox" name="data-type-tag" value="Images"> Images</label>
+                    <label><input type="checkbox" name="data-type-tag" value="Videos"> Videos</label>
+                    <label><input type="checkbox" name="data-type-tag" value="Code Scripts"> Code Scripts</label>
+                    <label><input type="checkbox" name="data-type-tag" value="Computation Results"> Computation Results</label>
+                    <label><input type="checkbox" name="data-type-tag" value="Machine Learning Model Files"> Machine Learning Model Files</label>
+                    <label><input type="checkbox" name="data-type-tag" value="Others"> Others</label>
                     <input type="text" id="data-type-other" class="form-control mt-2" style="display:none;" placeholder="Enter other data type">
                 </div>
             </div>
 
-            <div class="section">
-                <h4>Abstract Description:</h4>
-                <textarea id="abstract-description" class="form-control" placeholder="Enter abstract description" rows="5"></textarea>
+            <div class="section collapsed">
+                <h4>Abstract Description</h4>
+                <div class="section-content">
+                    <textarea id="abstract-description" class="form-control" placeholder="Enter abstract description" rows="3"></textarea>
+                </div>
             </div>
 
-            <div class="section">
-                <h4>Outer Link:</h4>
-                <input type="text" id="outer-link" class="form-control" placeholder="Enter outer link">
+            <div class="section collapsed">
+                <h4>Outer Link</h4>
+                <div class="section-content">
+                    <input type="text" id="outer-link" class="form-control" placeholder="Enter outer link">
+                </div>
             </div>
 
-            <button id="apply-tag" class="btn btn-primary btn-block">Apply Tag</button>
-            <div class="action-buttons">
-                <button id="clear-all" class="btn btn-secondary btn-block">Start Over Again</button>
-                <button id="clear-selected-tags" class="btn btn-secondary btn-block">Clear Selected Tags</button>
-                <button id="clear-tags" class="btn btn-secondary btn-block">Clear All Tags</button>
-                <button id="deselect-all" class="btn btn-secondary btn-block">Deselect All</button>
+            <button id="apply-tag" class="btn btn-primary btn-block mb-2">Apply Tag</button>
+            <div class="action-buttons" style="display: grid; grid-template-columns: 1fr 1fr; gap: 5px;">
+                <button id="clear-all" class="btn btn-sm btn-secondary">Start Over</button>
+                <button id="clear-selected-tags" class="btn btn-sm btn-secondary">Clear Selected</button>
+                <button id="clear-tags" class="btn btn-sm btn-secondary">Clear All Tags</button>
+                <button id="deselect-all" class="btn btn-sm btn-secondary">Deselect All</button>
             </div>
         </div>
 
         <div class="file-section">
-            <label for="file-input" class="file-input-label btn btn-primary disabled" id="file-input-label">(Step 2) Select Files or Folder</label>
-            <div class="toggle-switch mb-3">
-                <label for="mode-toggle" class="switch">
-                    <input type="checkbox" id="mode-toggle">
-                    <span class="slider round"></span>
-                </label>
-                <span id="mode-label">Select Folder (One)</span>
+            <div id="file-drop-zone" style="border: 2px dashed #007bff; border-radius: 8px; padding: 20px; text-align: center; background-color: #f8f9fa; margin-bottom: 1rem;">
+                <p style="margin: 0; color: #6c757d;">
+                    <i class="fas fa-cloud-upload-alt" style="font-size: 2em; color: #007bff;"></i><br>
+                    <strong>Drag and drop files or folders here</strong><br>
+                    <span style="font-size: 0.9em;">You can add multiple files/folders - they accumulate!</span><br>
+                    <span style="font-size: 0.9em;">or</span>
+                </p>
+                <label for="file-input" class="file-input-label btn btn-primary disabled" id="file-input-label" style="margin-top: 10px;">(Step 2) Click to Select Folder</label>
+                <div id="file-count" style="margin-top: 10px; color: #28a745; font-weight: bold; display: none;">
+                    <i class="fas fa-check-circle"></i> <span id="file-count-text">0 files loaded</span>
+                    <button id="remove-all-files" class="btn btn-danger btn-sm" style="margin-left: 15px;">
+                        <i class="fas fa-trash"></i> Remove All Files
+                    </button>
+                </div>
             </div>
             <input type="file" id="file-input" webkitdirectory multiple hidden disabled>
             <button id="toggle-files" class="btn btn-secondary">Hide All Files</button>
@@ -450,17 +512,27 @@
                 <ul id="untagged-items-list"></ul>
                 <div id="all-tagged-message" style="display: none;">All Folder/File Tagged, Please Proceed to Generate Meta Data File.</div>
                 
-                <h4>(Step 4) Input Path You Put in the Globus Folder:</h4>
+                <h4>(Step 4) Select Target Folder in Globus:</h4>
                 <div class="globus-path-container">
-                    <label for="globus-path">Globus Path: (Please indicate where you have uploaded already in Globus system under the 2025MADEPUBLICsnapshot folder, for example, if you directly put your whole folder processed by this page (by "Select Files or Folders") under the "Thrust 3/" folder, then input here "Thrust 3/")</label>
-                    <input type="text" id="globus-path" class="form-control" placeholder="Enter Globus path(eg. Thrust 3/)">
+                    <label for="globus-path">Select the folder where you uploaded your files in the 2025MADEPUBLICsnapshot directory:</label>
+                    <select id="globus-path" class="form-control">
+                        <option value="">-- Select Target Folder --</option>
+                        <option value="Thrust 1/">Thrust 1</option>
+                        <option value="Thrust 2/">Thrust 2</option>
+                        <option value="Thrust 3/">Thrust 3</option>
+                        <option value="Thrust 4/">Thrust 4</option>
+                        <option value="Thrust 5/">Thrust 5</option>
+                        <option value="General/">General</option>
+                        <option value="Publication Records/">Publication Records</option>
+                    </select>
                 </div>
                 <button id="generate-metadata" class="btn btn-primary btn-block">(Step 5) Generate Metadata JSON File</button>
             </div>
             
             <div class="json-upload-instruction">
-                <h4>(Step 6) Please upload the just now generated json file automatically downloaded by your browser to the public json storage path, please to click this button to be redirected to the path, and upload that json:</h4>
-                <button id="upload-json" class="btn btn-primary btn-block" onclick="window.location.href='https://app.globus.org/file-manager?origin_id=af7bda53-6d04-11e5-ba46-22000b92c6ec&origin_path=%2Fhome%2Fruiding%2FMADE_PUBLIC_DATA%2FJSON_Upload%2F'">(Step 7) Upload the Meta Data JSON File to the JSON Storage Folder</button>
+                <h4>(Step 6) Automated Ingest to Search Index:</h4>
+                <button id="auto-ingest" class="btn btn-success btn-block" style="display:none;">Automatically Ingest to Search Index</button>
+                <div id="ingest-status" class="alert" style="display:none;"></div>
             </div>
         </div>
     </div>
@@ -468,81 +540,286 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>
         $(document).ready(function() {
+            // Make sections collapsible
+            $('.section h4').click(function() {
+                $(this).parent('.section').toggleClass('collapsed');
+            });
+            
             const fileInput = document.getElementById('file-input');
-            const modeToggle = document.getElementById('mode-toggle');
-            const modeLabel = document.getElementById('mode-label');
             const fileTreeContainer = document.getElementById('file-tree');
+            const dropZone = document.getElementById('file-drop-zone');
             let showFiles = true;
             let lastSelectedItem = null;
             let fileTags = {};
             let foldersCollapsed = {};
+            let allLoadedFiles = [];  // Store ALL files loaded across multiple operations
 
-            // Mode toggle for file/folder selection
-            modeToggle.addEventListener('change', function() {
-                if (this.checked) {
-                    fileInput.removeAttribute('webkitdirectory');
-                    modeLabel.textContent = 'Select File(s)';
-                } else {
-                    fileInput.setAttribute('webkitdirectory', '');
-                    modeLabel.textContent = 'Select Folder (One)';
-                }
-            });
-
+            // Simple folder selection - no dialog needed
             fileInput.addEventListener('change', handleFileUpload);
 
             function handleFileUpload(e) {
-                const files = e.target.files;
-                if (modeToggle.checked) {
-                    displayFileStructure(files, true);
+                const files = Array.from(e.target.files);
+                // Add to existing files instead of replacing
+                addFilesToCollection(files);
+            }
+
+            function addFilesToCollection(newFiles) {
+                // Add new files to the collection
+                allLoadedFiles = allLoadedFiles.concat(newFiles);
+                // Update file count display
+                if (allLoadedFiles.length > 0) {
+                    $('#file-count').show();
+                    $('#file-count-text').text(`${allLoadedFiles.length} file${allLoadedFiles.length > 1 ? 's' : ''} loaded`);
+                }
+                // Display all files (accumulated)
+                displayFileStructure(allLoadedFiles, false);
+            }
+
+            // Enable/disable drop zone based on creator confirmation
+            $('#confirm-creator').click(function() {
+                var creatorName = $('#creator-name').val().trim();
+                if (creatorName) {
+                    $('#creator-name-display').text(creatorName);
+                    $('#creator-display').show();
+                    $('#file-input').prop('disabled', false);
+                    $('#file-input-label').removeClass('disabled');
+                    dropZone.style.opacity = '1';
+                    dropZone.style.pointerEvents = 'auto';
                 } else {
-                    displayFileStructure(files, false);
+                    $('#creator-display').hide();
+                    $('#file-input').prop('disabled', true);
+                    $('#file-input-label').addClass('disabled');
+                    dropZone.style.opacity = '0.5';
+                    dropZone.style.pointerEvents = 'none';
+                }
+            });
+
+            // Initially disable drop zone
+            dropZone.style.opacity = '0.5';
+            dropZone.style.pointerEvents = 'none';
+
+            // Drag and drop functionality
+            dropZone.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                this.style.backgroundColor = '#e7f3ff';
+                this.style.borderColor = '#0056b3';
+            });
+
+            dropZone.addEventListener('dragleave', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                this.style.backgroundColor = '#f8f9fa';
+                this.style.borderColor = '#007bff';
+            });
+
+            dropZone.addEventListener('drop', async function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                this.style.backgroundColor = '#f8f9fa';
+                this.style.borderColor = '#007bff';
+                
+                if ($('#file-input').prop('disabled')) {
+                    alert('Please enter creator name first');
+                    return;
+                }
+
+                const items = e.dataTransfer.items;
+                const allDroppedFiles = [];
+                const promises = [];
+                
+                // Process all dropped items
+                for (let i = 0; i < items.length; i++) {
+                    const item = items[i].webkitGetAsEntry();
+                    if (item) {
+                        promises.push(new Promise((resolve) => {
+                            traverseFileTree(item, '', function(files) {
+                                allDroppedFiles.push(...files);
+                                resolve();
+                            });
+                        }));
+                    }
+                }
+                
+                // Wait for all files to be processed
+                await Promise.all(promises);
+                
+                // Add all dropped files to the collection
+                addFilesToCollection(allDroppedFiles);
+            });
+
+            // Helper function to traverse file tree from drag and drop
+            function traverseFileTree(item, path, callback) {
+                const files = [];
+                let pending = 0;
+                
+                function checkComplete() {
+                    pending--;
+                    if (pending === 0) {
+                        callback(files);
+                    }
+                }
+                
+                if (item.isFile) {
+                    pending++;
+                    item.file(function(file) {
+                        // Add webkitRelativePath property
+                        Object.defineProperty(file, 'webkitRelativePath', {
+                            value: path + file.name,
+                            writable: false
+                        });
+                        files.push(file);
+                        checkComplete();
+                    });
+                } else if (item.isDirectory) {
+                    pending++;
+                    const dirReader = item.createReader();
+                    dirReader.readEntries(function(entries) {
+                        for (let i = 0; i < entries.length; i++) {
+                            pending++;
+                            traverseFileTree(entries[i], path + item.name + '/', function(subFiles) {
+                                files.push(...subFiles);
+                                checkComplete();
+                            });
+                        }
+                        checkComplete();
+                    });
                 }
             }
 
             function displayFileStructure(files, isFileMode) {
                 let fileMap = {};
+                
+                // Process all files into the map
                 for (let file of files) {
                     let paths = file.webkitRelativePath ? file.webkitRelativePath.split('/') : [file.name];
                     let currentPath = '';
+                    
                     paths.forEach((path, index) => {
+                        if (index > 0) currentPath += '/';
                         currentPath += path;
+                        
                         if (!fileMap[currentPath]) {
-                            let isFile = isFileMode || index === paths.length - 1;
+                            let isFile = index === paths.length - 1;
                             let documentType = isFile ? (path.includes('.') ? path.split('.').pop() : 'Others') : 'Folder';
+                            const tagData = fileTags[currentPath];
                             fileMap[currentPath] = {
                                 path: currentPath,
                                 children: [],
                                 isFile: isFile,
                                 depth: index,
-                                tag: fileTags[currentPath] || '',
-                                documentType: documentType
+                                tag: tagData ? tagData.raw : '',
+                                tagData: tagData || null,
+                                documentType: documentType,
+                                name: path
                             };
                         }
-                        if (index > 0 && !isFileMode) {
-                            const parentPath = currentPath.slice(0, currentPath.length - path.length - 1);
+                        
+                        // Add to parent's children if not root
+                        if (index > 0) {
+                            const parentPath = paths.slice(0, index).join('/');
                             if (fileMap[parentPath] && !fileMap[parentPath].children.includes(currentPath)) {
                                 fileMap[parentPath].children.push(currentPath);
                             }
                         }
-                        currentPath += '/';
                     });
                 }
 
-                if (isFileMode) {
-                    fileTreeContainer.innerHTML = '';
-                    for (let filePath in fileMap) {
-                        fileTreeContainer.innerHTML += createTreeHtml(fileMap, fileMap[filePath], 0);
+                // Clear and rebuild the tree
+                fileTreeContainer.innerHTML = '';
+                
+                // Find all root items (items with no parent in the map)
+                const rootItems = [];
+                for (let path in fileMap) {
+                    const item = fileMap[path];
+                    // Check if this is a root item (no parent exists in the map)
+                    const parentPath = path.includes('/') ? path.substring(0, path.lastIndexOf('/')) : null;
+                    if (!parentPath || !fileMap[parentPath]) {
+                        rootItems.push(item);
                     }
-                } else {
-                    fileTreeContainer.innerHTML = createTreeHtml(fileMap, fileMap[Object.keys(fileMap)[0]], 0);
                 }
+                
+                // Display all root items
+                let html = '';
+                rootItems.forEach(rootItem => {
+                    html += createTreeHtml(fileMap, rootItem, 0);
+                });
+                fileTreeContainer.innerHTML = html;
 
                 bindClickEvents();
+                bindRemoveButtons();
+                bindTagButtons();
                 updateUntaggedItemsList();
+            }
+
+            function bindTagButtons() {
+                // Handle show all tags button
+                $('.show-all-tags').off('click').on('click', function(e) {
+                    e.stopPropagation();
+                    e.preventDefault();
+                    const tagId = $(this).data('tag-id');
+                    const detailDiv = $(`#tags-${tagId}`);
+                    
+                    if (detailDiv.is(':visible')) {
+                        detailDiv.slideUp(200);
+                        $(this).html('<i class="fas fa-chevron-down"></i> Show all');
+                    } else {
+                        detailDiv.slideDown(200);
+                        $(this).html('<i class="fas fa-chevron-up"></i> Hide');
+                    }
+                });
+            }
+
+            function bindRemoveButtons() {
+                // Remove individual file/folder
+                $('.remove-file').click(function(e) {
+                    e.stopPropagation();
+                    const pathToRemove = $(this).data('path');
+                    
+                    // Remove from allLoadedFiles
+                    allLoadedFiles = allLoadedFiles.filter(file => {
+                        const filePath = file.webkitRelativePath || file.name;
+                        // Remove if it matches exactly or is a child of the path
+                        return !filePath.startsWith(pathToRemove);
+                    });
+                    
+                    // Remove tags for this path
+                    delete fileTags[pathToRemove];
+                    
+                    // Update display
+                    if (allLoadedFiles.length > 0) {
+                        $('#file-count-text').text(`${allLoadedFiles.length} file${allLoadedFiles.length > 1 ? 's' : ''} loaded`);
+                        displayFileStructure(allLoadedFiles, false);
+                    } else {
+                        $('#file-count').hide();
+                        fileTreeContainer.innerHTML = '';
+                        updateUntaggedItemsList();
+                    }
+                });
+                
+                // Remove all files button
+                $('#remove-all-files').off('click').on('click', function() {
+                    if (confirm('Are you sure you want to remove all files?')) {
+                        fileTreeContainer.innerHTML = '';
+                        fileInput.value = '';
+                        fileTags = {};
+                        foldersCollapsed = {};
+                        allLoadedFiles = [];
+                        generatedJsonData = null;
+                        $('#auto-ingest').hide();
+                        $('#ingest-status').hide();
+                        $('#file-count').hide();
+                        updateUntaggedItemsList();
+                    }
+                });
             }
 
             function bindClickEvents() {
                 $('.file-tree li').click(function(e) {
+                    // Don't handle clicks on buttons
+                    if ($(e.target).closest('button').length > 0) {
+                        return;
+                    }
                     e.stopPropagation();
                     const $this = $(this);
                     const isFolder = !$this.hasClass('file');
@@ -607,18 +884,78 @@
 
             function createTreeHtml(fileMap, node, level) {
                 if (!node) return '';
-                let html = `<li class="${node.isFile ? 'file' : 'folder'} ${node.tag ? 'tagged' : 'untagged'}" data-path="${node.path}" data-level="${level}">`;
-                html += `<span class="file-icon ${node.isFile ? 'fas fa-file' : foldersCollapsed[node.path] ? 'fas fa-folder' : 'fas fa-folder-open'} ${node.tag ? 'tagged' : 'untagged'}"></span>`;
-                html += `<span class="file-name" title="${node.path.split('/').pop()}">${node.path.split('/').pop()}</span>`;
-                html += `<span class="tag document-type-tag">${node.documentType}</span>`;
-                html += `<span class="file-tag">${node.tag}</span>`;
-                if (!node.isFile) {
-                    html += `<button class="toggle-folder btn btn-sm btn-secondary">Toggle Files</button>`;
+                const displayName = node.name || node.path.split('/').pop();
+                let html = `<li class="${node.isFile ? 'file' : 'folder'} ${node.tag ? 'tagged' : 'untagged'}" data-path="${node.path}" data-level="${level}" style="margin-left: ${level * 20}px; position: relative;">`;
+                
+                // First row: File icon, name, document type, and remove button
+                html += `<div style="display: flex; align-items: center; width: 100%;">`;
+                html += `<span class="file-icon ${node.isFile ? 'fas fa-file' : foldersCollapsed[node.path] ? 'fas fa-folder' : 'fas fa-folder-open'} ${node.tag ? 'tagged' : 'untagged'}" style="margin-right: 8px;"></span>`;
+                html += `<span class="file-name" title="${node.path}" style="font-weight: 500; margin-right: 8px;">${displayName}</span>`;
+                html += `<span class="tag document-type-tag" style="margin-right: 8px;">${node.documentType}</span>`;
+                if (!node.isFile && node.children.length > 0) {
+                    html += `<button class="toggle-folder btn btn-sm btn-secondary" style="margin-right: 5px;">Toggle</button>`;
                 }
+                html += `<button class="remove-file btn btn-danger btn-sm" data-path="${node.path}" style="margin-left: auto;" title="Remove this item">
+                    <i class="fas fa-times"></i>
+                </button>`;
+                html += `</div>`;
+                
+                // Second row: Tags (if any) - displayed below the file name
+                if (node.tagData && node.tag !== "[, , , , ]") {
+                    html += `<div class="file-tag" style="margin-top: 5px; margin-left: 28px;">`;
+                    
+                    // Create a detailed tag list
+                    let allTags = [];
+                    const categories = node.tagData.categories;
+                    
+                    if (categories) {
+                        if (categories[0]) allTags.push(`Thrust: ${categories[0]}`);
+                        if (categories[1]) allTags.push(`PI: ${categories[1]}`);
+                        if (categories[2]) allTags.push(`Topics: ${categories[2]}`);
+                        if (categories[3]) allTags.push(`Data Tags: ${categories[3]}`);
+                        if (categories[4]) allTags.push(`Data Type: ${categories[4]}`);
+                    }
+                    if (node.tagData.abstract) allTags.push('Has Abstract');
+                    if (node.tagData.link) allTags.push('Has Link');
+                    
+                    // Show compact view with expandable details
+                    html += `<div style="display: flex; flex-wrap: wrap; gap: 3px; align-items: center;">`;
+                    
+                    // Always show thrust
+                    if (categories && categories[0]) {
+                        html += `<span class="tag thrust-tag" style="font-size: 0.75rem;">${categories[0]}</span>`;
+                    }
+                    
+                    // Show first PI if exists
+                    if (categories && categories[1]) {
+                        const firstPI = categories[1].split(',')[0].trim();
+                        if (firstPI) {
+                            html += `<span class="tag pi-tag" style="font-size: 0.75rem;">${firstPI}</span>`;
+                        }
+                    }
+                    
+                    // Expandable button for all tags
+                    const tagId = node.path.replace(/[^a-zA-Z0-9]/g, '_');
+                    html += `<button class="btn btn-sm btn-link show-all-tags" data-tag-id="${tagId}" style="padding: 0 5px; font-size: 0.75rem;">
+                        <i class="fas fa-chevron-down"></i> Show all
+                    </button>`;
+                    html += `</div>`;
+                    
+                    // Hidden full tag list
+                    html += `<div id="tags-${tagId}" class="all-tags-detail" style="display: none; margin-top: 5px; padding: 5px; background: #fff; border: 1px solid #ddd; border-radius: 3px; font-size: 0.8rem;">`;
+                    allTags.forEach(tag => {
+                        html += `<div style="margin: 2px 0;">• ${tag}</div>`;
+                    });
+                    html += `</div>`;
+                    
+                    html += `</div>`;
+                }
+                
                 html += `</li>`;
 
-                if (node.children.length > 0 && (!node.isFile || showFiles || foldersCollapsed[node.path])) {
-                    html += '<ul style="display: ' + (foldersCollapsed[node.path] ? 'none' : 'block') + ';">';
+                if (node.children.length > 0 && !node.isFile) {
+                    const isCollapsed = foldersCollapsed[node.path];
+                    html += '<ul style="list-style: none; padding-left: 0; display: ' + (isCollapsed ? 'none' : 'block') + ';">';
                     node.children.forEach(childPath => {
                         html += createTreeHtml(fileMap, fileMap[childPath], level + 1);
                     });
@@ -628,11 +965,7 @@
                 return html;
             }
 
-            // Handle "Others" checkboxes
-            $('#thrust-tags input[name="thrust-tag"]').change(function() {
-                const othersChecked = $('#thrust-tags input[name="thrust-tag"][value="Others"]').is(':checked');
-                $('#thrust-other').toggle(othersChecked);
-            });
+            // Removed "Others" checkbox handler for Thrust tags as we now have fixed 7 options
 
             $('#pi-tags input[name="pi-tag"]').change(function() {
                 const othersChecked = $('#pi-tags input[name="pi-tag"][value="Others"]').is(':checked');
@@ -664,7 +997,7 @@
                     const path = $(this).data('path');
 
                     const thrustTags = $('#thrust-tags input[name="thrust-tag"]:checked').map(function() {
-                        return this.value === "Others" ? $('#thrust-other').val() : this.value;
+                        return this.value;
                     }).get().filter(value => value).join(', ');
 
                     const piTags = $('#pi-tags input[name="pi-tag"]:checked').map(function() {
@@ -698,35 +1031,25 @@
             });
 
             function applyTagToItem(item, path, tag, tagCategories, abstractDescription, outerLink) {
-                const tagContainer = $(item).find('.file-tag');
-                tagContainer.empty();
-
+                // Store the raw tag data for later use in JSON generation
+                fileTags[path] = {
+                    raw: tag,
+                    categories: tagCategories,
+                    abstract: abstractDescription,
+                    link: outerLink
+                };
+                
+                // Update the visual state
                 if (tag !== "[, , , , ]" && tagCategories.join('').trim() !== '') {
                     $(item).removeClass('untagged').addClass('tagged');
-
-                    tagCategories.forEach((tagCategory, index) => {
-                        const tags = tagCategory.split(', ').filter(value => value);
-                        tags.forEach(tagValue => {
-                            const tagSpan = $(`<span class="tag ${index === 0 ? 'thrust-tag' : index === 1 ? 'pi-tag' : index === 2 ? 'topic-tag' : index === 3 ? 'data-tag' : 'data-type-tag'}">${tagValue}</span>`);
-                            tagContainer.append(tagSpan);
-                        });
-                    });
-
-                    if (abstractDescription) {
-                        const abstractSpan = $(`<span class="tag abstract-tag" title="${abstractDescription}">Abstract Description</span>`);
-                        tagContainer.append(abstractSpan);
-                    }
-
-                    if (outerLink) {
-                        const linkSpan = $(`<span class="tag link-tag" title="${outerLink}">Outer Link</span>`);
-                        tagContainer.append(linkSpan);
-                    }
+                    $(item).find('.file-icon').removeClass('untagged').addClass('tagged');
                 } else {
                     $(item).removeClass('tagged').addClass('untagged');
+                    $(item).find('.file-icon').removeClass('tagged').addClass('untagged');
                 }
-
-                fileTags[path] = tag;
-                $(item).find('.file-icon').removeClass('tagged untagged').addClass($(item).hasClass('tagged') ? 'tagged' : 'untagged');
+                
+                // Refresh the display to show updated tags
+                displayFileStructure(allLoadedFiles, false);
                 updateUntaggedItemsList();
             }
 
@@ -755,6 +1078,9 @@
                     $('#all-tagged-message').hide();
                 }
             }
+
+            // Store the generated JSON data globally for auto-ingest
+            let generatedJsonData = null;
 
             // Generate metadata JSON
             function generateMetadataJSON() {
@@ -788,8 +1114,10 @@
 
                     const idDate = currentDate.replace(/ /g, 'T');
                     const gmetaId = `${thrustTag}-${globusPath}-${parentFolder}-${folderName}-${fileName}-${thrustTag}-${creatorName}-${piTags}${idDate}`;
-                    const encodedSubject = `${baseGlobusPath}${encodeURI(path)}`;
-                    const rawUrl = `${baseGlobusPath}${path}`;
+                    // Properly combine the base path with globus folder and file path
+                    const fullPath = globusPath ? `${globusPath}${path}` : path;
+                    const encodedSubject = `${baseGlobusPath}${encodeURI(fullPath)}`;
+                    const rawUrl = `${baseGlobusPath}${fullPath}`;
 
                     const gmetaEntry = {
                         id: gmetaId,
@@ -815,6 +1143,12 @@
                     jsonData.ingest_data.gmeta.push(gmetaEntry);
                 });
 
+                // Store the generated JSON data for auto-ingest
+                generatedJsonData = jsonData;
+                
+                // Show the auto-ingest button
+                $('#auto-ingest').show();
+                
                 downloadJSONFile(jsonData, `${creatorName}_${globusPath.split('/').pop()}_${currentDate.replace(/:/g, '_').replace(/ /g, 'T')}.json`);
             }
 
@@ -829,7 +1163,67 @@
             }
 
             $('#generate-metadata').click(function() {
+                // Check if all items are tagged
+                const untaggedItems = $('.file-tree li.untagged');
+                if (untaggedItems.length > 0) {
+                    alert(`Cannot generate metadata! You have ${untaggedItems.length} untagged item(s). Please tag all files and folders before generating metadata.`);
+                    return;
+                }
                 generateMetadataJSON();
+            });
+
+            // Auto-ingest button handler
+            $('#auto-ingest').click(function() {
+                if (!generatedJsonData) {
+                    alert('Please generate metadata first');
+                    return;
+                }
+                
+                const $button = $(this);
+                const $status = $('#ingest-status');
+                
+                // Disable button and show loading
+                $button.prop('disabled', true).text('Ingesting...');
+                $status.removeClass('alert-success alert-danger').addClass('alert-info').text('Sending data to search index...').show();
+                
+                // Send the JSON data to the backend for ingestion
+                $.ajax({
+                    url: '/auto_ingest_metadata/',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(generatedJsonData),
+                    success: function(response) {
+                        if (response.success) {
+                            $status.removeClass('alert-info alert-danger').addClass('alert-success');
+                            $status.html(`
+                                <strong>Success!</strong> ${response.message}<br>
+                                <small>Index UUID: ${response.index_uuid}</small><br>
+                                <small>Task ID: ${response.task_id}</small><br>
+                                <br>
+                                <strong>Next steps:</strong><br>
+                                1. The data has been ingested to the search index<br>
+                                2. It may take a few moments to appear in search results<br>
+                                3. You can now search for your data in the Repository
+                            `);
+                            $button.text('Successfully Ingested!').removeClass('btn-success').addClass('btn-secondary');
+                        } else {
+                            $status.removeClass('alert-info alert-success').addClass('alert-danger');
+                            $status.html(`<strong>Warning:</strong> ${response.message}`);
+                            $button.prop('disabled', false).text('Retry Auto-Ingest');
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        $status.removeClass('alert-info alert-success').addClass('alert-danger');
+                        let errorMsg = 'Failed to ingest metadata.';
+                        if (xhr.responseJSON && xhr.responseJSON.message) {
+                            errorMsg += ' ' + xhr.responseJSON.message;
+                        } else {
+                            errorMsg += ' ' + error;
+                        }
+                        $status.html(`<strong>Error:</strong> ${errorMsg}`);
+                        $button.prop('disabled', false).text('Retry Auto-Ingest');
+                    }
+                });
             });
 
             // Clear and reset functions
@@ -838,6 +1232,11 @@
                 fileInput.value = '';
                 fileTags = {};
                 foldersCollapsed = {};
+                allLoadedFiles = [];  // Clear accumulated files
+                generatedJsonData = null;  // Clear generated JSON
+                $('#auto-ingest').hide();  // Hide ingest button
+                $('#ingest-status').hide();  // Hide status
+                $('#file-count').hide();  // Hide file count
                 $('body').removeClass('no-select');
                 $('.file-tree li').removeClass('selected');
             });
@@ -864,19 +1263,7 @@
                 updateUntaggedItemsList();
             });
 
-            $('#confirm-creator').click(function() {
-                var creatorName = $('#creator-name').val().trim();
-                if (creatorName) {
-                    $('#creator-name-display').text(creatorName);
-                    $('#creator-display').show();
-                    $('#file-input').prop('disabled', false);
-                    $('#file-input-label').removeClass('disabled');
-                } else {
-                    $('#creator-display').hide();
-                    $('#file-input').prop('disabled', true);
-                    $('#file-input-label').addClass('disabled');
-                }
-            });
+            // Confirm creator handler moved up to work with drop zone
 
             $('#deselect-all').click(function() {
                 $('.file-tree li').removeClass('selected');

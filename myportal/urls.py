@@ -46,5 +46,6 @@ urlpatterns = [
     path('graph_visualization/', views.graph_visualization, name='graph_visualization'),
     path('test-globus-compute/', views.test_globus_compute, name='test_globus_compute'),
     path('run_ollama_interactive/', views.run_ollama_interactive, name='run_ollama_interactive'),
-path('extract_metadata_summary/', views.extract_metadata_summary_view, name='extract_metadata_summary'),
+    path('extract_metadata_summary/', views.extract_metadata_summary_view, name='extract_metadata_summary'),
+    path('auto_ingest_metadata/', views.auto_ingest_metadata, name='auto_ingest_metadata'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

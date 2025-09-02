@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 from .bayesian_optimization import run_BO  # adjust the import based on where you put the function
 from io import StringIO
 import pandas as pd
@@ -8,8 +9,123 @@ from globus_portal_framework.gsearch import (
     process_search_data, get_facets, get_template, get_index
 )
 from globus_portal_framework.gclients import load_search_client
+from globus_portal_framework import gsearch
 import json
 from django.contrib.auth.decorators import login_required
+
+# Monkey patch the gsearch.post_search to handle multiple indices
+original_post_search = gsearch.post_search
+
+def multi_index_post_search(index, query, filters, user=None, page=1, search_kwargs=None):
+    """Modified post_search that handles multiple indices"""
+    from globus_portal_framework.gsearch import (
+        prepare_search_facets, get_pagination, get_setting, VALID_SEARCH_KEYS
+    )
+    
+    if not index or not query:
+        return {'search_results': [], 'facets': []}
+    
+    index_data = get_index(index)
+    
+    # Check if we have multiple UUIDs
+    uuids = index_data.get('uuid', [])
+    if not isinstance(uuids, list):
+        # Single UUID - use original function
+        return original_post_search(index, query, filters, user, page, search_kwargs)
+    
+    # Multiple UUIDs - search each and merge results
+    client = load_search_client(user)
+    
+    # Build search data (same as original function)
+    search_data = {k: index_data[k] for k in VALID_SEARCH_KEYS
+                   if k in index_data}
+    search_data.update({
+        'q': query,
+        'facets': prepare_search_facets(index_data.get('facets', [])),
+        'filters': filters,
+        'offset': (int(page) - 1) * get_setting('SEARCH_RESULTS_PER_PAGE'),
+        'limit': get_setting('SEARCH_RESULTS_PER_PAGE')
+    })
+    search_data.update(search_kwargs or {})
+    
+    # Search all indices and merge results
+    all_gmeta = []
+    merged_result = None
+    total_count = 0
+    
+    for uuid in uuids:
+        try:
+            result = client.post_search(uuid, search_data)
+            all_gmeta.extend(result.data.get('gmeta', []))
+            total_count += result.data.get('total', 0)
+            if merged_result is None:
+                merged_result = result  # Keep first result for structure
+        except Exception as e:
+            print(f"Error searching index {uuid}: {e}")
+            continue
+    
+    # If no results from any index, return empty
+    if merged_result is None:
+        return {
+            'search_results': [],
+            'facets': [],
+            'pagination': [],
+            'count': 0,
+            'offset': 0,
+            'total': 0,
+        }
+    
+    # Update merged result with combined data
+    merged_result.data['gmeta'] = all_gmeta
+    merged_result.data['count'] = len(all_gmeta)
+    merged_result.data['total'] = total_count
+    
+    # Process and return combined results
+    return {
+        'search_results': process_search_data(index_data.get('fields', []),
+                                              all_gmeta),
+        'facets': get_facets(merged_result, index_data.get('facets', []),
+                             filters, index_data.get('filter_match'),
+                             index_data.get('facet_modifiers', [])),
+        'pagination': get_pagination(total_count, merged_result.data['offset']),
+        'count': len(all_gmeta),
+        'offset': merged_result.data['offset'],
+        'total': total_count,
+    }
+
+# Apply the monkey patch
+gsearch.post_search = multi_index_post_search
+
+# Also need to patch get_subject for detail views
+original_get_subject = gsearch.get_subject
+
+def multi_index_get_subject(index, subject, user=None):
+    """Modified get_subject that handles multiple indices"""
+    from urllib.parse import unquote
+    import globus_sdk
+    
+    client = load_search_client(user)
+    idata = get_index(index)
+    
+    # Check if we have multiple UUIDs
+    uuids = idata.get('uuid', [])
+    if not isinstance(uuids, list):
+        # Single UUID - use original function
+        return original_get_subject(index, subject, user)
+    
+    # Multiple UUIDs - try each until we find the subject
+    for uuid in uuids:
+        try:
+            result = client.get_subject(uuid, unquote(subject))
+            return process_search_data(idata.get('fields', {}), [result.data])[0]
+        except globus_sdk.SearchAPIError:
+            continue  # Try next index
+    
+    # Not found in any index
+    return {'subject': subject, 'error': 'No data was found for subject'}
+
+# Apply the get_subject patch
+gsearch.get_subject = multi_index_get_subject
 from globus_portal_framework.gclients import load_transfer_client
 from django.shortcuts import redirect
 from django.contrib import messages
@@ -512,3 +628,77 @@ def extract_metadata_summary_view(request):
         summary = extract_metadata_summary(data)
         return JsonResponse({'summary': summary})
     return JsonResponse({'error': 'Invalid request method'}, status=400)
+
+@csrf_exempt
+@login_required
+def auto_ingest_metadata(request):
+    """
+    Automatically ingest metadata JSON to Globus Search index
+    Phase 1: Assumes files are already uploaded to Globus endpoint manually
+    Uses subprocess to call globus CLI since API requires special permissions
+    """
+    if request.method == 'POST':
+        try:
+            import subprocess
+            import tempfile
+            import os
+            
+            # Get the JSON data from request
+            json_data = json.loads(request.body)
+            
+            # Get the target index UUID - using the new September 2025 index
+            target_index_uuid = '64565b2d-ac5b-480e-8669-1884f1573b53'
+            
+            # Write JSON to temporary file
+            with tempfile.NamedTemporaryFile(mode='w', suffix='.json', delete=False) as tmp_file:
+                json.dump(json_data, tmp_file, indent=2)
+                tmp_filename = tmp_file.name
+            
+            try:
+                # Call globus search ingest command
+                # This uses the CLI which should have the user's credentials
+                result = subprocess.run(
+                    ['globus', 'search', 'ingest', target_index_uuid, tmp_filename],
+                    capture_output=True,
+                    text=True,
+                    timeout=30
+                )
+                
+                # Clean up temp file
+                os.unlink(tmp_filename)
+                
+                if result.returncode == 0:
+                    # Parse task ID from output if available
+                    task_id = ''
+                    if 'Task ID:' in result.stdout:
+                        task_id = result.stdout.split('Task ID:')[1].strip().split('\n')[0]
+                    
+                    return JsonResponse({
+                        'success': True,
+                        'message': 'Metadata successfully ingested to search index via CLI',
+                        'task_id': task_id,
+                        'index_uuid': target_index_uuid,
+                        'output': result.stdout
+                    })
+                else:
+                    return JsonResponse({
+                        'success': False,
+                        'message': 'Ingest command failed',
+                        'error': result.stderr,
+                        'output': result.stdout
+                    }, status=400)
+                    
+            except subprocess.TimeoutExpired:
+                os.unlink(tmp_filename)
+                return JsonResponse({
+                    'success': False,
+                    'message': 'Ingest command timed out'
+                }, status=500)
+                
+        except Exception as e:
+            return JsonResponse({
+                'success': False,
+                'message': f'Error during ingest: {str(e)}'
+            }, status=500)
+    
+    return JsonResponse({'error': 'Only POST method is allowed'}, status=400)

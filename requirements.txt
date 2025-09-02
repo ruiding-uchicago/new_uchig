@@ -5,6 +5,7 @@ numpy
 scikit-learn
 scikit-optimize
 globus-compute-sdk
+globus-cli
 dj-database-url
 psycopg2-binary
 redis
