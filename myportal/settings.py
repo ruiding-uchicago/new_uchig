@@ -56,6 +56,7 @@ LOGIN_URL = '/login/globus'
 # The 'all' scope includes search, ingest for indices you own/manage
 SOCIAL_AUTH_GLOBUS_SCOPE = [
     'urn:globus:auth:scope:search.api.globus.org:all',
+    'urn:globus:auth:scope:transfer.api.globus.org:all',  # For file transfers
 ]
 
 # SECURITY WARNING: don't run with debug turned on in production!

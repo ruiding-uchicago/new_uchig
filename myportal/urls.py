@@ -48,4 +48,6 @@ urlpatterns = [
     path('run_ollama_interactive/', views.run_ollama_interactive, name='run_ollama_interactive'),
     path('extract_metadata_summary/', views.extract_metadata_summary_view, name='extract_metadata_summary'),
     path('auto_ingest_metadata/', views.auto_ingest_metadata, name='auto_ingest_metadata'),
+    path('auto_transfer_files/', views.auto_transfer_files, name='auto_transfer_files'),
+    path('upload_files_for_tagging/', views.upload_files_for_tagging, name='upload_files_for_tagging'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

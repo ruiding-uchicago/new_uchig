@@ -512,9 +512,9 @@
                 <ul id="untagged-items-list"></ul>
                 <div id="all-tagged-message" style="display: none;">All Folder/File Tagged, Please Proceed to Generate Meta Data File.</div>
                 
-                <h4>(Step 4) Select Target Folder in Globus:</h4>
+                <h4>(Step 4) Select Initial Target Folder:</h4>
                 <div class="globus-path-container">
-                    <label for="globus-path">Select the folder where you uploaded your files in the 2025MADEPUBLICsnapshot directory:</label>
+                    <label for="globus-path">Select the suggested folder for your files in the 2025MADEPUBLICsnapshot directory:</label>
                     <select id="globus-path" class="form-control">
                         <option value="">-- Select Target Folder --</option>
                         <option value="Thrust 1/">Thrust 1</option>
@@ -525,14 +525,131 @@
                         <option value="General/">General</option>
                         <option value="Publication Records/">Publication Records</option>
                     </select>
+                    <small class="text-muted">This is the suggested location. You can navigate elsewhere in Globus if needed.</small>
                 </div>
-                <button id="generate-metadata" class="btn btn-primary btn-block">(Step 5) Generate Metadata JSON File</button>
+                <button id="proceed-to-pipeline" class="btn btn-primary btn-block">Proceed to Upload & Ingest</button>
             </div>
             
             <div class="json-upload-instruction">
-                <h4>(Step 6) Automated Ingest to Search Index:</h4>
-                <button id="auto-ingest" class="btn btn-success btn-block" style="display:none;">Automatically Ingest to Search Index</button>
-                <div id="ingest-status" class="alert" style="display:none;"></div>
+                <h4>(Step 5) Complete the Pipeline:</h4>
+                
+                <!-- Main Pipeline Section -->
+                <div class="pipeline-buttons" style="display:none;">
+                    <div class="alert alert-warning" style="margin-bottom: 20px;">
+                        <strong>📋 Complete both tasks below (in any order):</strong>
+                    </div>
+                    
+                    <!-- Task Container with Two Columns -->
+                    <div style="display: flex; gap: 20px; margin-bottom: 20px;">
+                        <!-- Task 1: Upload Files -->
+                        <div style="flex: 1; border: 2px solid #007bff; padding: 20px; border-radius: 5px; background-color: #f0f8ff;">
+                            <div style="display: flex; align-items: start; margin-bottom: 15px;">
+                                <span id="upload-check" style="font-size: 24px; margin-right: 10px;">☐</span>
+                                <h5 style="margin: 0;">Task 1: Upload Files to MADE-PUBLIC</h5>
+                            </div>
+                            
+                            <p style="margin-bottom: 15px; font-size: 14px;">
+                                Open Globus to transfer your files to the repository:
+                            </p>
+                            
+                            <button id="globus-web-transfer" class="btn btn-primary btn-block" style="margin-bottom: 10px;">
+                                <strong>📤 Open Globus File Manager</strong>
+                            </button>
+                            
+                            <div class="alert alert-warning" style="margin-top: 10px; margin-bottom: 10px; padding: 10px; font-size: 12px;">
+                                <strong>⚠️ Important:</strong><br>
+                                • We'll open the suggested folder, but you can navigate elsewhere<br>
+                                • <strong>All files in one session must go to the SAME folder</strong><br>
+                                • We cannot track your actual upload location (browser limitation)<br>
+                                • You'll need to tell us where you uploaded in the next step
+                            </div>
+                            
+                            <!-- Path Verification Section (hidden initially) -->
+                            <div id="path-verification" style="display: none; margin-top: 15px; padding: 15px; border: 1px solid #ffc107; border-radius: 5px; background-color: #fff8e1;">
+                                <strong style="color: #856404;">Step 1b: Verify Upload Location</strong>
+                                <p style="margin: 10px 0; font-size: 13px;">
+                                    Where did you actually upload your files?
+                                </p>
+                                <div style="margin-bottom: 10px;">
+                                    <input type="radio" name="path-choice" id="path-suggested" value="suggested" checked>
+                                    <label for="path-suggested" style="font-size: 13px;">
+                                        Suggested location: <code id="suggested-path-label"></code>
+                                    </label>
+                                </div>
+                                <div style="margin-bottom: 10px;">
+                                    <input type="radio" name="path-choice" id="path-custom" value="custom">
+                                    <label for="path-custom" style="font-size: 13px;">
+                                        Different location (specify below):
+                                    </label>
+                                </div>
+                                <input type="text" id="custom-path" class="form-control" 
+                                       style="display: none; margin-top: 5px; font-size: 13px;"
+                                       placeholder="e.g., Thrust 1/MyProject/2025/">
+                                <button id="confirm-path" class="btn btn-sm btn-warning btn-block" style="margin-top: 10px;">
+                                    Confirm Upload Location
+                                </button>
+                            </div>
+                            
+                            <small class="text-muted">
+                                Opens in new tab with destination pre-selected.
+                            </small>
+                        </div>
+                        
+                        <!-- Task 2: Ingest Metadata -->
+                        <div style="flex: 1; border: 2px solid #28a745; padding: 20px; border-radius: 5px; background-color: #f0fff4;">
+                            <div style="display: flex; align-items: start; margin-bottom: 15px;">
+                                <span id="ingest-check" style="font-size: 24px; margin-right: 10px;">☐</span>
+                                <h5 style="margin: 0;">Task 2: Ingest Metadata</h5>
+                            </div>
+                            
+                            <p style="margin-bottom: 15px; font-size: 14px;">
+                                Submit metadata to the search index:
+                            </p>
+                            
+                            <button id="auto-ingest" class="btn btn-success btn-block" style="margin-bottom: 10px;">
+                                <strong>✓ Ingest to Search Index</strong>
+                            </button>
+                            
+                            <small class="text-muted">
+                                Makes your data searchable in the repository.<br>
+                                This task can be verified automatically.
+                            </small>
+                        </div>
+                    </div>
+                    
+                    <!-- Completion Status -->
+                    <div id="completion-status" class="alert alert-info" style="display: none;">
+                        <strong>Progress:</strong> <span id="completion-text">0 of 2 tasks completed</span>
+                    </div>
+                    
+                    <!-- Alternative: Auto-Transfer (Advanced Users Only) -->
+                    <details style="margin-top: 20px;">
+                        <summary style="cursor: pointer; padding: 10px; background-color: #f8f9fa; border-radius: 5px;">
+                            <small>Advanced: Auto-Transfer from Existing Endpoint (click to expand)</small>
+                        </summary>
+                        <div style="border: 1px solid #dee2e6; padding: 15px; border-radius: 5px; background-color: #f8f9fa; margin-top: 10px;">
+                            <p class="text-muted" style="font-size: 14px;">
+                                If you have files on a Globus endpoint (institutional storage), you can use auto-transfer:
+                            </p>
+                            
+                            <div class="transfer-section" style="margin-bottom: 15px;">
+                                <div class="form-group">
+                                    <label for="source-endpoint">Your Source Globus Endpoint ID:</label>
+                                    <input type="text" id="source-endpoint" class="form-control" 
+                                           placeholder="e.g., ab123cd4-5678-90ef-ghij-klmnopqrstuv">
+                                </div>
+                                
+                                <button id="auto-transfer" class="btn btn-outline-secondary btn-sm btn-block">
+                                    Auto-Transfer from Endpoint
+                                </button>
+                            </div>
+                        </div>
+                    </details>
+                </div>
+                
+                <!-- Status Messages -->
+                <div id="ingest-status" class="alert" style="display:none; margin-top: 10px;"></div>
+                <div id="transfer-status" class="alert" style="display:none; margin-top: 10px;"></div>
             </div>
         </div>
     </div>
@@ -1079,12 +1196,14 @@
                 }
             }
 
-            // Store the generated JSON data globally for auto-ingest
-            let generatedJsonData = null;
+            // Removed - we now generate JSON on-the-fly during ingest
+            // let generatedJsonData = null;
 
-            // Generate metadata JSON
+            // Old function - no longer needed since we generate on-the-fly
+            /*
             function generateMetadataJSON() {
-                const globusPath = $('#globus-path').val();
+                // Use actual upload path if verified, otherwise use dropdown selection
+                const globusPath = actualUploadPath || $('#globus-path').val();
                 const creatorName = $('#creator-name').val().trim();
                 const currentDate = new Date().toISOString().slice(0, 16).replace('T', ' ');
                 const baseGlobusPath = 'globus://af7bda53-6d04-11e5-ba46-22000b92c6ec/project2/chenyuxin/2025MADEPUBLICsnapshot/';
@@ -1103,14 +1222,17 @@
                     const folderName = pathParts.pop();
                     const parentFolder = pathParts.pop() || '';
 
-                    const $tagSpans = $(this).find('.file-tag .tag');
-                    const thrustTag = $tagSpans.filter('.thrust-tag').map(function() { return $(this).text(); }).get()[0];
-                    const piTags = $tagSpans.filter('.pi-tag').map(function() { return $(this).text(); }).get().join(',');
-                    const topicTags = $tagSpans.filter('.topic-tag').map(function() { return $(this).text(); }).get().sort().join(',');
-                    const dataTags = $tagSpans.filter('.data-tag').map(function() { return $(this).text(); }).get().sort().join(',');
-                    const dataTypeTags = $tagSpans.filter('.data-type-tag').map(function() { return $(this).text(); }).get().sort().join(',');
-                    const abstractDescription = $(this).find('.abstract-tag').attr('title') || '';
-                    const outerLink = $(this).find('.link-tag').attr('title') || '';
+                    // Use the stored tag data instead of reading from DOM
+                    const tagData = fileTags[path];
+                    if (!tagData || !tagData.categories) {
+                        console.error('No tag data found for:', path);
+                        return; // Skip this item if no tags
+                    }
+
+                    // Extract tags from stored categories array
+                    const [thrustTag, piTags, topicTags, dataTags, dataTypeTags] = tagData.categories;
+                    const abstractDescription = tagData.abstract || '';
+                    const outerLink = tagData.link || '';
 
                     const idDate = currentDate.replace(/ /g, 'T');
                     const gmetaId = `${thrustTag}-${globusPath}-${parentFolder}-${folderName}-${fileName}-${thrustTag}-${creatorName}-${piTags}${idDate}`;
@@ -1127,13 +1249,13 @@
                             Title: fileName,
                             "Document Format": fileExtension,
                             "Abstract Description": abstractDescription,
-                            "Data Type": dataTypeTags.split(','),
+                            "Data Type": dataTypeTags ? dataTypeTags.split(',').map(s => s.trim()).filter(s => s) : [],
                             "Outer Link": outerLink,
                             url: rawUrl,
                             creator: creatorName,
-                            "Related Topic": topicTags.split(','),
-                            "PI Affiliated": piTags.split(','),
-                            "Data Tags": dataTags.split(','),
+                            "Related Topic": topicTags ? topicTags.split(',').map(s => s.trim()).filter(s => s) : [],
+                            "PI Affiliated": piTags ? piTags.split(',').map(s => s.trim()).filter(s => s) : [],
+                            "Data Tags": dataTags ? dataTags.split(',').map(s => s.trim()).filter(s => s) : [],
                             Thrust: thrustTag,
                             date: currentDate.replace(/ /g, 'T'),
                             "original_collection_name": "UChicago RCC Midway"
@@ -1146,12 +1268,16 @@
                 // Store the generated JSON data for auto-ingest
                 generatedJsonData = jsonData;
                 
-                // Show the auto-ingest button
-                $('#auto-ingest').show();
+                // Show pipeline options after successful generation
+                $('.pipeline-buttons').show();
+                $('#ingest-status').hide();
+                $('#transfer-status').hide();
                 
                 downloadJSONFile(jsonData, `${creatorName}_${globusPath.split('/').pop()}_${currentDate.replace(/:/g, '_').replace(/ /g, 'T')}.json`);
             }
+            */
 
+            /* No longer needed - keeping for reference
             function downloadJSONFile(jsonData, fileName) {
                 const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(jsonData, null, 2));
                 const downloadAnchorNode = document.createElement('a');
@@ -1161,37 +1287,118 @@
                 downloadAnchorNode.click();
                 downloadAnchorNode.remove();
             }
+            */
 
-            $('#generate-metadata').click(function() {
+            $('#proceed-to-pipeline').click(function() {
                 // Check if all items are tagged
                 const untaggedItems = $('.file-tree li.untagged');
                 if (untaggedItems.length > 0) {
-                    alert(`Cannot generate metadata! You have ${untaggedItems.length} untagged item(s). Please tag all files and folders before generating metadata.`);
+                    alert(`Cannot proceed! You have ${untaggedItems.length} untagged item(s). Please tag all files and folders first.`);
                     return;
                 }
-                generateMetadataJSON();
+                
+                // Check if target folder is selected
+                if (!$('#globus-path').val()) {
+                    alert('Please select a target folder first');
+                    return;
+                }
+                
+                // Check if creator name is provided
+                if (!$('#creator-name').val().trim()) {
+                    alert('Please enter your name in Step 2');
+                    return;
+                }
+                
+                // Show the pipeline section
+                $('.pipeline-buttons').show();
+                $(this).prop('disabled', true).text('Pipeline Ready - Complete Tasks Below');
             });
 
             // Auto-ingest button handler
             $('#auto-ingest').click(function() {
-                if (!generatedJsonData) {
-                    alert('Please generate metadata first');
+                // Generate metadata with the correct path (actual or suggested)
+                const globusPath = actualUploadPath || $('#globus-path').val();
+                
+                if (!globusPath) {
+                    alert('Please complete the upload task and verify the path first');
                     return;
                 }
+                
+                // Generate metadata JSON on-the-fly with correct path
+                const creatorName = $('#creator-name').val().trim();
+                const currentDate = new Date().toISOString().slice(0, 16).replace('T', ' ');
+                const baseGlobusPath = 'globus://af7bda53-6d04-11e5-ba46-22000b92c6ec/project2/chenyuxin/2025MADEPUBLICsnapshot/';
+                const jsonData = {
+                    ingest_type: "GMetaList",
+                    ingest_data: {
+                        gmeta: []
+                    }
+                };
+
+                $('.file-tree li.tagged').each(function() {
+                    const path = $(this).data('path');
+                    const pathParts = path.split('/');
+                    const fileName = pathParts.pop();
+                    const fileExtension = fileName.includes('.') ? fileName.split('.').pop() : 'Folder';
+                    const folderName = pathParts.pop();
+                    const parentFolder = pathParts.pop() || '';
+
+                    // Use the stored tag data instead of reading from DOM
+                    const tagData = fileTags[path];
+                    if (!tagData || !tagData.categories) {
+                        console.error('No tag data found for:', path);
+                        return; // Skip this item if no tags
+                    }
+
+                    // Extract tags from stored categories array
+                    const [thrustTag, piTags, topicTags, dataTags, dataTypeTags] = tagData.categories;
+                    const abstractDescription = tagData.abstract || '';
+                    const outerLink = tagData.link || '';
+
+                    const idDate = currentDate.replace(/ /g, 'T');
+                    const gmetaId = `${thrustTag}-${globusPath}-${parentFolder}-${folderName}-${fileName}-${thrustTag}-${creatorName}-${piTags}${idDate}`;
+                    // Use the verified path
+                    const fullPath = globusPath ? `${globusPath}${path}` : path;
+                    const encodedSubject = `${baseGlobusPath}${encodeURI(fullPath)}`;
+                    const rawUrl = `${baseGlobusPath}${fullPath}`;
+
+                    const gmetaEntry = {
+                        id: gmetaId,
+                        subject: encodedSubject,
+                        visible_to: ["urn:globus:groups:id:bb420e57-7835-11ee-b0db-d9a5237cb2e9"],
+                        content: {
+                            Title: fileName,
+                            "Document Format": fileExtension,
+                            "Abstract Description": abstractDescription,
+                            "Data Type": dataTypeTags ? dataTypeTags.split(',').map(s => s.trim()).filter(s => s) : [],
+                            "Outer Link": outerLink,
+                            url: rawUrl,
+                            creator: creatorName,
+                            "Related Topic": topicTags ? topicTags.split(',').map(s => s.trim()).filter(s => s) : [],
+                            "PI Affiliated": piTags ? piTags.split(',').map(s => s.trim()).filter(s => s) : [],
+                            "Data Tags": dataTags ? dataTags.split(',').map(s => s.trim()).filter(s => s) : [],
+                            Thrust: thrustTag,
+                            date: currentDate.replace(/ /g, 'T'),
+                            "original_collection_name": "UChicago RCC Midway"
+                        }
+                    };
+
+                    jsonData.ingest_data.gmeta.push(gmetaEntry);
+                });
                 
                 const $button = $(this);
                 const $status = $('#ingest-status');
                 
                 // Disable button and show loading
                 $button.prop('disabled', true).text('Ingesting...');
-                $status.removeClass('alert-success alert-danger').addClass('alert-info').text('Sending data to search index...').show();
+                $status.removeClass('alert-success alert-danger').addClass('alert-info').text('Generating metadata and sending to search index...').show();
                 
                 // Send the JSON data to the backend for ingestion
                 $.ajax({
                     url: '/auto_ingest_metadata/',
                     type: 'POST',
                     contentType: 'application/json',
-                    data: JSON.stringify(generatedJsonData),
+                    data: JSON.stringify(jsonData),
                     success: function(response) {
                         if (response.success) {
                             $status.removeClass('alert-info alert-danger').addClass('alert-success');
@@ -1206,6 +1413,9 @@
                                 3. You can now search for your data in the Repository
                             `);
                             $button.text('Successfully Ingested!').removeClass('btn-success').addClass('btn-secondary');
+                            // Mark ingest task as complete
+                            $('#ingest-check').text('✅');
+                            updateCompletionStatus();
                         } else {
                             $status.removeClass('alert-info alert-success').addClass('alert-danger');
                             $status.html(`<strong>Warning:</strong> ${response.message}`);
@@ -1225,6 +1435,188 @@
                     }
                 });
             });
+            
+            // Auto-transfer button handler
+            $('#auto-transfer').click(function() {
+                const sourceEndpoint = $('#source-endpoint').val().trim();
+                
+                if (!sourceEndpoint) {
+                    alert('Please enter your source Globus endpoint ID');
+                    return;
+                }
+                
+                if (!generatedJsonData) {
+                    alert('Please generate metadata first');
+                    return;
+                }
+                
+                // Extract file paths from the generated JSON data
+                const filePaths = [];
+                generatedJsonData.ingest_data.gmeta.forEach(item => {
+                    // Extract the path from the subject URL
+                    const subject = item.subject;
+                    // Remove the base Globus URL to get just the path
+                    const basePath = 'globus://af7bda53-6d04-11e5-ba46-22000b92c6ec/project2/chenyuxin/2025MADEPUBLICsnapshot/';
+                    if (subject.startsWith(basePath)) {
+                        let path = decodeURI(subject.substring(basePath.length));
+                        // Remove the folder path that was added in generation (e.g., "Thrust 1/")
+                        const globusPath = $('#globus-path').val();
+                        if (globusPath && path.startsWith(globusPath)) {
+                            path = path.substring(globusPath.length);
+                        }
+                        filePaths.push(path);
+                    }
+                });
+                
+                const $button = $(this);
+                const $status = $('#transfer-status');
+                
+                // Disable button and show loading
+                $button.prop('disabled', true).text('Initiating Transfer...');
+                $status.removeClass('alert-success alert-danger').addClass('alert-info').text('Starting file transfer...').show();
+                
+                // Send transfer request
+                $.ajax({
+                    url: '/auto_transfer_files/',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({
+                        source_endpoint: sourceEndpoint,
+                        file_paths: filePaths
+                    }),
+                    success: function(response) {
+                        if (response.success) {
+                            $status.removeClass('alert-info alert-danger').addClass('alert-success');
+                            $status.html(`
+                                <strong>Transfer Initiated!</strong> ${response.message}<br>
+                                <small>Task ID: ${response.task_id}</small><br>
+                                <small>Label: ${response.label}</small><br>
+                                <br>
+                                <strong>Next steps:</strong><br>
+                                1. Monitor transfer progress in the Globus web app<br>
+                                2. Files will appear in: project2/chenyuxin/2025MADEPUBLICsnapshot/<br>
+                                3. Once complete, the data will be accessible via the search
+                            `);
+                            $button.text('Transfer Initiated!').removeClass('btn-primary').addClass('btn-secondary');
+                        } else {
+                            $status.removeClass('alert-info alert-success').addClass('alert-danger');
+                            $status.html(`<strong>Transfer Failed:</strong> ${response.message}`);
+                            $button.prop('disabled', false).text('Retry Transfer');
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        $status.removeClass('alert-info alert-success').addClass('alert-danger');
+                        let errorMsg = 'Failed to initiate transfer.';
+                        if (xhr.responseJSON && xhr.responseJSON.message) {
+                            errorMsg += ' ' + xhr.responseJSON.message;
+                            if (xhr.responseJSON.details) {
+                                console.error('Transfer error details:', xhr.responseJSON.details);
+                            }
+                        } else {
+                            errorMsg += ' ' + error;
+                        }
+                        $status.html(`<strong>Error:</strong> ${errorMsg}`);
+                        $button.prop('disabled', false).text('Retry Transfer');
+                    }
+                });
+            });
+            
+            // Function to update completion status
+            function updateCompletionStatus() {
+                let completed = 0;
+                if ($('#upload-check').text() === '✅') completed++;
+                if ($('#ingest-check').text() === '✅') completed++;
+                
+                $('#completion-status').show();
+                $('#completion-text').text(`${completed} of 2 tasks completed`);
+                
+                if (completed === 2) {
+                    $('#completion-status').removeClass('alert-info').addClass('alert-success');
+                    $('#completion-text').html('<strong>🎉 All tasks completed! Your data submission is complete.</strong>');
+                }
+            }
+            
+            // Store the actual upload path
+            let actualUploadPath = null;
+            
+            // Globus Web Transfer button handler
+            $('#globus-web-transfer').click(function() {
+                // Get the selected folder from the dropdown
+                const selectedFolder = $('#globus-path').val();
+                
+                if (!selectedFolder) {
+                    alert('Please select a target folder in Step 4 first');
+                    return;
+                }
+                
+                // Store the suggested path
+                $('#suggested-path-label').text(selectedFolder);
+                
+                // Construct the Globus web app URL with destination pre-filled
+                // UChicago RCC endpoint ID
+                const destEndpointId = 'af7bda53-6d04-11e5-ba46-22000b92c6ec';
+                const destPath = `/project2/chenyuxin/2025MADEPUBLICsnapshot/${selectedFolder}`;
+                
+                // Create Globus transfer URL - this will open with destination pre-selected
+                const globusUrl = `https://app.globus.org/file-manager?destination_id=${destEndpointId}&destination_path=${encodeURIComponent(destPath)}`;
+                
+                // Open in new tab
+                window.open(globusUrl, '_blank');
+                
+                // Mark upload task as "in progress"
+                $('#upload-check').text('⏳');
+                $(this).addClass('btn-secondary').removeClass('btn-primary').prop('disabled', true);
+                
+                // Show path verification after 3 seconds
+                setTimeout(() => {
+                    $('#path-verification').slideDown();
+                    // Remove the temporary warning alert if it exists
+                    $('.alert.mt-2').remove();
+                }, 3000);
+            });
+            
+            // Handle path choice radio buttons
+            $('input[name="path-choice"]').change(function() {
+                if ($(this).val() === 'custom') {
+                    $('#custom-path').show().focus();
+                } else {
+                    $('#custom-path').hide();
+                }
+            });
+            
+            // Handle path confirmation
+            $('#confirm-path').click(function() {
+                const pathChoice = $('input[name="path-choice"]:checked').val();
+                
+                if (pathChoice === 'suggested') {
+                    actualUploadPath = $('#globus-path').val();
+                } else {
+                    const customPath = $('#custom-path').val().trim();
+                    if (!customPath) {
+                        alert('Please enter the path where you uploaded the files');
+                        return;
+                    }
+                    // Ensure path ends with /
+                    actualUploadPath = customPath.endsWith('/') ? customPath : customPath + '/';
+                }
+                
+                // Mark upload as complete
+                $('#upload-check').text('✅');
+                updateCompletionStatus();
+                
+                // Hide verification section and show confirmation
+                $('#path-verification').slideUp();
+                $(this).parent().parent().append(
+                    `<div class="alert alert-success mt-2" style="font-size: 12px;">
+                        <strong>✓ Upload location confirmed:</strong><br>
+                        <code>${actualUploadPath}</code>
+                    </div>`
+                );
+                
+                // Update the global path for metadata generation
+                // This will override the dropdown selection
+                console.log('Actual upload path:', actualUploadPath);
+            });
 
             // Clear and reset functions
             $('#clear-all').click(function() {
@@ -1233,9 +1625,20 @@
                 fileTags = {};
                 foldersCollapsed = {};
                 allLoadedFiles = [];  // Clear accumulated files
-                generatedJsonData = null;  // Clear generated JSON
-                $('#auto-ingest').hide();  // Hide ingest button
-                $('#ingest-status').hide();  // Hide status
+                actualUploadPath = null;  // Reset actual upload path
+                $('.pipeline-buttons').hide();  // Hide pipeline buttons
+                $('#completion-status').hide().removeClass('alert-success').addClass('alert-info');  // Hide and reset completion status
+                $('#upload-check').text('☐');  // Reset upload checkbox
+                $('#ingest-check').text('☐');  // Reset ingest checkbox
+                $('#auto-ingest').prop('disabled', false).text('✓ Ingest to Search Index').removeClass('btn-secondary').addClass('btn-success');  // Reset ingest button
+                $('#globus-web-transfer').prop('disabled', false).removeClass('btn-secondary').addClass('btn-primary').html('<strong>📤 Open Globus File Manager</strong>');  // Reset transfer button
+                $('#path-verification').hide();  // Hide path verification
+                $('#path-suggested').prop('checked', true);  // Reset to suggested path
+                $('#custom-path').hide().val('');  // Hide and clear custom path
+                $('#proceed-to-pipeline').prop('disabled', false).text('Proceed to Upload & Ingest');  // Reset proceed button
+                $('.alert.mt-2, .alert.mt-2').remove();  // Remove any temporary alerts
+                $('#ingest-status').hide();  // Hide ingest status
+                $('#transfer-status').hide();  // Hide transfer status
                 $('#file-count').hide();  // Hide file count
                 $('body').removeClass('no-select');
                 $('.file-tree li').removeClass('selected');

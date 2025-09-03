@@ -50,14 +50,19 @@ def multi_index_post_search(index, query, filters, user=None, page=1, search_kwa
     
     # Search all indices and merge results
     all_gmeta = []
+    all_facet_results = []
     merged_result = None
     total_count = 0
     
     for uuid in uuids:
         try:
+            print(f"Searching index {uuid} with query: '{search_data.get('q')}'")
             result = client.post_search(uuid, search_data)
-            all_gmeta.extend(result.data.get('gmeta', []))
+            gmeta = result.data.get('gmeta', [])
+            print(f"Found {len(gmeta)} results in index {uuid}")
+            all_gmeta.extend(gmeta)
             total_count += result.data.get('total', 0)
+            all_facet_results.append(result.data.get('facet_results', []))
             if merged_result is None:
                 merged_result = result  # Keep first result for structure
         except Exception as e:
@@ -74,6 +79,28 @@ def multi_index_post_search(index, query, filters, user=None, page=1, search_kwa
             'offset': 0,
             'total': 0,
         }
+    
+    # Merge facets from all indices
+    if all_facet_results:
+        merged_facets = {}
+        for facet_results in all_facet_results:
+            if facet_results:
+                for facet in facet_results:
+                    facet_name = facet.get('name')
+                    if facet_name not in merged_facets:
+                        merged_facets[facet_name] = facet.copy()
+                        merged_facets[facet_name]['buckets'] = []
+                    
+                    # Merge buckets
+                    existing_buckets = {b['value']: b for b in merged_facets[facet_name]['buckets']}
+                    for bucket in facet.get('buckets', []):
+                        if bucket['value'] in existing_buckets:
+                            existing_buckets[bucket['value']]['count'] += bucket['count']
+                        else:
+                            merged_facets[facet_name]['buckets'].append(bucket.copy())
+        
+        # Convert back to list format
+        merged_result.data['facet_results'] = list(merged_facets.values())
     
     # Update merged result with combined data
     merged_result.data['gmeta'] = all_gmeta
@@ -718,3 +745,135 @@ def auto_ingest_metadata(request):
             }, status=500)
     
     return JsonResponse({'error': 'Only POST method is allowed'}, status=400)
+
+
+@csrf_exempt
+@login_required  
+def upload_files_for_tagging(request):
+    """
+    Handle file uploads from the tagging system
+    Store files temporarily for users to manually transfer to Globus
+    """
+    if request.method == 'POST':
+        try:
+            uploaded_files = request.FILES.getlist('files')
+            user_email = request.user.email if hasattr(request.user, 'email') else request.user.username
+            
+            # Create user-specific directory
+            import os
+            from django.conf import settings
+            
+            user_folder = os.path.join(settings.MEDIA_ROOT, 'tagging_uploads', user_email.replace('@', '_at_'))
+            os.makedirs(user_folder, exist_ok=True)
+            
+            saved_files = []
+            for uploaded_file in uploaded_files:
+                # Save file
+                file_path = os.path.join(user_folder, uploaded_file.name)
+                with open(file_path, 'wb+') as destination:
+                    for chunk in uploaded_file.chunks():
+                        destination.write(chunk)
+                
+                saved_files.append({
+                    'name': uploaded_file.name,
+                    'size': uploaded_file.size,
+                    'path': file_path
+                })
+            
+            return JsonResponse({
+                'success': True,
+                'message': f'Successfully uploaded {len(saved_files)} file(s)',
+                'files': saved_files,
+                'storage_path': user_folder
+            })
+            
+        except Exception as e:
+            return JsonResponse({
+                'success': False,
+                'message': f'Error uploading files: {str(e)}'
+            }, status=500)
+    
+    return JsonResponse({'success': False, 'message': 'Method not allowed'}, status=405)
+
+
+@csrf_exempt
+@login_required
+def auto_transfer_files(request):
+    """
+    Automatically transfer files to Globus endpoint after tagging
+    Uses Globus Transfer API with user's OAuth token
+    """
+    if request.method == 'POST':
+        try:
+            # Parse request data
+            data = json.loads(request.body)
+            source_endpoint = data.get('source_endpoint')
+            file_paths = data.get('file_paths', [])
+            
+            if not source_endpoint or not file_paths:
+                return JsonResponse({
+                    'success': False,
+                    'message': 'Missing source_endpoint or file_paths'
+                }, status=400)
+            
+            # Destination is the MADE-PUBLIC collection endpoint
+            # This is the Globus endpoint ID for the collection
+            dest_endpoint = 'c1e16320-e4ba-4bec-b653-6b4e9c85b522'  # UChicago RCC endpoint
+            dest_base_path = '/project2/chenyuxin/2025MADEPUBLICsnapshot/'
+            
+            # Load transfer client using the framework's helper
+            from globus_portal_framework import load_transfer_client
+            transfer_client = load_transfer_client(request.user)
+            
+            # Create transfer data
+            from globus_sdk import TransferData
+            import uuid
+            
+            # Generate a label for this transfer
+            transfer_label = f"MADE-PUBLIC Transfer {datetime.now().strftime('%Y-%m-%d %H:%M')}"
+            
+            # Create the transfer data object
+            transfer_data = TransferData(
+                transfer_client,
+                source_endpoint,
+                dest_endpoint,
+                label=transfer_label,
+                sync_level="checksum"  # Ensure file integrity
+            )
+            
+            # Add each file to the transfer
+            for file_path in file_paths:
+                # Ensure paths are properly formatted
+                source_path = file_path if file_path.startswith('/') else f'/{file_path}'
+                # Extract just the filename for destination
+                filename = os.path.basename(file_path)
+                dest_path = f"{dest_base_path}{filename}"
+                
+                transfer_data.add_item(source_path, dest_path)
+            
+            # Submit the transfer
+            transfer_result = transfer_client.submit_transfer(transfer_data)
+            
+            if transfer_result['code'] == 'Accepted':
+                return JsonResponse({
+                    'success': True,
+                    'message': f'Transfer submitted successfully. {len(file_paths)} file(s) queued.',
+                    'task_id': transfer_result['task_id'],
+                    'submission_id': transfer_result['submission_id'],
+                    'label': transfer_label
+                })
+            else:
+                return JsonResponse({
+                    'success': False,
+                    'message': f'Transfer submission failed: {transfer_result.get("message", "Unknown error")}'
+                }, status=400)
+                
+        except Exception as e:
+            import traceback
+            return JsonResponse({
+                'success': False,
+                'message': f'Error during transfer: {str(e)}',
+                'details': traceback.format_exc()
+            }, status=500)
+    
+    return JsonResponse({'success': False, 'message': 'Method not allowed'}, status=405)
