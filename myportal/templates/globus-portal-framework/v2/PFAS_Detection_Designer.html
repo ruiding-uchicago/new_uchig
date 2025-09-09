@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Probe-Target Detection Designer - AI-Powered Sensor Configuration</title>
+    
+    <!-- External Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.21.1/cytoscape.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Chart.js for LDL visualization -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="/static/css/pfas-designer.css">
+    
+    <style>
+        /* Inline critical styles for immediate rendering */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.95);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            transition: opacity 0.3s ease;
+        }
+        
+        .loading-content {
+            text-align: center;
+        }
+        
+        .molecule-loader {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 20px;
+            position: relative;
+        }
+        
+        .molecule-loader .atom {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            position: absolute;
+            animation: orbit 2s linear infinite;
+        }
+        
+        .molecule-loader .atom:nth-child(1) {
+            background: #4CAF50;
+            top: 0;
+            left: 40px;
+        }
+        
+        .molecule-loader .atom:nth-child(2) {
+            background: #2196F3;
+            top: 40px;
+            left: 70px;
+            animation-delay: 0.5s;
+        }
+        
+        .molecule-loader .atom:nth-child(3) {
+            background: #FF9800;
+            top: 70px;
+            left: 40px;
+            animation-delay: 1s;
+        }
+        
+        .molecule-loader .atom:nth-child(4) {
+            background: #E91E63;
+            top: 40px;
+            left: 10px;
+            animation-delay: 1.5s;
+        }
+        
+        @keyframes orbit {
+            0% { transform: rotate(0deg) translateX(30px) rotate(0deg); }
+            100% { transform: rotate(360deg) translateX(30px) rotate(-360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-content">
+            <div class="molecule-loader">
+                <div class="atom"></div>
+                <div class="atom"></div>
+                <div class="atom"></div>
+                <div class="atom"></div>
+            </div>
+            <h3>Initializing Probe-Target Detection Designer...</h3>
+            <p>Loading molecular database</p>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Header -->
+        <header class="app-header">
+            <button class="home-button" onclick="window.location.href='/'">
+                <i class="fas fa-home"></i>
+            </button>
+            <div class="header-content">
+                <h1 class="app-title">
+                    <i class="fas fa-flask"></i>
+                    Probe-Target Detection Designer
+                </h1>
+                <p class="app-subtitle">AI-Powered Chemical Sensor Configuration Tool</p>
+                <p style="font-size: 0.85em; color: rgba(255,255,255,0.8); margin-top: 5px;">Model from: <a href="https://doi.org/10.1039/D4ME00203B" target="_blank" style="color: #fff; text-decoration: underline;">10.1039/D4ME00203B</a></p>
+            </div>
+            <div class="header-actions">
+                <button class="btn btn-secondary" id="tutorialBtn">
+                    <i class="fas fa-question-circle"></i> Tutorial
+                </button>
+                <button class="btn btn-primary" id="saveConfigBtn">
+                    <i class="fas fa-save"></i> Save
+                </button>
+            </div>
+        </header>
+
+        <!-- Mode Selector -->
+        <div class="mode-selector">
+            <div class="mode-tabs">
+                <button class="mode-tab active" data-mode="complete">
+                    <i class="fas fa-clipboard-check"></i>
+                    Complete Setup
+                </button>
+                <button class="mode-tab" data-mode="find-probe">
+                    <i class="fas fa-search"></i>
+                    Find Best Probe
+                </button>
+                <button class="mode-tab" data-mode="find-medium">
+                    <i class="fas fa-flask"></i>
+                    Find Best Medium
+                </button>
+                <button class="mode-tab" data-mode="optimize">
+                    <i class="fas fa-sliders-h"></i>
+                    Optimize Conditions
+                </button>
+                <button class="mode-tab" data-mode="batch">
+                    <i class="fas fa-layer-group"></i>
+                    Batch Analysis
+                </button>
+            </div>
+        </div>
+
+        <!-- Main Content Area -->
+        <div class="content-wrapper">
+            <!-- Left Panel - Graph Visualization -->
+            <div class="graph-panel">
+                <div class="graph-toolbar">
+                    <button class="tool-btn" id="resetGraphBtn">
+                        <i class="fas fa-undo"></i> Reset
+                    </button>
+                    <button class="tool-btn" id="centerGraphBtn">
+                        <i class="fas fa-compress"></i> Center
+                    </button>
+                    <button class="tool-btn" id="animateBtn">
+                        <i class="fas fa-play"></i> Animate
+                    </button>
+                    <div class="view-options">
+                        <label class="switch">
+                            <input type="checkbox" id="showLabels" checked>
+                            <span class="slider"></span>
+                        </label>
+                        <span>Labels</span>
+                    </div>
+                </div>
+                <div id="cy" class="cytoscape-container"></div>
+                
+                <!-- Floating Action Buttons -->
+                <div class="fab-container">
+                    <button class="fab fab-primary" id="runInferenceBtn">
+                        <i class="fas fa-brain"></i>
+                        <span class="fab-label">Run AI Inference</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Right Panel - Information & Controls -->
+            <div class="info-panel">
+                <!-- Performance Meter -->
+                <div class="panel-card performance-card">
+                    <h3 class="panel-title">
+                        <i class="fas fa-tachometer-alt"></i> Detection Performance
+                    </h3>
+                    <div class="ldl-meter-container">
+                        <canvas id="ldlMeter"></canvas>
+                        <div class="ldl-score" id="ldlScoreDisplay">
+                            <span class="score-value">--</span>
+                            <span class="score-label">LDL Level</span>
+                        </div>
+                    </div>
+                    <div class="performance-details">
+                        <div class="detail-item">
+                            <span class="detail-label">Sensitivity:</span>
+                            <span class="detail-value" id="sensitivityValue">--</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Confidence:</span>
+                            <span class="detail-value" id="confidenceValue">--</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Component Details -->
+                <div class="panel-card component-card">
+                    <h3 class="panel-title">
+                        <i class="fas fa-atom"></i> Component Configuration
+                    </h3>
+                    <div class="component-list">
+                        <div class="component-item" data-component="target">
+                            <div class="component-header">
+                                <span class="component-label">Target</span>
+                                <button class="edit-btn" data-node="target">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                            </div>
+                            <div class="component-value" id="targetValue">Not Selected</div>
+                        </div>
+                        <div class="component-item" data-component="probe">
+                            <div class="component-header">
+                                <span class="component-label">Probe</span>
+                                <button class="edit-btn" data-node="probe">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                            </div>
+                            <div class="component-value" id="probeValue">Not Selected</div>
+                        </div>
+                        <div class="component-item" data-component="medium">
+                            <div class="component-header">
+                                <span class="component-label">Medium</span>
+                                <button class="edit-btn" data-node="medium">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                            </div>
+                            <div class="component-value" id="mediumValue">Not Selected</div>
+                        </div>
+                        <div class="component-item" data-component="condition">
+                            <div class="component-header">
+                                <span class="component-label">Conditions</span>
+                                <button class="edit-btn" data-node="condition">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                            </div>
+                            <div class="component-value" id="conditionValue">Not Set</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AI Recommendations -->
+                <div class="panel-card recommendations-card" id="recommendationsCard" style="display: none;">
+                    <h3 class="panel-title">
+                        <i class="fas fa-robot"></i> AI Recommendations
+                    </h3>
+                    <div class="rec-mode-indicator" id="recModeIndicator">
+                        <!-- Will show current screening mode -->
+                    </div>
+                    <div class="recommendations-content">
+                        <div class="rec-stats" id="recStats">
+                            <!-- Statistics about recommendations -->
+                        </div>
+                        <div class="recommendations-list" id="recommendationsList">
+                            <!-- Dynamic recommendations will be inserted here -->
+                        </div>
+                        <div class="rec-actions">
+                            <button class="btn btn-secondary btn-sm" id="refreshRecBtn" style="display: none;">
+                                <i class="fas fa-sync"></i> Refresh
+                            </button>
+                            <button class="btn btn-primary btn-sm" id="applyBestBtn" style="display: none;">
+                                <i class="fas fa-check"></i> Apply Best
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- History Timeline -->
+                <div class="panel-card history-card">
+                    <h3 class="panel-title">
+                        <i class="fas fa-history"></i> Experiment History
+                    </h3>
+                    <div class="history-timeline" id="historyTimeline">
+                        <!-- Dynamic history entries will be inserted here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Material Selection Modal -->
+    <div class="modal" id="materialModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Select <span id="modalComponentType"></span></h2>
+                <button class="modal-close" id="closeModalBtn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <!-- Search Bar -->
+                <div class="search-container">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" class="search-input" id="materialSearchInput" 
+                           placeholder="Search from 730+ compounds...">
+                    <div class="search-filters">
+                        <button class="filter-chip active" data-filter="all">All</button>
+                        <button class="filter-chip" data-filter="pfas">PFAS Compounds</button>
+                        <button class="filter-chip" data-filter="carbon">Carbon Materials</button>
+                        <button class="filter-chip" data-filter="polymer">Polymers</button>
+                        <button class="filter-chip" data-filter="inorganic">Inorganic</button>
+                        <button class="filter-chip" data-filter="solvent">Solvents/Buffers</button>
+                        <button class="filter-chip" data-filter="biological">Biological</button>
+                    </div>
+                </div>
+                
+                <!-- Results Grid -->
+                <div class="results-container">
+                    <div class="results-header">
+                        <span class="results-count">0 results</span>
+                        <select class="sort-select" id="sortSelect">
+                            <option value="relevance">Relevance</option>
+                            <option value="name">Name A-Z</option>
+                            <option value="performance">Performance</option>
+                        </select>
+                    </div>
+                    <div class="results-grid" id="resultsGrid">
+                        <!-- Dynamic results will be inserted here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Condition Setting Modal -->
+    <div class="modal" id="conditionModal">
+        <div class="modal-content modal-compact">
+            <div class="modal-header">
+                <h2 class="modal-title">Set Experimental Conditions</h2>
+                <button class="modal-close" id="closeConditionModalBtn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="condition-form">
+                    <div class="form-group">
+                        <label for="temperatureInput">
+                            <i class="fas fa-thermometer-half"></i> Temperature (°C)
+                        </label>
+                        <input type="number" id="temperatureInput" min="-20" max="100" value="25" step="0.1">
+                        <input type="range" id="temperatureSlider" min="-20" max="100" value="25" step="0.1">
+                    </div>
+                    <div class="form-group">
+                        <label for="phMinInput">
+                            <i class="fas fa-vial"></i> pH Range
+                        </label>
+                        <div class="ph-inputs">
+                            <input type="number" id="phMinInput" min="0" max="14" value="6.5" step="0.1">
+                            <span>to</span>
+                            <input type="number" id="phMaxInput" min="0" max="14" value="7.5" step="0.1">
+                        </div>
+                        <div class="ph-slider-container">
+                            <div id="phRangeSlider"></div>
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button class="btn btn-secondary" id="cancelConditionBtn">Cancel</button>
+                        <button class="btn btn-primary" id="applyConditionBtn">Apply</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Batch Analysis Modal -->
+    <div class="modal" id="batchModal">
+        <div class="modal-content modal-large">
+            <div class="modal-header">
+                <h2 class="modal-title">Batch Analysis Configuration</h2>
+                <button class="modal-close" id="closeBatchModalBtn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="batch-config">
+                    <div class="batch-section">
+                        <h3>Select Targets</h3>
+                        <div class="batch-list" id="batchTargetsList">
+                            <!-- Target checkboxes -->
+                        </div>
+                    </div>
+                    <div class="batch-section">
+                        <h3>Select Probes</h3>
+                        <div class="batch-list" id="batchProbesList">
+                            <!-- Probe checkboxes -->
+                        </div>
+                    </div>
+                    <div class="batch-actions">
+                        <button class="btn btn-primary" id="runBatchBtn">
+                            <i class="fas fa-play"></i> Run Batch Analysis
+                        </button>
+                    </div>
+                </div>
+                <div class="batch-results" id="batchResults" style="display: none;">
+                    <h3>Analysis Results</h3>
+                    <div class="heatmap-container">
+                        <canvas id="batchHeatmap"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tutorial Overlay -->
+    <div class="tutorial-overlay" id="tutorialOverlay" style="display: none;">
+        <div class="tutorial-content">
+            <div class="tutorial-step" id="tutorialStep1">
+                <h3>Welcome to Probe-Target Detection Designer</h3>
+                <p>This tool helps you design optimal chemical sensors using AI.</p>
+                <div class="tutorial-illustration">
+                    <i class="fas fa-flask fa-4x"></i>
+                </div>
+            </div>
+            <div class="tutorial-navigation">
+                <button class="btn btn-secondary" id="skipTutorialBtn">Skip</button>
+                <button class="btn btn-primary" id="nextTutorialBtn">Next</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Custom JavaScript -->
+    <script src="/static/js/pfas-designer.js"></script>
+</body>
+</html>

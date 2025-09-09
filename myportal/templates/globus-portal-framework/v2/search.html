@@ -32,15 +32,18 @@
 <div class="container-fluid">
 
   {% block search_form %}
-  <form id="search-form" class="my-4" name="search_form"
-        action="{% block search_form_url %}{% url 'search' globus_portal_framework.index %}{% endblock %}">
-    <input type="text" id="search-input" autocomplete="off"
-           data-provide="typeahead" name="q"
-           value="{{request.session.search.query}}" placeholder="Start your search here">
-    <button id="search-btn" type="submit" class="btn btn-default">
-      <i class="fas fa-search"></i>
-    </button>
-  </form>
+  <!-- Original search form hidden - using sticky one instead -->
+  <div style="display: none;">
+    <form id="search-form" class="my-4" name="search_form"
+          action="{% block search_form_url %}{% url 'search' globus_portal_framework.index %}{% endblock %}">
+      <input type="text" id="search-input" autocomplete="off"
+             data-provide="typeahead" name="q"
+             value="{{request.session.search.query}}" placeholder="Start your search here">
+      <button id="search-btn" type="submit" class="btn btn-default">
+        <i class="fas fa-search"></i>
+      </button>
+    </form>
+  </div>
   {% endblock %}
 
   <div class="row">

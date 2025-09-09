@@ -12,3 +12,6 @@ redis
 django-redis
 gunicorn
 whitenoise
+torch
+torch_geometric
+snntorch

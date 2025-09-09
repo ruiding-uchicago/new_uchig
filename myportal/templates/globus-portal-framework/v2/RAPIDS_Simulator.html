@@ -1,0 +1,1286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RAPIDS - Molecular Interaction Simulator</title>
+    
+    <!-- External Libraries - CDN Only -->
+    <script src="https://cdn.jsdelivr.net/npm/3dmol@latest/build/3Dmol-min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .header h1 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 32px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 16px;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .tab-button {
+            padding: 12px 24px;
+            background: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            transition: all 0.3s;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .tab-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .tab-button.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #444;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .molecule-preview {
+            height: 300px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            position: relative;
+            background: #f8f9fa;
+        }
+
+        .output-terminal {
+            background: #1e1e1e;
+            color: #00ff00;
+            font-family: 'Courier New', monospace;
+            padding: 15px;
+            border-radius: 8px;
+            height: 400px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5a67d8;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: #48bb78;
+            color: white;
+        }
+
+        .btn-danger {
+            background: #f56565;
+            color: white;
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 30px;
+            background: #e0e0e0;
+            border-radius: 15px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #48bb78);
+            transition: width 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .result-card {
+            background: #f7fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 20px;
+        }
+
+        .result-card h3 {
+            color: #2d3748;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+
+        .result-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .advanced-options {
+            background: #f7fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .advanced-options h3 {
+            margin-bottom: 15px;
+            color: #2d3748;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .advanced-content {
+            display: none;
+        }
+
+        .advanced-content.show {
+            display: block;
+        }
+
+        .batch-list {
+            background: #f7fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .batch-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            margin-bottom: 5px;
+            background: white;
+            border-radius: 6px;
+        }
+
+        .batch-item .status {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .status.pending { background: #fef5e7; color: #f39c12; }
+        .status.running { background: #e8f5e9; color: #4caf50; }
+        .status.completed { background: #e3f2fd; color: #2196f3; }
+        .status.error { background: #ffebee; color: #f44336; }
+
+        .chart-container {
+            position: relative;
+            height: 400px;
+            margin-top: 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-spinner {
+            display: none;
+            width: 40px;
+            height: 40px;
+            border: 4px solid #e0e0e0;
+            border-top-color: #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        .loading-spinner.active {
+            display: block;
+        }
+
+        .molecule-input-group {
+            display: flex;
+            gap: 10px;
+            align-items: flex-end;
+        }
+
+        .molecule-input-group input {
+            flex: 1;
+        }
+
+        .molecule-search-btn {
+            padding: 10px 15px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .substrate-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .substrate-option {
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .substrate-option:hover {
+            border-color: #667eea;
+            background: #f7f9ff;
+        }
+
+        .substrate-option.selected {
+            border-color: #667eea;
+            background: #667eea;
+            color: white;
+        }
+
+        .file-upload-area {
+            border: 2px dashed #cbd5e0;
+            border-radius: 8px;
+            padding: 40px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .file-upload-area:hover {
+            border-color: #667eea;
+            background: #f7f9ff;
+        }
+
+        .file-upload-area.dragover {
+            border-color: #667eea;
+            background: #e9efff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🧬 RAPIDS Molecular Interaction Simulator</h1>
+            <p>Rapid Adsorption Probe Interaction Discovery System - Powered by FAIRChem ML Models</p>
+        </div>
+
+        <!-- Tab Navigation -->
+        <div class="tabs">
+            <button class="tab-button active" onclick="showTab('single')">
+                <i class="fas fa-atom"></i> Single Simulation
+            </button>
+            <button class="tab-button" onclick="showTab('batch')">
+                <i class="fas fa-layer-group"></i> Batch Screening
+            </button>
+            <button class="tab-button" onclick="showTab('results')">
+                <i class="fas fa-chart-bar"></i> Results & History
+            </button>
+        </div>
+
+        <!-- Single Simulation Tab -->
+        <div id="single" class="tab-content active">
+            <h2>Single Molecule Simulation</h2>
+            
+            <div class="form-grid">
+                <div>
+                    <div class="form-group">
+                        <label for="probe-molecule">Probe Molecule</label>
+                        <div class="molecule-input-group">
+                            <input type="text" id="probe-molecule" placeholder="Enter molecule name, SMILES, or PubChem CID">
+                            <button class="molecule-search-btn" onclick="searchMolecule('probe')">
+                                <i class="fas fa-search"></i> Search
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="target-molecule">Target Molecule (Optional)</label>
+                        <div class="molecule-input-group">
+                            <input type="text" id="target-molecule" placeholder="Leave empty for probe-only simulation">
+                            <button class="molecule-search-btn" onclick="searchMolecule('target')">
+                                <i class="fas fa-search"></i> Search
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Substrate</label>
+                        <div class="substrate-grid">
+                            <div class="substrate-option selected" data-substrate="vacuum">
+                                <i class="fas fa-wind"></i><br>Vacuum
+                            </div>
+                            <div class="substrate-option" data-substrate="Graphene">
+                                <i class="fas fa-th"></i><br>Graphene
+                            </div>
+                            <div class="substrate-option" data-substrate="Co_HHTP">
+                                <i class="fas fa-cubes"></i><br>Co-HHTP
+                            </div>
+                            <div class="substrate-option" data-substrate="Cu_BTC">
+                                <i class="fas fa-cube"></i><br>Cu-BTC
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <label>3D Molecule Preview</label>
+                    <div id="molecule-viewer" class="molecule-preview"></div>
+                </div>
+            </div>
+
+            <!-- Advanced Options -->
+            <div class="advanced-options">
+                <h3 onclick="toggleAdvanced()">
+                    <i class="fas fa-cog"></i> Advanced Options 
+                    <i class="fas fa-chevron-down" id="advanced-arrow"></i>
+                </h3>
+                <div id="advanced-content" class="advanced-content">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="box-size">Box Size</label>
+                            <select id="box-size">
+                                <option value="auto">Auto</option>
+                                <option value="small">Small (10Å)</option>
+                                <option value="medium">Medium (15Å)</option>
+                                <option value="large">Large (20Å)</option>
+                                <option value="custom">Custom</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="model-name">ML Model</label>
+                            <select id="model-name">
+                                <option value="uma-s-1p1">UMA-S-1p1 (Default)</option>
+                                <option value="uma-base">UMA-Base</option>
+                                <option value="uma-large">UMA-Large</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="fmax">Force Convergence (eV/Å)</label>
+                            <input type="number" id="fmax" value="0.05" step="0.01" min="0.01" max="0.5">
+                        </div>
+                        <div class="form-group">
+                            <label for="max-steps">Max Optimization Steps</label>
+                            <input type="number" id="max-steps" value="100" min="10" max="1000">
+                        </div>
+                        <div class="form-group">
+                            <label for="device">Compute Device</label>
+                            <select id="device">
+                                <option value="cpu">CPU</option>
+                                <option value="cuda">GPU (CUDA)</option>
+                                <option value="mps">GPU (Apple M1/M2)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="temperature">Temperature (K)</label>
+                            <input type="number" id="temperature" value="300" min="0" max="1000">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Control Buttons -->
+            <div style="margin-top: 20px; display: flex; gap: 10px;">
+                <button class="btn btn-primary" onclick="startSimulation()">
+                    <i class="fas fa-play"></i> Start Simulation
+                </button>
+                <button class="btn btn-danger" onclick="stopSimulation()" id="stop-btn" disabled>
+                    <i class="fas fa-stop"></i> Stop
+                </button>
+                <button class="btn btn-secondary" onclick="clearForm()">
+                    <i class="fas fa-redo"></i> Clear
+                </button>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="progress-bar" id="progress-bar" style="display: none; margin-top: 20px;">
+                <div class="progress-fill" id="progress-fill" style="width: 0%">0%</div>
+            </div>
+
+            <!-- Output Terminal -->
+            <div id="output-section" style="display: none; margin-top: 20px;">
+                <h3>Simulation Output</h3>
+                <div class="output-terminal" id="output-terminal"></div>
+            </div>
+
+            <!-- Results Display -->
+            <div id="results-section" style="display: none;">
+                <h3>Simulation Results</h3>
+                <div class="results-grid">
+                    <div class="result-card">
+                        <h3>Adsorption Energy</h3>
+                        <div class="result-value" id="adsorption-energy">--</div>
+                        <small>eV</small>
+                    </div>
+                    <div class="result-card">
+                        <h3>Interaction Energy</h3>
+                        <div class="result-value" id="interaction-energy">--</div>
+                        <small>eV</small>
+                    </div>
+                    <div class="result-card">
+                        <h3>Optimization Steps</h3>
+                        <div class="result-value" id="opt-steps">--</div>
+                        <small>iterations</small>
+                    </div>
+                    <div class="result-card">
+                        <h3>Final Forces</h3>
+                        <div class="result-value" id="final-forces">--</div>
+                        <small>eV/Å</small>
+                    </div>
+                </div>
+                
+                <!-- Energy Convergence Chart -->
+                <div class="chart-container">
+                    <canvas id="convergence-chart"></canvas>
+                </div>
+
+                <!-- Download Buttons -->
+                <div style="margin-top: 20px; display: flex; gap: 10px;">
+                    <button class="btn btn-secondary" onclick="downloadResults('json')">
+                        <i class="fas fa-download"></i> Download JSON
+                    </button>
+                    <button class="btn btn-secondary" onclick="downloadResults('vasp')">
+                        <i class="fas fa-download"></i> Download Structure
+                    </button>
+                    <button class="btn btn-secondary" onclick="downloadResults('report')">
+                        <i class="fas fa-file-alt"></i> Download Report
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Batch Screening Tab -->
+        <div id="batch" class="tab-content">
+            <h2>Batch Molecular Screening</h2>
+            
+            <!-- Batch Input -->
+            <div class="form-group">
+                <label>Upload Molecules List</label>
+                <div class="file-upload-area" id="batch-upload" ondrop="handleDrop(event)" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)">
+                    <i class="fas fa-cloud-upload-alt" style="font-size: 48px; color: #cbd5e0; margin-bottom: 10px;"></i>
+                    <p>Drag & drop CSV/JSON file here or click to browse</p>
+                    <p style="color: #718096; font-size: 14px; margin-top: 10px;">Supported formats: CSV with molecule names/SMILES, JSON configuration</p>
+                    <input type="file" id="batch-file-input" style="display: none;" accept=".csv,.json" onchange="handleFileSelect(event)">
+                </div>
+            </div>
+
+            <!-- Or Manual Input -->
+            <div class="form-group">
+                <label>Or Enter Molecules Manually (one per line)</label>
+                <textarea id="batch-molecules" rows="5" placeholder="glucose&#10;ethanol&#10;benzene&#10;caffeine"></textarea>
+            </div>
+
+            <!-- Target and Substrate Selection -->
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="batch-target">Target Molecule (Optional)</label>
+                    <input type="text" id="batch-target" placeholder="Target for all probes">
+                </div>
+                <div class="form-group">
+                    <label for="batch-substrate">Substrate</label>
+                    <select id="batch-substrate">
+                        <option value="vacuum">Vacuum</option>
+                        <option value="Graphene">Graphene</option>
+                        <option value="Co_HHTP">Co-HHTP MOF</option>
+                        <option value="Cu_BTC">Cu-BTC MOF</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Start Batch Button -->
+            <button class="btn btn-primary" onclick="startBatchScreening()">
+                <i class="fas fa-play"></i> Start Batch Screening
+            </button>
+
+            <!-- Batch Progress -->
+            <div id="batch-progress-section" style="display: none; margin-top: 20px;">
+                <h3>Screening Progress</h3>
+                <div class="batch-list" id="batch-list"></div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="batch-progress-fill" style="width: 0%">0 / 0</div>
+                </div>
+            </div>
+
+            <!-- Batch Results -->
+            <div id="batch-results-section" style="display: none;">
+                <h3>Screening Results</h3>
+                <div class="chart-container">
+                    <canvas id="batch-chart"></canvas>
+                </div>
+                
+                <!-- Results Table -->
+                <table style="width: 100%; margin-top: 20px; border-collapse: collapse;">
+                    <thead>
+                        <tr style="background: #f7fafc;">
+                            <th style="padding: 10px; text-align: left;">Rank</th>
+                            <th style="padding: 10px; text-align: left;">Molecule</th>
+                            <th style="padding: 10px; text-align: left;">Adsorption Energy (eV)</th>
+                            <th style="padding: 10px; text-align: left;">Interaction Energy (eV)</th>
+                            <th style="padding: 10px; text-align: left;">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="batch-results-table"></tbody>
+                </table>
+
+                <!-- Export Options -->
+                <div style="margin-top: 20px; display: flex; gap: 10px;">
+                    <button class="btn btn-secondary" onclick="exportBatchResults('csv')">
+                        <i class="fas fa-file-csv"></i> Export CSV
+                    </button>
+                    <button class="btn btn-secondary" onclick="exportBatchResults('json')">
+                        <i class="fas fa-file-code"></i> Export JSON
+                    </button>
+                    <button class="btn btn-secondary" onclick="exportBatchResults('pdf')">
+                        <i class="fas fa-file-pdf"></i> Generate Report
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results & History Tab -->
+        <div id="results" class="tab-content">
+            <h2>Results & History</h2>
+            
+            <!-- Search and Filter -->
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Search History</label>
+                    <input type="text" id="history-search" placeholder="Search by molecule name or date..." oninput="filterHistory()">
+                </div>
+                <div class="form-group">
+                    <label>Filter by Type</label>
+                    <select id="history-filter" onchange="filterHistory()">
+                        <option value="all">All Simulations</option>
+                        <option value="single">Single Simulations</option>
+                        <option value="batch">Batch Screenings</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- History List -->
+            <div id="history-list" style="margin-top: 20px;">
+                <!-- Dynamically populated -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let currentSimulation = null;
+        let simulationHistory = JSON.parse(localStorage.getItem('rapidsHistory') || '[]');
+        let viewer3D = null;
+        let convergenceChart = null;
+        let batchChart = null;
+
+        // Initialize 3D viewer
+        function init3DViewer() {
+            let element = document.getElementById('molecule-viewer');
+            let config = { backgroundColor: 'white' };
+            viewer3D = $3Dmol.createViewer(element, config);
+        }
+
+        // Tab switching
+        function showTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.tab-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+            
+            // Initialize components if needed
+            if (tabName === 'single' && !viewer3D) {
+                init3DViewer();
+            }
+            if (tabName === 'results') {
+                loadHistory();
+            }
+        }
+
+        // Toggle advanced options
+        function toggleAdvanced() {
+            const content = document.getElementById('advanced-content');
+            const arrow = document.getElementById('advanced-arrow');
+            content.classList.toggle('show');
+            arrow.style.transform = content.classList.contains('show') ? 'rotate(180deg)' : 'rotate(0deg)';
+        }
+
+        // Substrate selection
+        document.querySelectorAll('.substrate-option').forEach(option => {
+            option.addEventListener('click', function() {
+                document.querySelectorAll('.substrate-option').forEach(opt => opt.classList.remove('selected'));
+                this.classList.add('selected');
+            });
+        });
+
+        // Search molecule from PubChem
+        async function searchMolecule(type) {
+            const input = document.getElementById(type + '-molecule');
+            const moleculeName = input.value;
+            
+            if (!moleculeName) {
+                alert('Please enter a molecule name');
+                return;
+            }
+            
+            // Show loading
+            input.disabled = true;
+            
+            try {
+                // Mock API call - replace with actual PubChem API
+                const response = await fetch(`https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/name/${moleculeName}/property/MolecularFormula,CanonicalSMILES/JSON`);
+                const data = await response.json();
+                
+                if (data.PropertyTable && data.PropertyTable.Properties) {
+                    const props = data.PropertyTable.Properties[0];
+                    // Update viewer with SMILES
+                    if (viewer3D && type === 'probe') {
+                        viewer3D.clear();
+                        viewer3D.addModel(props.CanonicalSMILES, 'smi');
+                        viewer3D.zoomTo();
+                        viewer3D.render();
+                    }
+                    
+                    // Store SMILES for simulation
+                    input.dataset.smiles = props.CanonicalSMILES;
+                    input.dataset.formula = props.MolecularFormula;
+                }
+            } catch (error) {
+                console.error('Error searching molecule:', error);
+                alert('Could not find molecule. Please check the name or enter SMILES directly.');
+            } finally {
+                input.disabled = false;
+            }
+        }
+
+        // Start single simulation
+        async function startSimulation() {
+            // Gather configuration
+            const config = {
+                probe: document.getElementById('probe-molecule').value,
+                target: document.getElementById('target-molecule').value || null,
+                substrate: document.querySelector('.substrate-option.selected').dataset.substrate,
+                box_size: document.getElementById('box-size').value,
+                model_name: document.getElementById('model-name').value,
+                fmax: parseFloat(document.getElementById('fmax').value),
+                max_steps: parseInt(document.getElementById('max-steps').value),
+                device: document.getElementById('device').value,
+                temperature: parseInt(document.getElementById('temperature').value)
+            };
+            
+            if (!config.probe) {
+                alert('Please enter a probe molecule');
+                return;
+            }
+            
+            // Show output section
+            document.getElementById('output-section').style.display = 'block';
+            document.getElementById('progress-bar').style.display = 'block';
+            document.getElementById('output-terminal').innerHTML = '';
+            
+            // Disable buttons
+            document.querySelector('.btn-primary').disabled = true;
+            document.getElementById('stop-btn').disabled = false;
+            
+            // Start simulation
+            currentSimulation = await runSimulation(config);
+        }
+
+        // Run simulation with streaming output
+        async function runSimulation(config) {
+            const terminal = document.getElementById('output-terminal');
+            const progressBar = document.getElementById('progress-fill');
+            
+            // Add initial message
+            addTerminalOutput('Initializing RAPIDS simulation...');
+            addTerminalOutput(`Configuration: ${JSON.stringify(config, null, 2)}`);
+            
+            try {
+                // Create EventSource for server-sent events
+                const response = await fetch('/api/simulate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(config)
+                });
+                
+                const reader = response.body.getReader();
+                const decoder = new TextDecoder();
+                let buffer = '';
+                
+                while (true) {
+                    const { done, value } = await reader.read();
+                    if (done) break;
+                    
+                    buffer += decoder.decode(value, { stream: true });
+                    const lines = buffer.split('\n');
+                    buffer = lines.pop(); // Keep incomplete line in buffer
+                    
+                    for (const line of lines) {
+                        if (line.startsWith('data: ')) {
+                            const data = line.slice(6);
+                            processSimulationOutput(data);
+                        }
+                    }
+                }
+                
+                // Simulation complete
+                showResults();
+                
+            } catch (error) {
+                addTerminalOutput(`Error: ${error.message}`, 'error');
+            } finally {
+                document.querySelector('.btn-primary').disabled = false;
+                document.getElementById('stop-btn').disabled = true;
+            }
+        }
+
+        // Process simulation output line
+        function processSimulationOutput(line) {
+            addTerminalOutput(line);
+            
+            // Parse progress
+            const progressMatch = line.match(/(\d+)%/);
+            if (progressMatch) {
+                updateProgress(parseInt(progressMatch[1]));
+            }
+            
+            // Parse energy values
+            const energyMatch = line.match(/Energy:\s*([-\d.]+)/);
+            if (energyMatch) {
+                updateConvergenceChart(parseFloat(energyMatch[1]));
+            }
+        }
+
+        // Add output to terminal
+        function addTerminalOutput(text, type = 'normal') {
+            const terminal = document.getElementById('output-terminal');
+            const timestamp = new Date().toLocaleTimeString();
+            const color = type === 'error' ? '#ff6b6b' : '#00ff00';
+            terminal.innerHTML += `<div style="color: ${color}">[${timestamp}] ${text}</div>`;
+            terminal.scrollTop = terminal.scrollHeight;
+        }
+
+        // Update progress bar
+        function updateProgress(percent) {
+            const progressFill = document.getElementById('progress-fill');
+            progressFill.style.width = percent + '%';
+            progressFill.textContent = percent + '%';
+        }
+
+        // Show results section
+        function showResults() {
+            document.getElementById('results-section').style.display = 'block';
+            
+            // Mock results - replace with actual data
+            document.getElementById('adsorption-energy').textContent = '-2.34';
+            document.getElementById('interaction-energy').textContent = '-1.56';
+            document.getElementById('opt-steps').textContent = '87';
+            document.getElementById('final-forces').textContent = '0.048';
+            
+            // Create convergence chart
+            createConvergenceChart();
+            
+            // Save to history
+            saveToHistory({
+                type: 'single',
+                config: getCurrentConfig(),
+                results: {
+                    adsorption_energy: -2.34,
+                    interaction_energy: -1.56,
+                    steps: 87
+                },
+                timestamp: new Date().toISOString()
+            });
+        }
+
+        // Create convergence chart
+        function createConvergenceChart() {
+            const ctx = document.getElementById('convergence-chart').getContext('2d');
+            
+            if (convergenceChart) {
+                convergenceChart.destroy();
+            }
+            
+            convergenceChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: Array.from({length: 87}, (_, i) => i + 1),
+                    datasets: [{
+                        label: 'Energy (eV)',
+                        data: Array.from({length: 87}, () => Math.random() * 2 - 5), // Mock data
+                        borderColor: '#667eea',
+                        backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Energy Convergence'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Energy (eV)'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Optimization Step'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Stop simulation
+        function stopSimulation() {
+            if (currentSimulation) {
+                // Send stop signal to server
+                fetch('/api/stop', { method: 'POST' });
+                addTerminalOutput('Simulation stopped by user', 'error');
+                document.querySelector('.btn-primary').disabled = false;
+                document.getElementById('stop-btn').disabled = true;
+            }
+        }
+
+        // Clear form
+        function clearForm() {
+            document.getElementById('probe-molecule').value = '';
+            document.getElementById('target-molecule').value = '';
+            document.querySelectorAll('.substrate-option').forEach(opt => opt.classList.remove('selected'));
+            document.querySelector('.substrate-option[data-substrate="vacuum"]').classList.add('selected');
+            
+            if (viewer3D) {
+                viewer3D.clear();
+                viewer3D.render();
+            }
+        }
+
+        // Batch screening functions
+        function handleDragOver(e) {
+            e.preventDefault();
+            document.getElementById('batch-upload').classList.add('dragover');
+        }
+
+        function handleDragLeave(e) {
+            e.preventDefault();
+            document.getElementById('batch-upload').classList.remove('dragover');
+        }
+
+        function handleDrop(e) {
+            e.preventDefault();
+            document.getElementById('batch-upload').classList.remove('dragover');
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                processFile(files[0]);
+            }
+        }
+
+        function handleFileSelect(e) {
+            const file = e.target.files[0];
+            if (file) {
+                processFile(file);
+            }
+        }
+
+        // Make file upload area clickable
+        document.getElementById('batch-upload').addEventListener('click', function() {
+            document.getElementById('batch-file-input').click();
+        });
+
+        function processFile(file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const content = e.target.result;
+                if (file.name.endsWith('.csv')) {
+                    // Parse CSV
+                    const lines = content.split('\n').filter(line => line.trim());
+                    document.getElementById('batch-molecules').value = lines.join('\n');
+                } else if (file.name.endsWith('.json')) {
+                    // Parse JSON
+                    try {
+                        const data = JSON.parse(content);
+                        if (data.molecules) {
+                            document.getElementById('batch-molecules').value = data.molecules.join('\n');
+                        }
+                    } catch (err) {
+                        alert('Invalid JSON file');
+                    }
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        // Start batch screening
+        async function startBatchScreening() {
+            const moleculesText = document.getElementById('batch-molecules').value;
+            const molecules = moleculesText.split('\n').filter(m => m.trim());
+            
+            if (molecules.length === 0) {
+                alert('Please enter at least one molecule');
+                return;
+            }
+            
+            const target = document.getElementById('batch-target').value;
+            const substrate = document.getElementById('batch-substrate').value;
+            
+            // Show progress section
+            document.getElementById('batch-progress-section').style.display = 'block';
+            
+            // Initialize batch list
+            const batchList = document.getElementById('batch-list');
+            batchList.innerHTML = '';
+            
+            molecules.forEach((mol, index) => {
+                const item = document.createElement('div');
+                item.className = 'batch-item';
+                item.innerHTML = `
+                    <span>${mol}</span>
+                    <span class="status pending" id="batch-status-${index}">Pending</span>
+                `;
+                batchList.appendChild(item);
+            });
+            
+            // Run simulations
+            const results = [];
+            for (let i = 0; i < molecules.length; i++) {
+                // Update status
+                document.getElementById(`batch-status-${i}`).className = 'status running';
+                document.getElementById(`batch-status-${i}`).textContent = 'Running';
+                
+                // Update progress bar
+                const progress = Math.round((i / molecules.length) * 100);
+                document.getElementById('batch-progress-fill').style.width = progress + '%';
+                document.getElementById('batch-progress-fill').textContent = `${i} / ${molecules.length}`;
+                
+                // Simulate API call
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                
+                // Mock result
+                results.push({
+                    molecule: molecules[i],
+                    adsorption_energy: Math.random() * 4 - 2,
+                    interaction_energy: Math.random() * 3 - 1.5,
+                    status: 'completed'
+                });
+                
+                // Update status
+                document.getElementById(`batch-status-${i}`).className = 'status completed';
+                document.getElementById(`batch-status-${i}`).textContent = 'Completed';
+            }
+            
+            // Update final progress
+            document.getElementById('batch-progress-fill').style.width = '100%';
+            document.getElementById('batch-progress-fill').textContent = `${molecules.length} / ${molecules.length}`;
+            
+            // Show results
+            showBatchResults(results);
+        }
+
+        // Show batch results
+        function showBatchResults(results) {
+            document.getElementById('batch-results-section').style.display = 'block';
+            
+            // Sort by adsorption energy
+            results.sort((a, b) => a.adsorption_energy - b.adsorption_energy);
+            
+            // Create chart
+            const ctx = document.getElementById('batch-chart').getContext('2d');
+            
+            if (batchChart) {
+                batchChart.destroy();
+            }
+            
+            batchChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: results.map(r => r.molecule),
+                    datasets: [
+                        {
+                            label: 'Adsorption Energy (eV)',
+                            data: results.map(r => r.adsorption_energy),
+                            backgroundColor: '#667eea'
+                        },
+                        {
+                            label: 'Interaction Energy (eV)',
+                            data: results.map(r => r.interaction_energy),
+                            backgroundColor: '#48bb78'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Batch Screening Results'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Energy (eV)'
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // Populate table
+            const tbody = document.getElementById('batch-results-table');
+            tbody.innerHTML = '';
+            
+            results.forEach((result, index) => {
+                const row = tbody.insertRow();
+                row.innerHTML = `
+                    <td style="padding: 10px;">${index + 1}</td>
+                    <td style="padding: 10px;">${result.molecule}</td>
+                    <td style="padding: 10px;">${result.adsorption_energy.toFixed(3)}</td>
+                    <td style="padding: 10px;">${result.interaction_energy.toFixed(3)}</td>
+                    <td style="padding: 10px;"><span class="status completed">Completed</span></td>
+                `;
+            });
+            
+            // Save to history
+            saveToHistory({
+                type: 'batch',
+                molecules: results.map(r => r.molecule),
+                results: results,
+                timestamp: new Date().toISOString()
+            });
+        }
+
+        // Export batch results
+        function exportBatchResults(format) {
+            // Mock export - implement actual export logic
+            alert(`Exporting results as ${format.toUpperCase()}...`);
+        }
+
+        // Download results
+        function downloadResults(format) {
+            // Mock download - implement actual download logic
+            alert(`Downloading ${format.toUpperCase()} file...`);
+        }
+
+        // History management
+        function saveToHistory(entry) {
+            simulationHistory.unshift(entry);
+            if (simulationHistory.length > 50) {
+                simulationHistory.pop();
+            }
+            localStorage.setItem('rapidsHistory', JSON.stringify(simulationHistory));
+        }
+
+        function loadHistory() {
+            const historyList = document.getElementById('history-list');
+            historyList.innerHTML = '';
+            
+            if (simulationHistory.length === 0) {
+                historyList.innerHTML = '<p style="color: #718096;">No simulation history found</p>';
+                return;
+            }
+            
+            simulationHistory.forEach((entry, index) => {
+                const card = document.createElement('div');
+                card.className = 'result-card';
+                card.style.marginBottom = '15px';
+                
+                const date = new Date(entry.timestamp).toLocaleString();
+                const type = entry.type === 'batch' ? 'Batch Screening' : 'Single Simulation';
+                
+                card.innerHTML = `
+                    <h3>${type}</h3>
+                    <p style="color: #718096; font-size: 14px;">${date}</p>
+                    ${entry.type === 'single' ? 
+                        `<p>Molecule: ${entry.config?.probe || 'Unknown'}</p>` :
+                        `<p>Molecules: ${entry.molecules?.length || 0} screened</p>`
+                    }
+                    <button class="btn btn-secondary" style="margin-top: 10px;" onclick="loadHistoryEntry(${index})">
+                        <i class="fas fa-folder-open"></i> Load
+                    </button>
+                `;
+                
+                historyList.appendChild(card);
+            });
+        }
+
+        function filterHistory() {
+            // Implement history filtering
+            const searchTerm = document.getElementById('history-search').value.toLowerCase();
+            const filterType = document.getElementById('history-filter').value;
+            
+            // Filter and re-render history
+            loadHistory();
+        }
+
+        function loadHistoryEntry(index) {
+            const entry = simulationHistory[index];
+            if (entry.type === 'single') {
+                showTab('single');
+                // Load configuration
+                if (entry.config) {
+                    document.getElementById('probe-molecule').value = entry.config.probe || '';
+                    document.getElementById('target-molecule').value = entry.config.target || '';
+                }
+            } else {
+                showTab('batch');
+                // Show batch results
+                if (entry.results) {
+                    showBatchResults(entry.results);
+                }
+            }
+        }
+
+        function getCurrentConfig() {
+            return {
+                probe: document.getElementById('probe-molecule').value,
+                target: document.getElementById('target-molecule').value,
+                substrate: document.querySelector('.substrate-option.selected')?.dataset.substrate
+            };
+        }
+
+        // Initialize on load
+        window.addEventListener('load', function() {
+            init3DViewer();
+        });
+    </script>
+</body>
+</html>

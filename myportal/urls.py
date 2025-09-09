@@ -50,4 +50,8 @@ urlpatterns = [
     path('auto_ingest_metadata/', views.auto_ingest_metadata, name='auto_ingest_metadata'),
     path('auto_transfer_files/', views.auto_transfer_files, name='auto_transfer_files'),
     path('upload_files_for_tagging/', views.upload_files_for_tagging, name='upload_files_for_tagging'),
+    
+    # PFAS Detection Designer
+    path('Probe_Target_Detection_Designer/', views.Probe_Target_Detection_Designer, name='Probe_Target_Detection_Designer'),
+    path('api/pfas-inference/', views.pfas_inference_api, name='pfas_inference_api'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -1,0 +1,730 @@
+(3-aminopropyl)triethoxysilane
+(4-hydroxyphenyl)diphenylmethanol
+1,1,3,3-tetramethyldisiloxane
+1,1-dichloro-1-fluoroethane
+1,2-diaminobenzene
+1,2-diphenylethylenediamine
+1,2-dithiolane
+1,4,8,11,15,18,22,25-octabutoxy-29h,31h-phthalocyanine
+1,4-benzenedicarboxylic acid, mono(2-ethylhexyl) ester
+1,4-diaminobutane
+1,5,7-trimethyl-3-azabicyclo[3.3.1]nonan-2-one
+1,5-anhydroglucitol
+1-beta-d-glucopyranosyl-4-phenyl-1h-1,2,3-triazole
+1-butanol
+1-ethyl-3-methylimidazolium tetrafluoroborate
+1-octadecanethiol
+1-pyrenecarboxaldehyde hydrazone
+11-(ferrocenyl)undecanethiol
+11-aminoundecyltrimethoxysilane
+11-ferrocenyl-1-undecanethiol
+18-crown-6
+2,1,3-benzothiadiazole
+2,11,20,29,37,38-hexaza-39,40-diazanidanonacyclo[28.6.1.13,10.112,19.121,28.04,9.013,18.022,27.031,36]tetraconta-1,3,5,7,9,11,13,15,17,19,21(38),22,24,26,28,30(37),31,33,35-nonadecaene;titanium(2+);hydrate
+2,2'-bithiophene-5-boronic acid
+2,2'-dipicolylamine
+2,3,5,6-tetrafluoro-7,7,8,8-tetracyanoquinodimethane
+2,3,6,7,10,11-hexahydroxytriphenylene
+2,3,6,7,10,11-hexaiminotriphenylene
+2,3,9,10,16,17,23,24-octakis(octyloxy)-29h,31h-phthalocyanine
+2,3-dimethyl-2,3-dinitrobutane
+2,4,6-trinitrotoluene
+2,4-dichlorophenoxyacetic acid
+2,4-dinitrotoluene
+2,6-naphthalenedicarboxylic acid
+2,7,12,17,22-penta-tert-butyl-4,9,14,19,24-pentacyano-pentabenzo[ab,fg,kl,pq,uv]-[25]annulene
+2,8-dichloro-5,11-dihexyl-indolo(3,2-b)carbazole
+2,8-difluoro-5,11-bis(triethylsilylethynyl)
+2,8-difluoro-5,11-bis(triethylsilylethynyl)anthradithiophene
+2,9-di(pentan-3-yl)anthra[2,1,9-def:6,5,10-d'e'f']diisoquinoline-1,3,8,10(2h,9h)-tetraone
+2-(bis(pyridin-2-ylmethyl)amino)ethane-1-thiol
+2-(n-morpholino)ethanesulfonic acid
+2-(thiophen-3-yl)-1,3-thiazole-5-carbaldehyde
+2-[bis(2-methoxy-2-oxoethyl)amino]propanoic acid
+2-butanone
+2-hydroxypropyl-beta-cyclodextrin
+2-methylimidazole
+2-morpholinoethanesulfonic acid
+2-propenyl
+2-pyridyl diketopyrrolopyrrole
+3,3'-bithiophene
+3,3'-me2-salophen
+3,6-diphenyl-2,5-dihydropyrrolo[3,4-c]pyrrole-1,4-dione
+3-[2-(3-thienyl)vinyl]thiophene
+3-aminophenylboronic acid
+3-aminopropyltriethoxysilane
+3-carboxy-5-nitrophenylboronic acid
+3-octylthiophene
+3-sialyl lactose
+4,4'-[1,4-phenylenebis(ethyne-2,1-diyl)]dibenzoic acid
+4,4'-thiobisbenzenethiol
+4,4,4,4-(porphine-5,10,15,20-tetrayl)tetrakis(benzoic acid)
+4-(2-hydroxyethyl)-1-piperazine ethanesulfonic acid
+4-(2-hydroxyethyl)-1-piperazineethanesulfonic acid
+4-(dicyanomethylene)-2,5-cyclohexadien-1-ylidenecyanamide
+4-[2-(4-hydroxyphenyl)propan-2-yl]phenol;carbonate
+4-amino-n-methylphthalimide
+4-aminophthalimide
+4-carboxyphenyl boronic acid
+4-carboxyphenylboronic acid
+4-ethynylaniline
+4-formylphenylboronic acid
+4-hydroxybenzoate
+4-mercaptobenzoic acid
+4-mercaptophenylboronic acid
+4-tert-butylcalix[4]arene-tetraacetic acid tetraethyl ester
+4-tert-butylcalix[6]arene
+4-vinylphenylboronic acid
+5,10,15,20-tetra(4-pyridyl)-21h,23h-porphine
+5,10,15-tris(pentafluorophenyl)corrole
+5,11-bis(triethylsilylethynyl)anthradithiophene
+5,9,14,18,23,27,32,36-octabutoxy-2,3-naphthalocyanine
+5-carboxy-1-pentanethiol
+6,13-bis(triisopropylsilylethynyl) pentacene
+6,13-bis(triisopropylsilylethynyl)pentacene
+7,16-dibenzyl-1,4,10,13-tetraoxa-7,16-diazacyclooctadecane
+8-hydroxy-1,3,6-pyrenetrisulfonic acid
+Perfluorohexanesulfonamide
+Perfluorohexanesulfonic Acid
+Perfluorooctanesulfonic acid
+Perfluoropropanesulfonic acid
+[1]benzothieno[3,2-b][1]benzothiophene
+acetate
+acetic acid
+acetone
+acetylcholine
+acrylonitrile
+adenosine triphosphate
+ag+
+alanine
+alpha-sexithiophene
+alumina
+aluminium tris(quinolin-8-olate)
+aluminum
+aluminum nitride
+aluminum oxide
+amine
+amino-undecyl-triethoxysilane
+ammonia
+ammonium
+ammonium chloride
+ammonium hydroxide
+amphetamine
+ampicillin
+aniline
+antimony trioxide
+argon
+arsenic
+as3+
+ascorbic acid
+atrazine
+au
+azobenzene
+barium strontium titanate
+benzene
+benzenehexathiol
+benzo(ghi)perylene
+benzo-12-crown 4-ether
+benzo[1,2-b:4,5-b']dithiophene-4,8-dione
+benzoic acid
+benzothiazole spiropyran
+benzothienobenzothiophene
+benzothiophene
+benzyltriethylammonium chloride
+beta-citronellol
+biotin
+bis-methoxyphenol-perylene tetracarboxyllicdiimide
+bis-tris propane
+bismuth oxide
+bismuth(iii) vanadate
+bisphenol a
+bithiophene
+biurea
+boric acid
+boron
+boron carbon nitride
+boron nitride
+bromine
+bromophenol blue
+butadiene
+c8-btbt
+ca2+
+cadmium cation
+cadmium ionophore i
+cadmium nitrate
+cadmium sulfide
+calcium chloride
+calcium ionophore iv
+calcium sulfate
+calix[4]arene
+calix[8]arene
+calixarene
+carbofuran
+carbon
+carbon dioxide
+carbon molecular sieve
+carbon monoxide
+carbon nanotube
+carbon nitride
+carbon quantum dot
+carbonate
+carboxylated polypyrrole
+catechol
+cellulose
+ceric oxide
+cerium dioxide
+cerium oxide
+cerium titanate
+chitosan
+chloroform
+chlorpyrifos
+cinnamaldehyde
+cis,cis-1,3,5-trimethylcyclohexane-1,3,5-tricarboxylic acid
+citrate
+citric acid
+citric acid monohydrate
+co2+
+cobalt
+cobalt ferrite
+cobalt oxide
+cobalt phthalocyanine
+cobyrinate c-monamide
+copper hexacyanoferrate(ii)
+copper oxide
+copper phthalocyanine
+copper phthalocyanine sulfonate
+copper phthalocyanine tetrasulfonic acid tetrasodium salt
+copper tetraphenylporphyrin
+copper(ii) acetate
+copper(ii) benzene-1,3,5-tricarboxylate
+copper(ii) oxide
+copper(ii) perchlorate
+copper(ii) phthalocyanine
+copper(ii) phthalocyanine-tetrasulfonic acid tetrasodium salt
+copper(ii) sulfate
+copper(ii) sulfide
+copper, [1,2,3,4,8,9,10,11,15,16,17,18,22,23,24,25-hexadecachloro-29h,31h-phthalocyaninato(2-)-kappan29,kappan30,kappan31,kappan32]-, (sp-4-1)-
+cortisol
+cr3+
+creatinine
+cs+
+cu
+cu2+
+cucurbit[7]uril
+cupric cation
+cupric oxide
+curcumin
+cyanide
+cyclam
+cyclohexanone
+cyclopentadithiophene benzothiadiazole copolymer
+cysteamine
+cysteine
+d-arabitol
+decane
+delta9-tetrahydrocannabinol
+dextran
+di-2-ethylhexyl phthalate
+di-n-octyl phthalate-d4
+diamond
+diazinon
+dibenzo-18-crown-6
+dichloromethane
+diethyl carbonate
+diethyl chlorophosphate
+diethyl ether
+diethyl sulfide
+diketopyrrolopyrrole
+diketopyrrolopyrrole fluorene copolymer
+diketopyrrolopyrrole-fluorene copolymer
+diketopyrrolopyrrole-terthiophene conjugated polymer
+dimethoate
+dimethyl methylphosphonate
+dinaphtho[2,3-b:2',3'-f]thieno[3,2-b]thiophene
+dinitrotoluene
+dinonylnaphthalene sulfonic acid
+diphenyl chlorophosphate
+dipicolylamine
+dipyrazino[2,3-f:2',3'-h]quinoxaline-2,3,6,7,10,11-hexacarbonitrile
+dipyrrin
+disodium hydrogen phosphate
+disodium phosphate
+disodium sulfide nonahydrate
+dithieno[2,3-d:2',3'-d']benzo[1,2-b:4,5-b']dithiophene-5,10-dione
+dithiothreitol
+dodecamethylbambus[6]uril hydrate, bu[6]
+dopamine
+dysprosium(iii) titanium dioxide
+edetic acid
+epigallocatechin gallate
+epinephrine
+ethanol
+ethyl 2-[[[2,4(or3,5)-dimethyl-3-cyclohexen-1-yl]methyl]amino]benzoate
+ethyl acetate
+ethyl undecylenate
+ethylboronic acid
+ethylene
+ethylene glycol dimethacrylate
+ethylene glycol dimethacrylate-co-methacrylic acid
+ethylene oxide
+ethylenediamine
+europium
+f-
+fast blue bb salt
+fe3+
+ferric chloride
+ferric ferrocyanide
+fetppcl
+fluo 4-am
+fluo-4-am
+fluorinated thiopheneisoindigo conjugated polymer
+fluorine
+fluoropolysiloxane
+formaldehyde
+fullerene
+gadolinium cation (3+)
+gadolinium oxide
+gallium nitride
+gallium oxide
+gallium sulfide
+gamma-aminobutyric acid
+glucose
+glucose oxidase
+glutathione
+gly-his
+glycerol
+glyphosate
+gold
+graphene
+graphite
+guanine
+h+
+hafnium dioxide
+hafnium nitride
+hafnium oxide
+helium
+hematite
+heptacyclene
+hexabenzocoronene
+hexafluoro-2-propanol
+hexafluorotitanate(2-)
+hexahydropyridine
+hexahydroxytriphenylene
+hexane
+hexyltrichlorosilane
+hg2+
+histamine
+histidine
+holmium titanate
+homocysteine
+hydrazine
+hydrochloric acid
+hydrocortisone 3-(o-carboxymethyl)oxime
+hydrogen
+hydrogen fluoride
+hydrogen peroxide
+hydrogen phosphate
+hydrogen sulfide
+hydrogen sulfite
+hydroxyl radical
+hyoscyamine
+ibuprofen
+indacenodithiophene-co-benzothiadiazole
+indigo
+indium arsenide
+indium nitride
+indium oxide
+indolo[3,2-b]carbazole
+inosine
+iodine
+ionophore
+iridium
+iridium oxide
+iron hydroxide oxide
+iron porphyrin
+iron(iii)
+iron(iii) chloride
+iron(iii) oxide
+iron(iii) phthalocyanine chloride
+iron(iii) tetraphenylporphyrin chloride
+isonicotinic acid
+isophthalate
+isopropanol
+isopropyl alcohol
+isopropyl amine
+k+
+l-ascorbic acid
+l-cysteine
+l-cystine
+l-glutamine
+l-serine
+lactic acid
+lanthanum cation (3+)
+lanthanum fluoride
+lead
+lead ionophore iii
+lead methylammonium tri-iodide
+lead sulfide
+li+
+lignin
+lithium acetate
+lithium oxide
+lutetium oxide
+lutetium phthalocyanine
+magnesium chloride
+magnesium oxide
+magnesium sulfate
+malononitrile
+manganese dioxide
+melamine
+melanin
+mercury
+mercury(ii) nitrate
+mercury(ii) perchlorate
+meso-tetra(4-carboxyphenyl)porphine
+methane
+methanethiol
+methanol
+methyl 5-(dimethylamino)-2-methyl-5-oxopentanoate
+methyl cellulose
+methyl iodide
+methyl parathion
+methylene blue
+molybdenum diselenide
+molybdenum disulfide
+molybdenum ditelluride
+molybdenum trioxide
+mono-(6-amino-6-deoxy)-beta-cyclodextrin
+monopotassium phosphate
+monosodium phosphate
+mucin
+n,n'-bis(2,5-di-tert-butylphenyl)-3,4,9,10-perylenedicarboximide
+n,n'-dimethyl-1,4,5,8-naphthalenetetracarboxylic diimide
+n,n-dimethylformamide
+n-(1-pyrenyl)maleimide
+n-(9-acridinyl)maleimide
+n-(tert-butoxycarbonyl)-l-phenylalanine
+n-[3-(dimethylamino)propyl]methacrylamide
+n-[3-(trimethoxysilyl)propyl]ethylenediamine
+n-alkyl-diketopyrrolo-pyrrole-dithienylthieno[3,2-b]thiophene
+n-butanol
+n-butylamine
+n-cyclohexyl-2-aminoethanesulfonic acid
+n-methyl pyrrolidone
+na+
+nafion
+naphthalene
+naphthalene diimide
+naphthalene tetracarboxylic diimide
+naphthalenediimide
+neodymium oxide
+ni2+
+nickel
+nickel cation
+nickel nitrilotriacetic acid
+nickel oxide
+nickel porphyrin
+nickel silicide
+nickel(ii) nitrate hexahydrate
+nickel(ii) oxide
+nickel(ii) phthalocyanine-tetrasulfonic acid tetrasodium salt
+nickel-histidine
+nicotine
+nile red
+niobium hydride
+niobium pentoxide
+niobium sulfide
+nitrate
+nitric acid
+nitric oxide
+nitrilotriacetic acid
+nitrogen
+nitrogen dioxide
+nitrogen monoxide
+nitrous oxide
+nonactin
+norfentanyl
+octadecylphosphonic acid
+octanol
+octylamine
+ovalbumin
+oxalic acid
+oxygen
+ozone
+p-xylene
+palladium
+palladium oxide
+palladium sulfide
+parylene c
+patulin
+pb2+
+pentacene
+perfluorooctanesulfonic acid
+perhydroxycucurbit[6]uril
+phenobarbital
+phenol
+phenol red
+phenoxyethanol
+phenyl
+phenylalanine
+phenylboronic acid
+phenytoin
+phosphate
+phosphoric acid
+phosphorus
+phthalocyanine
+picene
+platinum
+platinum diselenide
+poly (3, 3- dialkylquaterthiophene)
+poly 2,2'-bithiophene-5-boronic acid
+poly [3-(3,4-difluoro-[2,2:5,2-terthiophen]-5-yl)-2,5-bis(3-(2-(2-methoxyethoxy)ethoxy)-2-((2-(2-methoxyethoxy)-ethoxy)-methyl)-propyl)-6-(thiophen-2-yl)pyrrolo[3,4-c]pyrrole-1,4(2h,5h)-dione]
+poly(2,5-bis(3-hexadecylthiophen-2-yl)thieno[3,2-b]thiophene)
+poly(2,5-bis(3-tetradecylthiophen-2-yl)thieno(3,2-b)thiophene)
+poly(2,5-bis(3-tetradecylthiophen-2-yl)thieno[3,2-b]thiophene)
+poly(2,5-bis(3-tetradecylthiophen-2-yl)thienol [3,2-b]thiophene)
+poly(2,5-bis(3-tetradecylthiophen-2yl)thieno(3,2-b)thiophene)
+poly(2,5-{2-octyldodecyl}-3,6-diketopyrrolopyrrole-alt-5,5-{2,5-di[thien-2-yl]thieno[3,2-b]thiophene})
+poly(2,7-dichlorofluorescein-co-norbornene)
+poly(2-hydroxyethyl methacrylate)
+poly(2-hydroxyethylmethacrylate-co-vinylphenylboronic acid)
+poly(3,3-dialkylquaterthiophene)
+poly(3,3-didodecyl quarter thiophene)
+poly(3,3-didodecylquaterthiophene)
+poly(3,4-ethylenedioxythiophene)
+poly(3-amino-benzylamine-co-aniline)
+poly(3-butylthiophene)
+poly(3-carboxypropylthiophene)
+poly(3-hexyl thiophene)
+poly(3-hexylthiophene)
+poly(3-hexylthiophene-2,5-diyl)
+poly(3-thiophene-isoindigo)
+poly(4-(4,4-bis(2-ethylhexyl)-4h-silolo[3,2-b:4,5-b]dithiophen-2-yl)-7-(4,4-bis(2-ethylhexyl)-6-(thiophen-2-yl)-4h-silolo[3,2-b:4,5-b]dithiophen-2-yl)-5,6-difluorobenzo[c][1,2,5]thiadiazole)
+poly(4-iso-cyano-benzoic acid 5-(2-dimethylamino-ethoxy)-2-nitro-benzylester)-b-poly(3-hexylthiophene)
+poly(4-styrene sulfonate)
+poly(4-vinylpyridine)
+poly(9,9'-spirobifluorene-alt-4,4'-biphenylene)
+poly(9,9-di-n-dodecylfluorene)
+poly(9-vinylcarbazole)
+poly([n,n-bis(2-octyldodecyl)-naphthalene-1,4,5,8-bis(dicarboximide)-2,6-diyl]-alt-5,5-(2,2-bithiophene))
+poly(acrylic acid)
+poly(allylamine hydrochloride)
+poly(bisdodecylquaterthiophene)
+poly(butyl acrylate)
+poly(diallyldimethylammonium chloride)
+poly(diketopyrrolopyrrole-terthiophene)
+poly(diketopyrrolopyrrolethiophene-thieno[3,2,b]thiophene-thiophene) (pdpp-tt)
+poly(diketopyrrolopyrrolethiophene-thieno[3,2-b]thiophenethiophene)
+poly(dopamine-co-1,2-diaminobenzene)
+poly(ethylene glycol) diglycidyl ether
+poly(ethylene-co-vinyl acetate)
+poly(ethylene-co-vinyl alcohol)
+poly(methyl methacrylate)
+poly(n-isopropylacrylamide-co-2,2-dimethyl-4-pentenoic acid-co-n,n-methylenebisacrylamide)
+poly(propylene imine) dendrimer
+poly(sodium 4-styrenesulfonate)
+poly(sodium-p-styrenesulfonate)
+poly(styrenesulfonate)
+poly(tetraphenylporphyrin)
+poly(triarylamine)
+poly(vinyl alcohol)
+poly(vinyl chloride)
+poly(vinylidene fluoride-trifluoroethylene-chlorofluoroethylene)
+poly-(4-[2,2;5,2]terthiophene-3-yl-pyridine-co-3-hexylthiophene)
+poly-3-hexylthiophene
+poly-l-lysine
+poly[(3,6-bis(thiophen-2-yl)-2,5-bis(7-decylnonadecyl)-2,5-dihydropyrrolo[3,4-c]pyrrole-1,4-dione-selenopheno[3,2-b]thiophene-2,5-diyl)]
+poly[(4,6-thieno[3,4-b]thiophen-2-yl)-2-ethylhexan-1-one]
+poly[2,5-(2-octyldodecyl)-3,6-diketopyrrolopyrrole-alt-5,5-(2,5-di(thien-2-yl)thieno[3,2-b]-thiophene)]
+poly[2,5-(2-octyldodecyl)-3,6-diketopyrrolopyrrole-alt-5,5-(2,5-di(thien-2-yl)thieno[3,2-b]thiophene)]
+poly[2,5-bis(2-decyltetradecyl)pyrrolo[3,4-c]pyrrole-1,4(2h,5h)-dione-alt-5,5'-di(thiophen-2-yl)-2,2'-(e)-2-(2-(thiophen-2-yl)vinyl)thiophene]
+poly[2,5-bis(2-octyldodecyl)-3,6-diketopyrrolopyrrole-alt-5,5-(2,5-di(thien-2-yl)thieno[3,2-b]thiophene)]
+poly[2,5-bis(2-octyldodecyl)pyrrolo-[3,4-c]pyrrole-1,4(2h,5h)-dione-alt-2,2:5,2:5,2-quaterthiophene]
+poly[2,5-bis(3-dodecylthiophen-2-yl)thieno[3,2-b]thiophene]
+poly[2,5-bis(3-tetradecylthiophen-2-yl) thieno [3,2-b] thiophene]
+poly[2,5-bis(3-tetradecylthiophen-2-yl)thieno[3,2-b]thiophene]
+poly[2,5-bis(7-decylnonadecyl)pyrrolo[3,4-c]pyrrole-1,4(2h,5h)-dione-(e)-1,2-bis(5-(thiophen-2-yl)selenophen-2-yl)ethene]
+poly[2,6-(4,4-bis-(2-ethylhexyl)-4h-cyclopenta [2,1-b; 3,4-b] dithiophene)-alt-4,7-(2,1,3-benzothiadiazole)]
+poly[2,6-(4,4-bis-(2-ethylhexyl)-4h-cyclopenta[2,1-b;3,4-b']dithiophene)-alt-4,7-(2,1,3-benzothiadiazole)]
+poly[2,6-(4,4-bis-(2-ethylhexyl)-4h-cyclopenta[2,1-b;3,4-b] dithiophene)-alt-4,7(2,1,3 benzothiadiazole)]
+poly[3-(3-carboxypropyl)thiophene-2,5-diyl]
+poly[4-(4,4-dihexadecyl-4h-cyclopenta[1,2-b:5,4-b]dithiophen-2-yl)-alt-[1,2,5]thiadiazolo[3,4-c]pyridine]
+poly[[2,5-bis(2-octyldodecyl)-2,3,5,6-tetrahydro-3,6-dioxopyrrolo[3,4-c]pyrrole-1,4-diyl]-alt-[[2,2-(2,5-thiophene)bis-thieno(3,2-b)thiophene]-5,5-diyl]]
+poly[n,n'-bis(4-butylphenyl)-n,n'-bis(phenyl)benzidine]
+polyacrylamide
+polyacrylic acid
+polyaniline
+polydimethylsiloxane
+polydithiopropane sulfonic acid
+polyethylene glycol
+polyethyleneimine
+polyethylenimine
+polyfuran
+polyhexylthiophene
+polyisobutylmethacrylate
+polyisoindigo
+polylysine
+polypyrrole
+polysiloxane
+polystyrene
+polystyrene sulfonate
+polystyrenesulfonic acid
+polythiophene
+polyurethane
+polyvinyl butyral
+polyvinyl chloride
+polyvinylchloride
+poly{2,5-bis(3-tetradecylthiophene-2-yl)thieno[3,2-b]thiophene}
+poly{3,6-dithiophen-2-yl-2,5-bis(2-decyltetradecyl)pyrrolo[3,4-c]pyrrole-1,4-dione-alt-thienylenevinylene-2,5-yl}
+poly{[n,n-bis(2-decylpentadecyl)naphtho[2,3-b:6,7-b]dithiophene-4,5,9,10-tetracarboxidiimide-2,7-diyl]-alt-5,5-(2,2-bithiophene)}
+porphyrin
+potassium
+potassium chloride
+potassium dichromate
+potassium dihydrogen phosphate
+potassium ionophore iii
+potassium nitrate
+potassium perchlorate
+potassium phosphate
+propanal
+propane
+propanedinitrile
+propene
+pt
+putrescine
+pyrene
+pyrene-1,3,6,8-tetraphosphonic acid
+pyridine
+pyrrole
+quaternary ammonium sulfanilamide
+quinine
+quinquethiophene
+rhenium sulfide
+rhodium oxide
+ruthenium
+ruthenium dioxide
+ruthenium oxide
+saccharose
+sarin
+serine
+serotonin
+silanol
+silica
+silicene
+silicon
+silicon carbide
+silicon dioxide
+silicon nitride
+silver
+silver oxide
+sodium 2-anthraquinonesulfonate
+sodium acetate
+sodium aluminosilicate
+sodium anthraquinone-2-sulfonate
+sodium arsenite
+sodium bicarbonate
+sodium carbonate
+sodium chloride
+sodium citrate
+sodium dihydrogen phosphate
+sodium dihydrogen phosphate dihydrate
+sodium ferrocyanide
+sodium fluoride
+sodium hydroxide
+sodium ionophore i
+sodium ionophore iii
+sodium ionophore x
+sodium nitrate
+sodium nitrite
+sodium phosphate
+sodium phosphotungstate
+sodium sulfate
+sorbitol
+soybean lecithin
+spermidine
+sr2+
+strontium oxide
+sulfate ion
+sulfide
+sulfur dioxide
+tantalum
+tantalum oxide
+tantalum pentoxide
+tantalum trisulfide
+taurine
+tellurium
+terbium(iii,iv) oxide
+tetrabenzoporphyrin
+tetracycline
+tetraethyl orthosilicate
+tetraethyl pyrophosphate
+tetrakis(4-carboxyphenyl)porphine
+tetramethylammonium
+tetraphenylporphyrin
+tetrathiafulvalene
+tetrathiapentacene
+tetraxetan
+thiazole
+thioformaldehyde
+thiophene
+thiophenol
+thiourea
+thulium oxide
+thymine
+tin (ii) sulfide
+tin (iv) oxide
+tin dioxide
+tin diselenide
+tin(ii) oxide
+tin(iv) oxide
+tips-pentacene
+titanium
+titanium carbide
+titanium dioxide
+titanium nitride
+toluene
+transferrin
+triazolyl ketone hydrazone
+trichloro(phenethyl)silane
+tricine
+tridodecylamine
+triethylamine
+triisopropylsilylethynyl pentacene
+trimethylamine
+trimethylolpropane tris((3-isocyanato-4-methylphenyl)carbamate)
+trinitrotoluene
+tris
+tris buffer
+tris hydroxymethyl aminomethane
+tris(hydroxymethyl)aminomethane
+tris(pentafluorophenyl)borane
+tris-(hydroxymethyl)-aminomethane
+trisodium phosphate dodecahydrate
+tromethamine
+tryptophan
+tungsten diselenide
+tungsten disulfide
+tungsten ditelluride
+tungsten trioxide
+tungstophosphoric acid
+urea
+uric acid
+valinomycin
+vanadium dioxide
+vanadium pentoxide
+vanadyl phthalocyanine
+violet phosphorus
+water
+xylene
+ytterbium oxide
+yttrium
+yttrium oxide
+zif-8
+zinc dioxide
+zinc oxide
+zinc phthalocyanine
+zinc telluride
+zirconium oxide
+zirconium trisulfide
+zn-tcpp
+zn2+

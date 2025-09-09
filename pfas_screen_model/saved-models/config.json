@@ -1,0 +1,23 @@
+{
+  "arch": "MultiModal(SNN+GNN)",
+  "num_classes": 5,
+  "snn": {
+    "input_size": 1358,
+    "hidden_size": 64,
+    "beta": 0.85
+  },
+  "gnn": {
+    "input_size": 96,
+    "hidden_size": 64,
+    "layers": 7
+  },
+  "max_feature_length": 32,
+  "positive_class_index": 0,
+  "ldl_mapping": {
+    "Very Low Detection (High Sensitivity)": 0,
+    "Low Detection": 1,
+    "Moderate Detection": 2,
+    "High Detection (Lower Sensitivity)": 3,
+    "Very High Detection (Low Sensitivity)": 4
+  }
+}
