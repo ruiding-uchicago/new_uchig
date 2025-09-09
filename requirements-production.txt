@@ -1,0 +1,16 @@
+django-globus-portal-framework
+django-sslserver-v2
+pandas
+numpy
+scikit-learn
+scikit-optimize
+globus-compute-sdk
+globus-cli
+dj-database-url
+psycopg2-binary
+redis
+django-redis
+gunicorn
+whitenoise
+# Note: torch and torch_geometric are excluded for production
+# They should be installed separately if needed for PFAS module

@@ -1,0 +1,10 @@
+# Ignore large data files during build
+pfas_screen_model/JSON_data/
+*.pyc
+__pycache__/
+.DS_Store
+db.sqlite3
+media/
+*.log
+.git/
+.gitignore
