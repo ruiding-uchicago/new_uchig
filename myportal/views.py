@@ -515,11 +515,21 @@ from django.conf import settings
 
 @csrf_exempt
 def run_ollama_interactive(request):
+    """
+    Backend endpoint that uses Grok-4 API instead of Ollama
+    API key is stored securely in backend, not exposed to frontend
+    """
     if request.method == 'POST':
+        import requests
+        
         data = json.loads(request.body)
         prompt = data.get('prompt', '')
         conversation_history = data.get('conversation_history', [])
         is_initial_message = data.get('is_initial_message', False)
+
+        # Hardcoded API key - DO NOT CHANGE WITHOUT PERMISSION
+        # TODO: Move to environment variable in production
+        XAI_API_KEY = 'xai-JwEq5trusa3TM31s5w1RQCZXctYrGRLFMp8ONDSpPfkpFFk4QRgd3lOo9DBn0wk4pO9Y7ByqEZC4fK3Z'
 
         if is_initial_message:
             # load background knowledge as before...
@@ -531,91 +541,94 @@ def run_ollama_interactive(request):
                 prompt = "Acknowledge that you've received the background knowledge."
             except FileNotFoundError:
                 conversation_history = []
-                prompt = "Unable to load background knowledge. Please proceed with the conversation."
+                prompt = "Hello, please introduce yourself and explain how you can help with graph visualization."
             except UnicodeDecodeError:
                 conversation_history = []
-                prompt = "Unable to load background knowledge due to encoding issues. Please proceed with the conversation."
+                prompt = "Hello, please introduce yourself and explain how you can help with graph visualization."
 
-        if not prompt:
+        if not prompt and not is_initial_message:
             return JsonResponse({'error': 'No prompt provided'}, status=400)
 
-        # Append the new prompt if not already the last message.
-        if not (conversation_history and conversation_history[-1]['role'] == 'Human' and conversation_history[-1]['content'] == prompt):
-            conversation_history.append({'role': 'Human', 'content': prompt})
-
-        tutorial_endpoint = '7db36379-95ad-4892-aee2-43f3a825d275'
+        # Prepare messages for Grok API
+        messages = []
         
-        # Here is the key modification: instead of blindly instantiating Client (which would try to prompt interactively),
-        # we first check for existing tokens in the session.
-        globus_data_raw = request.session.get("GLOBUS_DATA")
-        if globus_data_raw:
-            try:
-                tokens = pickle.loads(base64.b64decode(globus_data_raw))['tokens']
-            except Exception as e:
-                return JsonResponse({'error': 'Error decoding authentication tokens: ' + str(e)}, status=401)
-
-            # Build authorizers using the tokens we expect to have been stored.
-            compute_scopes = ComputeScopeBuilder()
-            try:
-                compute_auth = AccessTokenAuthorizer(tokens[compute_scopes.resource_server]['access_token'])
-                openid_auth = AccessTokenAuthorizer(tokens['auth.globus.org']['access_token'])
-            except KeyError as e:
-                return JsonResponse({'error': 'Missing expected token data: ' + str(e)}, status=401)
-
-            # Create a login manager that simply returns these tokens.
-            login_manager = AuthorizerLoginManager(
-                authorizers={
-                    compute_scopes.resource_server: compute_auth,
-                    AuthScopes.resource_server: openid_auth,
-                }
-            )
-            # In production, if tokens are invalid, we do not want interactive login.
-            try:
-                login_manager.ensure_logged_in()
-            except Exception as e:
-                return JsonResponse({'error': 'Authentication error: ' + str(e)}, status=401)
-
-            gc = Client(login_manager=login_manager, code_serialization_strategy=CombinedCode())
-        else:
-            # In production, if there are no tokens available, immediately return an error.
-            return JsonResponse({'error': 'Authentication tokens missing in session. Please log in first.'}, status=401)
-
-        # Create the Executor as before.
-        gce = Executor(endpoint_id=tutorial_endpoint, client=gc)
-
-        # Define the function to run Ollama.
-        def run_ollama(prompt, conversation_history):
-            import subprocess
-            import time
-            start_time = time.time()
-            full_prompt = "\n".join([f"{msg['role']}: {msg['content']}" for msg in conversation_history])
-            full_prompt += "\nAI:"
-            try:
-                result = subprocess.run(['ollama', 'run', 'llama3.1', full_prompt],
-                                        capture_output=True, text=True, timeout=60)
-                output = result.stdout.strip()
-            except subprocess.TimeoutExpired:
-                output = "Ollama command timed out after 60 seconds"
-            except subprocess.CalledProcessError as e:
-                output = f"Ollama command failed: {e}"
-            except Exception as e:
-                output = f"An error occurred: {str(e)}"
-            end_time = time.time()
-            execution_time = end_time - start_time
-            return {
-                'output': output,
-                'execution_time': execution_time
-            }
-
-        future = gce.submit(run_ollama, prompt, conversation_history)
-        result = future.result()
-
-        conversation_history.append({'role': 'AI', 'content': result['output']})
-        return JsonResponse({
-            'output': result['output'],
-            'execution_time': result['execution_time'],
-            'conversation_history': conversation_history
+        # Add system message
+        messages.append({
+            "role": "system",
+            "content": "You are a helpful assistant for graph visualization and data analysis. Help users understand their data and relationships in the graph."
         })
+        
+        # Convert conversation history to Grok format
+        for msg in conversation_history:
+            if msg['role'] == 'System':
+                # Add system context as part of system message
+                messages[0]['content'] += f"\n\nBackground Knowledge:\n{msg['content']}"
+            elif msg['role'] == 'Human':
+                messages.append({"role": "user", "content": msg['content']})
+            elif msg['role'] == 'AI':
+                messages.append({"role": "assistant", "content": msg['content']})
+        
+        # Add current prompt
+        if prompt and not (conversation_history and conversation_history[-1]['role'] == 'Human' and conversation_history[-1]['content'] == prompt):
+            messages.append({"role": "user", "content": prompt})
+            # Also add to conversation history for tracking
+            if not is_initial_message:
+                conversation_history.append({'role': 'Human', 'content': prompt})
+        
+        try:
+            # Call Grok-4 API
+            response = requests.post(
+                'https://api.x.ai/v1/chat/completions',
+                headers={
+                    'Content-Type': 'application/json',
+                    'Authorization': f'Bearer {XAI_API_KEY}'
+                },
+                json={
+                    'messages': messages,
+                    'model': 'grok-4-latest',
+                    'stream': False,
+                    'temperature': 0.7,
+                    'max_tokens': 1000
+                },
+                timeout=30
+            )
+            
+            if response.status_code == 200:
+                result = response.json()
+                if result.get('choices') and len(result['choices']) > 0:
+                    ai_response = result['choices'][0]['message']['content']
+                    
+                    # Add AI response to conversation history
+                    conversation_history.append({'role': 'AI', 'content': ai_response})
+                    
+                    return JsonResponse({
+                        'output': ai_response,
+                        'conversation_history': conversation_history
+                    })
+                else:
+                    return JsonResponse({
+                        'output': 'Error: Invalid response format from Grok-4',
+                        'conversation_history': conversation_history
+                    })
+            else:
+                error_msg = f'Error: Grok API returned status {response.status_code}'
+                if response.text:
+                    error_msg += f' - {response.text}'
+                return JsonResponse({
+                    'output': error_msg,
+                    'conversation_history': conversation_history
+                })
+                
+        except requests.exceptions.Timeout:
+            return JsonResponse({
+                'output': 'Error: Request to Grok API timed out',
+                'conversation_history': conversation_history
+            })
+        except Exception as e:
+            return JsonResponse({
+                'output': f'Error calling Grok API: {str(e)}',
+                'conversation_history': conversation_history
+            })
 
     return JsonResponse({'error': 'Only POST method is allowed'}, status=400)
     
