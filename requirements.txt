@@ -12,6 +12,8 @@ redis
 django-redis
 gunicorn
 whitenoise
-torch
+# Use CPU-only version of torch (smaller for deployment)
+--find-links https://download.pytorch.org/whl/torch_stable.html
+torch==2.0.1+cpu
 torch_geometric
 snntorch

@@ -1,5 +1,7 @@
-# Ignore large data files during build
-pfas_screen_model/JSON_data/
+# Ignore unnecessary files during build
+# BUT keep the model code - only exclude the massive JSON dataset
+pfas_screen_model/JSON_data/retrieved_substances_data_enhanced_json_files_2nd_attempt_11052024/
+pfas_screen_model/JSON_data/*.zip
 *.pyc
 __pycache__/
 .DS_Store
@@ -8,3 +10,4 @@ media/
 *.log
 .git/
 .gitignore
+# Keep pfas_screen_model Python files for inference!
