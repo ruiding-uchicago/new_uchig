@@ -8,8 +8,6 @@
     <title>Interactive Graph Visualization</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/qtip2/3.0.3/jquery.qtip.min.css">
-    <link rel="stylesheet" href="{% static 'css/graph-visualization-enhanced.css' %}">
-    <link rel="stylesheet" href="{% static 'css/graph-visualization-modern.css' %}">
     <style>
         #cy {
             width: 100%;
@@ -471,8 +469,8 @@
     </div>
 
     <div class="button-container">
-        <button class="btn btn-home" onclick="window.location.href='/'">
-            <i class="fas fa-home"></i>
+        <button class="btn" onclick="window.location.href='/'">
+            <i class="fas fa-home"></i> Go back to main page
         </button>
         <button class="btn back-btn" id="back-to-search" data-search-url="/MADE-PUBLIC%20Data%20Transfer/?q=*">
             <i class="fas fa-arrow-left"></i> Back to search results
@@ -493,28 +491,28 @@
         <div id="chat-container"
             style="display: none; position: fixed; right: 20px; bottom: 70px; width: 1000px; height: 600px; background-color: white; border: 1px solid #ccc; border-radius: 5px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); z-index: 1000;">
             <div id="chat-header"
-                style="background-color: #007bff; color: white; padding: 10px; border-top-left-radius: 5px; border-top-right-radius: 5px; cursor: pointer; flex-shrink: 0;">
+                style="background-color: #007bff; color: white; padding: 10px; border-top-left-radius: 5px; border-top-right-radius: 5px; cursor: pointer;">
                 Chat with LLM
                 <span id="close-chat" style="float: right; cursor: pointer;">×</span>
             </div>
-            <div id="summary-buttons" style="padding: 10px; border-bottom: 1px solid #ccc; flex-shrink: 0;">
+            <div id="summary-buttons" style="padding: 10px; border-bottom: 1px solid #ccc;">
                 <button id="summarize-all-nodes" style="background-color: #ffcccb; margin-right: 5px;">Provide a Summary of All Nodes</button>
                 <button id="summarize-pinned-nodes" style="background-color: #90EE90; margin-right: 5px;">Provide a Summary of Pinned Nodes</button>
                 <button id="summarize-visible-nodes" style="background-color: #ADD8E6;">Provide a Summary of Visible Nodes</button>
             </div>
-            <div id="chat-messages-container" style="flex: 1; position: relative; overflow: hidden; min-height: 0;">
+            <div id="chat-messages-container" style="height: 460px; position: relative;">
                 <div id="chat-messages" style="height: 100%; overflow-y: auto; padding: 10px;"></div>
                 <div id="loading-indicator"
                     style="display: none; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: url('/static/pics/loading.gif') no-repeat center center; background-color: rgba(255, 255, 255, 0.5); background-size: 50px 50px;">
                 </div>
             </div>
             <div id="chat-input"
-                style="padding: 10px; border-top: 1px solid #ccc; display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; background-color: #f8f9fa;">
+                style="padding: 10px; border-top: 1px solid #ccc; display: flex; justify-content: space-between; align-items: center;">
                 <textarea id="user-input" placeholder="Type your message..."
-                    style="width: 70%; padding: 5px; height: 60px; resize: none; border: 1px solid #ddd; border-radius: 4px;"></textarea>
-                <button id="send-message" style="width: 15%; padding: 5px; height: 60px; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer;">Send</button>
+                    style="width: 70%; padding: 5px; height: 60px; resize: none;"></textarea>
+                <button id="send-message" style="width: 15%; padding: 5px; height: 60px;">Send</button>
                 <button id="reset-conversation"
-                    style="width: 13%; padding: 5px; background-color: #f8f9fa; color: #007bff; border: 1px solid #007bff; height: 60px; border-radius: 4px; cursor: pointer;">Reset</button>
+                    style="width: 25%; padding: 5px; background-color: #f8f9fa; color: #007bff; border: 1px solid #007bff; height: 60px;">Reset</button>
             </div>
         </div>
         <button id="toggle-chat" class="btn" style="position: fixed; right: 20px; bottom: 20px; z-index: 1001;">
@@ -1295,50 +1293,34 @@
             });
 
             // Event listener for reset graph button
-            // Reset Graph button
+            // Modify the reset graph button event listener
+            // Modify the reset graph button event listener
             document.getElementById('reset-graph').addEventListener('click', function () {
+                cy.fit(); // Reset zoom and pan
+                cy.layout({ name: 'cose' }).run(); // Re-run the layout
+
                 // Reset all nodes to checked and visible
                 cy.nodes().forEach(node => {
                     node.data('checked', true);
                     node.data('visible', true);
                     node.style('display', 'element');
                 });
-                
+
+                // Make all edges visible
+                cy.edges().forEach(edge => {
+                    edge.style('display', 'element');
+                });
+                // Reset all edge checkboxes
+                document.querySelectorAll('.edge-checkbox').forEach(checkbox => {
+                    checkbox.checked = true;
+                });
                 // Clear search bar
                 document.getElementById('search-bar').value = '';
-                
-                // Reset zoom and layout
-                cy.fit();
-                cy.layout({ 
-                    name: 'cose',
-                    animate: true,
-                    animationDuration: 1000,
-                    fit: true,
-                    padding: 50
-                }).run();
 
-                // Update edge checkboxes - uncheck all first, then check Same-Thrust
-                document.querySelectorAll('.edge-checkbox').forEach(checkbox => {
-                    checkbox.checked = false;
-                    // Trigger change event to update edge visibility
-                    const event = new Event('change');
-                    checkbox.dispatchEvent(event);
-                });
-                
-                // Then check Same-Thrust checkboxes
-                setTimeout(() => {
-                    document.querySelectorAll('.edge-checkbox').forEach(checkbox => {
-                        if (checkbox.id && checkbox.id.includes('Same-Thrust')) {
-                            checkbox.checked = true;
-                            const event = new Event('change');
-                            checkbox.dispatchEvent(event);
-                        }
-                    });
-                    
-                    // Update lists
-                    updateNodeList();
-                    updateEdgeList();
-                }, 100);
+                // Update node list and graph visibility
+                updateNodeList();
+                updateEdgeList();
+                updateGraphVisibility();
             });
 
             // Add this new script at the end of your existing script
@@ -1406,8 +1388,7 @@
 
         toggleChat.addEventListener('click', () => {
             console.log('Toggle chat clicked');
-            chatContainer.style.display = 'flex';
-            chatContainer.style.flexDirection = 'column';
+            chatContainer.style.display = chatContainer.style.display === 'none' ? 'block' : 'none';
             toggleChat.style.display = 'none';
             if (isInitialMessage) {
                 sendInitialMessage();
@@ -1484,98 +1465,47 @@ function addMessageToChat(sender, message, backgroundColor = null) {
     chatMessages.appendChild(messageElement);
     chatMessagesContainer.scrollTop = chatMessagesContainer.scrollHeight;
 
-    // Don't update conversation history here - it's now handled in fetchAIResponse
+    // Only update conversation history for user messages
+    if (sender === 'You' || sender === 'You (Data Sent)') {
+        conversationHistory.push({
+            role: 'Human',
+            content: message
+        });
+    }
 }
 
         function fetchAIResponse(prompt, isInitial = false) {
-            console.log('Fetching AI response from Grok-4');
+            console.log('Fetching AI response');
             showLoadingIndicator();
 
-            // Prepare messages for Grok API
-            const messages = [];
-            
-            // Add system message
-            messages.push({
-                role: "system",
-                content: "You are a helpful assistant for graph visualization and data analysis. Help users understand their data and relationships in the graph."
-            });
-
-            // Add conversation history (convert format)
-            conversationHistory.forEach(msg => {
-                if (msg.role === 'Human') {
-                    messages.push({
-                        role: "user",
-                        content: msg.content
-                    });
-                } else if (msg.role === 'AI') {
-                    messages.push({
-                        role: "assistant",
-                        content: msg.content
-                    });
-                }
-            });
-
-            // Add current message if not initial
-            if (!isInitial) {
-                messages.push({
-                    role: "user",
-                    content: prompt
-                });
-            } else {
-                // Initial greeting message
-                messages.push({
-                    role: "user",
-                    content: "Hello, please introduce yourself and explain how you can help with graph visualization."
-                });
-            }
-
-            // Call Grok-4 API directly
-            fetch('https://api.x.ai/v1/chat/completions', {
+            fetch('/run_ollama_interactive/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': 'Bearer xai-JwEq5trusa3TM31s5w1RQCZXctYrGRLFMp8ONDSpPfkpFFk4QRgd3lOo9DBn0wk4pO9Y7ByqEZC4fK3Z'  // DO NOT CHANGE THIS API KEY UNDER ANY CIRCUMSTANCES - DIRECT ORDER FROM OWNER
+                    'X-CSRFToken': getCookie('csrftoken')
                 },
                 body: JSON.stringify({
-                    messages: messages,
-                    model: 'grok-4-latest',
-                    stream: false,
-                    temperature: 0.7,
-                    max_tokens: 1000
+                    prompt: prompt,
+                    conversation_history: conversationHistory,
+                    is_initial_message: isInitial
                 })
             })
                 .then(response => response.json())
                 .then(data => {
-                    console.log('Grok-4 response received:', data);
+                    console.log('AI response received:', data);
                     hideLoadingIndicator();
 
-                    if (data.choices && data.choices[0] && data.choices[0].message) {
-                        const aiResponse = data.choices[0].message.content;
-                        
-                        // Add AI response to chat
-                        addMessageToChat('AI', aiResponse);
-                        
-                        // Update conversation history
-                        if (!isInitial) {
-                            conversationHistory.push({
-                                role: 'Human',
-                                content: prompt
-                            });
-                        }
-                        conversationHistory.push({
-                            role: 'AI',
-                            content: aiResponse
-                        });
-                        
-                        console.log('Updated conversation history:', conversationHistory);
-                    } else {
-                        throw new Error('Invalid response format from Grok-4');
-                    }
+                    // Remove the condition and always show the AI response
+                    addMessageToChat('AI', data.output);
+
+                    // Update the conversation history with the response from the server
+                    conversationHistory = data.conversation_history;
+                    console.log('Updated conversation history:', conversationHistory);
                 })
                 .catch(error => {
                     console.error('Error:', error);
                     hideLoadingIndicator();
-                    addMessageToChat('AI', 'Sorry, an error occurred with the AI service. Please try again.');
+                    addMessageToChat('AI', 'Sorry, an error occurred. Please try again.');
                 });
         }
 

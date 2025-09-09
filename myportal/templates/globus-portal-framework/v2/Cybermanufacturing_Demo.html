@@ -1,4 +1,3 @@
-{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -9,10 +8,45 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.21.1/cytoscape.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-    <link rel="stylesheet" href="{% static 'css/cybermanufacturing-modern.css' %}">
     <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
 
+        #cy {
+            width: 95%;
+            height: 1200px;
+            display: block;
+            margin: 20px auto;
+            border: 2px solid #333;
+            position: relative;
+        }
 
+        .home-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            font-size: 24px;
+            width: 50px;
+            height: 50px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .home-button:hover {
+            background-color: #45a049;
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+        }
 
         .switch-container {
             position: absolute;
@@ -259,32 +293,10 @@
 </head>
 
 <body>
-    <div class="main-wrapper">
-        <!-- App Header with Gradient Background -->
-        <header class="app-header">
-            <button class="home-button-header" onclick="window.location.href='/'">
-                <i class="fas fa-home"></i>
-            </button>
-            <div class="header-content">
-                <h1 class="app-title">
-                    <i class="fas fa-project-diagram"></i>
-                    Cybermanufacturing Demo
-                </h1>
-                <p class="app-subtitle">Interactive Knowledge Graph for Sensor Component Analysis</p>
-            </div>
-            <div class="header-actions">
-                <button class="btn btn-secondary" id="tutorialBtn">
-                    <i class="fas fa-question-circle"></i> Tutorial
-                </button>
-                <button class="btn btn-primary" id="exportBtn">
-                    <i class="fas fa-download"></i> Export
-                </button>
-            </div>
-        </header>
-        
-    <!-- Main Content Container -->
-    <div class="graph-container">
-        <div class="switch-container">
+    <button class="home-button" onclick="window.location.href='/'">
+        <i class="fas fa-home"></i>
+    </button>
+    <div class="switch-container">
         <button class="switch-button" onclick="clearAndReset()">Clear and Reset</button>
         <button class="switch-button active" onclick="switchDesign('standard')">Standard</button>
         <button class="switch-button" onclick="switchDesign('remote')">Remote Gate</button>
@@ -298,8 +310,7 @@
     </div>
     <div id="hoverPanel">
     </div>
-        <div id="cy"></div>
-    </div> <!-- End of graph-container -->
+    <div id="cy"></div>
     <div class="model-selection">
         <select id="modelSelect">
             <option value="gnn_v2.1">Graph Neural Network v2.1 20240902</option>
@@ -350,7 +361,7 @@
         <i class="fas fa-comments"></i> Chat with LLM
     </button>
     <div id="graph-loading-indicator"
-        style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: url('/static/pics/loading.gif') no-repeat center center; background-color: rgba(255, 255, 255, 0.7); background-size: 100px 100px; z-index: 2000;">
+        style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: url('/static/pics/loading.gif') no-repeat center center; background-color: rgba(255, 255, 255, 0.7); background-size: 100px 100px; z-index: 9999;">
     </div>
     <script>
         var cy;
@@ -1242,9 +1253,6 @@
         }
 
         document.getElementById('computeButton').addEventListener('click', performGraphInference);
-        // Chat functionality
-        console.log('Chat functionality script loaded');
-        
         let conversationHistory = [];
 
         document.addEventListener('DOMContentLoaded', function () {
@@ -1256,19 +1264,9 @@
             const closeChat = document.getElementById('close-chat');
             const resetConversation = document.getElementById('reset-conversation');
             const loadingIndicator = document.getElementById('loading-indicator');
-            const chatMessagesContainer = document.getElementById('chat-messages-container');
             const summarizeMap = document.getElementById('summarize-map');
             const importantNodes = document.getElementById('important-nodes');
             const suggestNodes = document.getElementById('suggest-nodes');
-
-            console.log('Chat elements:', {
-                chatContainer,
-                chatMessages,
-                userInput,
-                sendMessage,
-                toggleChat,
-                closeChat
-            });
 
             summarizeMap.addEventListener('click', () => sendGraphQuery("A Summary for the current map?"));
             importantNodes.addEventListener('click', () => sendGraphQuery("Which Node(s) should be concerned as potentially important and worthy further discovery?"));
@@ -1314,19 +1312,9 @@
 
                 return message;
             }
-
-            function showLoadingIndicator() {
-                loadingIndicator.style.display = 'block';
-            }
-
-            function hideLoadingIndicator() {
-                loadingIndicator.style.display = 'none';
-            }
-
             let isInitialMessage = true;
 
             toggleChat.addEventListener('click', () => {
-                console.log('Toggle chat clicked');
                 chatContainer.style.display = chatContainer.style.display === 'none' ? 'block' : 'none';
                 toggleChat.style.display = 'none';
                 if (isInitialMessage) {
@@ -1335,26 +1323,29 @@
             });
 
             closeChat.addEventListener('click', () => {
-                console.log('Close chat clicked');
                 chatContainer.style.display = 'none';
                 toggleChat.style.display = 'block';
             });
 
-            // Update send button event listener
             sendMessage.addEventListener('click', (e) => {
                 e.preventDefault();
                 sendUserMessage();
             });
 
-            // Update the reset conversation function
             resetConversation.addEventListener('click', () => {
                 if (confirm('Are you sure you want to reset the conversation? This action cannot be undone.')) {
-                    console.log('Resetting conversation');
-                    chatMessages.innerHTML = ''; // Clear only the messages
-                    conversationHistory = []; // Reset conversation history
-                    hideLoadingIndicator(); // Ensure loading indicator is hidden
+                    chatMessages.innerHTML = '';
+                    conversationHistory = [];
+                    hideLoadingIndicator();
                     isInitialMessage = true;
                     sendInitialMessage();
+                }
+            });
+
+            userInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    sendUserMessage();
                 }
             });
 
@@ -1364,40 +1355,17 @@
             }
 
             function sendUserMessage() {
-                console.log('Sending user message');
                 const message = userInput.value.trim();
                 if (message) {
                     addMessageToChat('You', message);
-                    userInput.value = ''; // Clear the input
-                    userInput.style.height = '60px'; // Reset the height
-                    userInput.blur(); // Remove focus from the textarea
+                    userInput.value = '';
+                    userInput.style.height = '60px';
+                    userInput.blur();
                     fetchAIResponse(message);
                 }
             }
 
-            // Update event listener for textarea
-            userInput.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter') {
-                    if (e.shiftKey) {
-                        // Shift+Enter: allow new line
-                        return;
-                    } else {
-                        // Enter without Shift: send message
-                        e.preventDefault();
-                        sendUserMessage();
-                    }
-                }
-            });
-
-            // Add this new function to handle textarea auto-resize
-            function autoResizeTextarea() {
-                this.style.height = '60px'; // Reset height to default
-                this.style.height = (this.scrollHeight) + 'px';
-            }
-
-            // Modify the addMessageToChat function to accept a background color
             function addMessageToChat(sender, message, backgroundColor = null) {
-                console.log('Adding message to chat:', { sender, message, backgroundColor });
                 const messageElement = document.createElement('div');
                 messageElement.className = `message ${sender === 'You' || sender === 'You (Data Sent)' ? 'human-message' : 'ai-message'}`;
                 if (backgroundColor) {
@@ -1405,104 +1373,54 @@
                 }
                 messageElement.innerHTML = `<strong>${sender}:</strong> ${message}`;
                 chatMessages.appendChild(messageElement);
-                chatMessagesContainer.scrollTop = chatMessagesContainer.scrollHeight;
-
-                // Don't update conversation history here - it's now handled in fetchAIResponse
+                chatMessages.scrollTop = chatMessages.scrollHeight;
             }
 
             function fetchAIResponse(prompt, isInitial = false) {
-                console.log('Fetching AI response from Grok-4');
                 showLoadingIndicator();
 
-                // Prepare messages for Grok API
-                const messages = [];
-                
-                // Add system message
-                messages.push({
-                    role: "system",
-                    content: "You are a helpful assistant for graph visualization and data analysis. Help users understand their data and relationships in the graph."
-                });
-
-                // Add conversation history (convert format)
-                conversationHistory.forEach(msg => {
-                    if (msg.role === 'Human') {
-                        messages.push({
-                            role: "user",
-                            content: msg.content
-                        });
-                    } else if (msg.role === 'AI') {
-                        messages.push({
-                            role: "assistant",
-                            content: msg.content
-                        });
-                    }
-                });
-
-                // Add current message if not initial
-                if (!isInitial) {
-                    messages.push({
-                        role: "user",
-                        content: prompt
-                    });
-                } else {
-                    // Initial greeting message
-                    messages.push({
-                        role: "user",
-                        content: "Hello, please introduce yourself and explain how you can help with graph visualization."
-                    });
-                }
-
-                // Call Grok-4 API directly
-                fetch('https://api.x.ai/v1/chat/completions', {
+                fetch('/run_ollama_interactive/', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': 'Bearer xai-JwEq5trusa3TM31s5w1RQCZXctYrGRLFMp8ONDSpPfkpFFk4QRgd3lOo9DBn0wk4pO9Y7ByqEZC4fK3Z'  // DO NOT CHANGE THIS API KEY UNDER ANY CIRCUMSTANCES - DIRECT ORDER FROM OWNER
+                        'X-CSRFToken': getCookie('csrftoken')
                     },
                     body: JSON.stringify({
-                        messages: messages,
-                        model: 'grok-4-latest',
-                        stream: false,
-                        temperature: 0.7,
-                        max_tokens: 1000
+                        prompt: prompt,
+                        conversation_history: conversationHistory,
+                        is_initial_message: isInitial
                     })
                 })
                     .then(response => response.json())
                     .then(data => {
-                        console.log('Grok-4 response received:', data);
                         hideLoadingIndicator();
-
-                        if (data.choices && data.choices[0] && data.choices[0].message) {
-                            const aiResponse = data.choices[0].message.content;
-                            
-                            // Add AI response to chat
-                            addMessageToChat('AI', aiResponse);
-                            
-                            // Update conversation history
-                            if (!isInitial) {
-                                conversationHistory.push({
-                                    role: 'Human',
-                                    content: prompt
-                                });
-                            }
+                        addMessageToChat('AI', data.output);
+                        if (!isInitial) {
                             conversationHistory.push({
-                                role: 'AI',
-                                content: aiResponse
+                                role: 'Human',
+                                content: prompt
                             });
-                            
-                            console.log('Updated conversation history:', conversationHistory);
-                        } else {
-                            throw new Error('Invalid response format from Grok-4');
                         }
+                        conversationHistory.push({
+                            role: 'AI',
+                            content: data.output
+                        });
                     })
                     .catch(error => {
                         console.error('Error:', error);
                         hideLoadingIndicator();
-                        addMessageToChat('AI', 'Sorry, an error occurred with the AI service. Please try again.');
+                        addMessageToChat('AI', 'Sorry, an error occurred. Please try again.');
                     });
             }
 
-            // Function to get CSRF token
+            function showLoadingIndicator() {
+                loadingIndicator.style.display = 'block';
+            }
+
+            function hideLoadingIndicator() {
+                loadingIndicator.style.display = 'none';
+            }
+
             function getCookie(name) {
                 let cookieValue = null;
                 if (document.cookie && document.cookie !== '') {
@@ -1517,8 +1435,6 @@
                 }
                 return cookieValue;
             }
-
-            console.log('Chat functionality script completed');
         });
         function showLoadingIndicator() {
     document.getElementById('graph-loading-indicator').style.display = 'block';
@@ -1528,7 +1444,7 @@ function hideLoadingIndicator() {
     document.getElementById('graph-loading-indicator').style.display = 'none';
 }
 </script>
-    </div> <!-- End of main-wrapper -->
+
 </body>
 
 </html>
