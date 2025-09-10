@@ -527,9 +527,19 @@ def run_ollama_interactive(request):
         conversation_history = data.get('conversation_history', [])
         is_initial_message = data.get('is_initial_message', False)
 
-        # Hardcoded API key - DO NOT CHANGE WITHOUT PERMISSION
-        # TODO: Move to environment variable in production
-        XAI_API_KEY = 'xai-JwEq5trusa3TM31s5w1RQCZXctYrGRLFMp8ONDSpPfkpFFk4QRgd3lOo9DBn0wk4pO9Y7ByqEZC4fK3Z'
+        # Get API key from environment or local_settings
+        XAI_API_KEY = os.environ.get('XAI_API_KEY')
+        if not XAI_API_KEY:
+            try:
+                from myportal.local_settings import XAI_API_KEY
+            except ImportError:
+                XAI_API_KEY = None
+        
+        if not XAI_API_KEY:
+            return JsonResponse({
+                'output': 'Error: XAI API key not configured. Please set XAI_API_KEY in environment or local_settings.py',
+                'conversation_history': conversation_history
+            })
 
         if is_initial_message:
             # load background knowledge as before...
